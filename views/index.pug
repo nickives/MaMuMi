@@ -15,12 +15,140 @@ block content
     var map, markers, geoJSON;
 
     async function myMap() {
+
+      /*
+      const styledMapType = new google.maps.StyledMapType(
+        [
+          {
+              "featureType": "administrative.country",
+              "elementType": "geometry",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "landscape",
+              "elementType": "geometry",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "landscape.man_made",
+              "elementType": "geometry.fill",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  },
+                  {
+                      "hue": "#00ff1a"
+                  }
+              ]
+          },
+          {
+              "featureType": "landscape.natural.landcover",
+              "elementType": "geometry.fill",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          },
+          {
+              "featureType": "road.highway",
+              "elementType": "all",
+              "stylers": [
+                  {
+                      "visibility": "off"
+                  }
+              ]
+          }
+        ],
+        { name: "Styled Map" }
+      );
+
       var mapProp= {
         center:new google.maps.LatLng(51.508742,-0.120850),
         zoom:5,
+        mapTypeControlOptions: {
+          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
+        },
       };
 
       map = new google.maps.Map(document.getElementById("gMap"),mapProp);
+
+      map.mapTypes.set("styled_map", styledMapType);
+
+      */
+      const styledMapType = new google.maps.StyledMapType(
+        [
+          {
+            "featureType": "administrative.country",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "landscape",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "visibility": "off"
+                },
+                {
+                    "hue": "#00ff1a"
+                }
+            ]
+        },
+        {
+            "featureType": "landscape.natural.landcover",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "road.highway",
+            "elementType": "all",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        }
+        ],
+        { name: "Styled Map" }
+      );
+      // Create a map object, and include the MapTypeId to add
+      // to the map type control.
+      map = new google.maps.Map(document.getElementById("gMap"), {
+        center: { lat: 51.508742, lng: -0.120850 },
+        zoom: 5,
+        mapTypeControlOptions: {
+          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
+        },
+      });
+      //Associate the styled map with the MapTypeId and set it to display.
+      map.mapTypes.set("styled_map", styledMapType);
+      map.setMapTypeId("styled_map");
     }
 
     async function updateMap() {
@@ -35,13 +163,6 @@ block content
         map.data.addGeoJson(data);
 
       })
-
-
-      //map.data.loadGeoJson("#{hostname.toString()}:#{port}/journeys");
-      
-    }
-
-    async function mobileMarker() {
       
     }
 
@@ -50,4 +171,4 @@ block content
       updateMap();
     });
 
-  script(src="https://maps.googleapis.com/maps/api/js")
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeZsCAZYZRjuoeBa_gLfWuYI_gcykFcSg")
