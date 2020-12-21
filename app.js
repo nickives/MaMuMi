@@ -1,12 +1,11 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const app = express();
 
-var indexRouter = require('./routes/index');
-
-var app = express();
+const indexRouter = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,11 +17,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app locals
-if (app.get('env' == 'development')) {
-  app.locals.url = "http://localhost:" + app.get('port');
-}
-
+// app locals - all templates can see these
+app.use((req, res, next) => {
+  res.locals.hostname = "http://" + req.hostname;
+  res.locals.port = app.get('port');
+  next();
+});
 
 /**
  * TODO: Express matches the "/" here, so any subsequent routes will fail. Just 

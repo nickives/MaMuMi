@@ -1,11 +1,8 @@
-extends base-template
+extends layout
 
 block content
-  h1= title
-  p Choose a date, see journeys!
-
-  #datePick
-    input(type="date", id="datePicker", name="date", value= new Date().toISOString().split("T")[0])
+  h1 MaMuMi
+  p Here is an example journey! #{hostname}
 
   #gMap(style="width:100%;height:800px;")
 
@@ -15,7 +12,7 @@ block content
 
   script.
     
-    var map, markers;
+    var map, markers, geoJSON;
 
     async function myMap() {
       var mapProp= {
@@ -27,23 +24,30 @@ block content
     }
 
     async function updateMap() {
-      date = $('#datePicker').val();
 
-      map.data.forEach( function (feature) {
+      map.data.forEach(function (feature) {
         map.data.remove(feature);
       })
 
-      map.data.loadGeoJson("http://raspberrypi.lan:3000/events/" + date);
-      map.data.setStyle({
-        icon: 'http://raspberrypi.lan:3000/s/img/cat_icon.svg'
+      
+      $.getJSON("#{hostname.toString()}:#{port}/journeys", function(data) {
+        geoJSON = data;
+        map.data.addGeoJson(data);
+
       })
+
+
+      //map.data.loadGeoJson("#{hostname.toString()}:#{port}/journeys");
+      
+    }
+
+    async function mobileMarker() {
+      
     }
 
     $(document).ready( function () {
       myMap();
       updateMap();
-    })
-
-    $('#datePicker').change(updateMap);
+    });
 
   script(src="https://maps.googleapis.com/maps/api/js")

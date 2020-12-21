@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node ./bin/www",
-    "start.dev": "nodemon -e js,njs,json,pug -L ./bin/www"
+    "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
   "repository": {
     "type": "git",

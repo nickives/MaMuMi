@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   mamumi:
-    image: mamumi-debug
+    image: mamumi-dev
     build:
       context: .
       dockerfile: ./Dockerfile.dev
@@ -13,5 +13,4 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3000:3000
-      - 9229:9229
-    command: ["npm", "run", --inspect=0.0.0.0:9229", "start"]
+    command: ["npm", "run", "start.dev"]
