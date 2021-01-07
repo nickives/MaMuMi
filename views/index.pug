@@ -12,78 +12,11 @@ block content
 
   script.
     
-    var map, markers, geoJSON;
+    var geoJSON;
+    var map;
 
     async function myMap() {
 
-      /*
-      const styledMapType = new google.maps.StyledMapType(
-        [
-          {
-              "featureType": "administrative.country",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.man_made",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  },
-                  {
-                      "hue": "#00ff1a"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.natural.landcover",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "road.highway",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          }
-        ],
-        { name: "Styled Map" }
-      );
-
-      var mapProp= {
-        center:new google.maps.LatLng(51.508742,-0.120850),
-        zoom:5,
-        mapTypeControlOptions: {
-          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-        },
-      };
-
-      map = new google.maps.Map(document.getElementById("gMap"),mapProp);
-
-      map.mapTypes.set("styled_map", styledMapType);
-
-      */
       const styledMapType = new google.maps.StyledMapType(
         [
           {
@@ -137,6 +70,7 @@ block content
         ],
         { name: "Styled Map" }
       );
+
       // Create a map object, and include the MapTypeId to add
       // to the map type control.
       map = new google.maps.Map(document.getElementById("gMap"), {
@@ -161,10 +95,26 @@ block content
       $.getJSON("#{hostname.toString()}:#{port}/journeys", function(data) {
         geoJSON = data;
         map.data.addGeoJson(data);
-
+        midpoint = data.features[0].properties.midpoint;
+        marker = new google.maps.Marker({
+            map,
+            animation: google.maps.Animation.BOUNCE,
+            position: { lat: midpoint[1], lng: midpoint[0] },
+        })
       })
+
+
       
     }
+
+    function toggleBounce(marker) {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+
 
     $(document).ready( function () {
       myMap();

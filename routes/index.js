@@ -16,18 +16,16 @@ app.get('/journeys', function(req, res, next) {
         features: [
             {
                 type: "Feature",
-                properties: {},
+                properties: {
+                    midpoint: [0, 51.9]
+                },
                 geometry: {
-                    type: "Point",
-                    coordinates: [-2.088126, 51.886695]
-                }
-            },
-            {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                    type: "Point",
-                    coordinates: [-2.2, 55,]
+                    type: "LineString",
+                    coordinates: [
+                        [7.088126, 51.886695],
+                        [0, 51.9],
+                        [-3.2, 52.5]
+                    ]
                 }
             }
         ]
