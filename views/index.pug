@@ -1,190 +1,197 @@
 extends layout
 
 block content
-  h1 MaMuMi
-  p Here is an example journey! #{hostname}
+    div.animation
+      video(autoplay muted id='loading-animation') 
+        source(src='/a/splash.mp4' type='video/mp4')
+        
 
-  #gMap(style="width:100%;height:800px;")
+        
+    div.map(class='hidden')
+      #gMap(style="width:100%;height:800px;")
+      #testOut
 
-  #testOut
+      script.
+          
+          var map, markers, geoJSON;
 
-  
+          async function myMap() {
 
-  script.
-    
-    var map, markers, geoJSON;
+          /*
+          const styledMapType = new google.maps.StyledMapType(
+              [
+              {
+                  "featureType": "administrative.country",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape.man_made",
+                  "elementType": "geometry.fill",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      },
+                      {
+                          "hue": "#00ff1a"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape.natural.landcover",
+                  "elementType": "geometry.fill",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "road.highway",
+                  "elementType": "all",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              }
+              ],
+              { name: "Styled Map" }
+          );
 
-    async function myMap() {
+          var mapProp= {
+              center:new google.maps.LatLng(51.508742,-0.120850),
+              zoom:5,
+              mapTypeControlOptions: {
+              mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
+              },
+          };
 
-      /*
-      const styledMapType = new google.maps.StyledMapType(
-        [
-          {
-              "featureType": "administrative.country",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape",
-              "elementType": "geometry",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.man_made",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  },
-                  {
-                      "hue": "#00ff1a"
-                  }
-              ]
-          },
-          {
-              "featureType": "landscape.natural.landcover",
-              "elementType": "geometry.fill",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
-          },
-          {
-              "featureType": "road.highway",
-              "elementType": "all",
-              "stylers": [
-                  {
-                      "visibility": "off"
-                  }
-              ]
+          map = new google.maps.Map(document.getElementById("gMap"),mapProp);
+
+          map.mapTypes.set("styled_map", styledMapType);
+
+          */
+          const styledMapType = new google.maps.StyledMapType(
+              [
+              {
+                  "featureType": "administrative.country",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape",
+                  "elementType": "geometry",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape.man_made",
+                  "elementType": "geometry.fill",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      },
+                      {
+                          "hue": "#00ff1a"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "landscape.natural.landcover",
+                  "elementType": "geometry.fill",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              },
+              {
+                  "featureType": "road.highway",
+                  "elementType": "all",
+                  "stylers": [
+                      {
+                          "visibility": "off"
+                      }
+                  ]
+              }
+              ],
+              { name: "Styled Map" }
+          );
+          // Create a map object, and include the MapTypeId to add
+          // to the map type control.
+          map = new google.maps.Map(document.getElementById("gMap"), {
+              center: { lat: 51.508742, lng: -0.120850 },
+              zoom: 5,
+              mapTypeControlOptions: {
+              mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
+              },
+          });
+          //Associate the styled map with the MapTypeId and set it to display.
+          map.mapTypes.set("styled_map", styledMapType);
+          map.setMapTypeId("styled_map");
           }
-        ],
-        { name: "Styled Map" }
-      );
 
-      var mapProp= {
-        center:new google.maps.LatLng(51.508742,-0.120850),
-        zoom:5,
-        mapTypeControlOptions: {
-          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-        },
-      };
+          async function updateMap() {
 
-      map = new google.maps.Map(document.getElementById("gMap"),mapProp);
+          map.data.forEach(function (feature) {
+              map.data.remove(feature);
+          })
 
-      map.mapTypes.set("styled_map", styledMapType);
+          
+          $.getJSON("#{hostname.toString()}:#{port}/journeys", function(data) {
+              geoJSON = data;
+              map.data.addGeoJson(data);
 
-      */
-      const styledMapType = new google.maps.StyledMapType(
-        [
-          {
-            "featureType": "administrative.country",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "landscape",
-            "elementType": "geometry",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "landscape.man_made",
-            "elementType": "geometry.fill",
-            "stylers": [
-                {
-                    "visibility": "off"
-                },
-                {
-                    "hue": "#00ff1a"
-                }
-            ]
-        },
-        {
-            "featureType": "landscape.natural.landcover",
-            "elementType": "geometry.fill",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        },
-        {
-            "featureType": "road.highway",
-            "elementType": "all",
-            "stylers": [
-                {
-                    "visibility": "off"
-                }
-            ]
-        }
-        ],
-        { name: "Styled Map" }
-      );
-      // Create a map object, and include the MapTypeId to add
-      // to the map type control.
-      map = new google.maps.Map(document.getElementById("gMap"), {
-        center: { lat: 51.508742, lng: -0.120850 },
-        zoom: 5,
-        mapTypeControlOptions: {
-          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-        },
-      });
-      //Associate the styled map with the MapTypeId and set it to display.
-      map.mapTypes.set("styled_map", styledMapType);
-      map.setMapTypeId("styled_map");
-    }
+          })
 
-    async function updateMap() {
+          // ### Display decription box for a marker ###
+          var markerDesc = new google.maps.InfoWindow();
+          
+          // When the user clicks on a marker get the description
+          // json and display it
+          map.data.addListener('click', function(event) {
+              var desc = event.feature.getProperty("description");
+              markerDesc.setContent("<div>"+desc+"</div>");
+              markerDesc.setPosition(event.feature.getGeometry().get());
+              markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
+              markerDesc.open(map);
+          });
+          }
 
-      map.data.forEach(function (feature) {
-        map.data.remove(feature);
-      })
+          async function animation() {
+              const video = document.getElementById('loading-animation');
 
-      
-      $.getJSON("#{hostname.toString()}:#{port}/journeys", function(data) {
-        geoJSON = data;
-        map.data.addGeoJson(data);
+              video.onended = function() {
+                video.classList.add('hidden');
+                document.querySelector('div.map').classList.remove('hidden');
+              }
+          }
 
-      })
+          $(document).ready( function () {
+          animation();
+          myMap();
+          updateMap();
+          });
 
-    // ### Display decription box for a marker ###
-    var markerDesc = new google.maps.InfoWindow();
-    
-    // When the user clicks on a marker get the description
-    // json and display it
-    map.data.addListener('click', function(event) {
-        var desc = event.feature.getProperty("description");
-        markerDesc.setContent("<div>"+desc+"</div>");
-        markerDesc.setPosition(event.feature.getGeometry().get());
-        markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
-        markerDesc.open(map);
-    });
-
-
-
-      
-    }
-
-    $(document).ready( function () {
-      myMap();
-      updateMap();
-    });
-
-  script(src="https://maps.googleapis.com/maps/api/js")
+    script(src="https://maps.googleapis.com/maps/api/js")
