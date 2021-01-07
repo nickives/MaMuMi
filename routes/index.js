@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 
 app.use('/s', express.static(path.resolve(__dirname, '../static')));
+app.use('/a', express.static(path.resolve(__dirname, '../assets')));
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
