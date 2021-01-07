@@ -163,6 +163,22 @@ block content
         map.data.addGeoJson(data);
 
       })
+
+    // ### Display decription box for a marker ###
+    var markerDesc = new google.maps.InfoWindow();
+    
+    // When the user clicks on a marker get the description
+    // json and display it
+    map.data.addListener('click', function(event) {
+        var desc = event.feature.getProperty("description");
+        markerDesc.setContent("<div>"+desc+"</div>");
+        markerDesc.setPosition(event.feature.getGeometry().get());
+        markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
+        markerDesc.open(map);
+    });
+
+
+
       
     }
 
