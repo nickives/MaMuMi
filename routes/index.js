@@ -4,7 +4,6 @@ const path = require('path');
 const app = express();
 
 app.use('/s', express.static(path.resolve(__dirname, '../static')));
-app.use('/a', express.static(path.resolve(__dirname, '../assets')));
 
 /* GET home page. */
 app.get('/', function(req, res, next) {
@@ -22,21 +21,36 @@ app.get('/journeys', function(req, res, next) {
             {
                 type: "Feature",
                 properties: {
-                    description: '<iframe width="420" height="345" src="https://www.youtube.com/embed/ZtNcvoG3YdQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                    description: "Journey Start"
                 },
                 geometry: {
                     type: "Point",
-                    coordinates: [-2.088126, 51.886695]
+                    coordinates: [7.088126, 51.886695]
                 }
             },
             {
                 type: "Feature",
                 properties: {
-                    description:"A description"
+                    description: "Journey End"
                 },
                 geometry: {
                     type: "Point",
-                    coordinates: [-2.2, 55,]
+                    coordinates: [-3.2, 52.5]
+                },
+            },
+            {
+                type: "Feature",
+                properties: {
+                    description: '<iframe width="420" height="345" src="https://www.youtube.com/embed/ZtNcvoG3YdQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+                    midpoint: [0, 51.9]
+                },
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [7.088126, 51.886695],
+                        [0, 51.9],
+                        [-3.2, 52.5]
+                    ]
                 }
             }
         ]
