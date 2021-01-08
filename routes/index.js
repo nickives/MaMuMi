@@ -22,7 +22,7 @@ app.get('/journeys', function(req, res, next) {
             {
                 type: "Feature",
                 properties: {
-                    description: '<iframe width="420" height="345" src="https://www.youtube.com/embed/slwmJLaVrdE?list=PLL6nII2yndsosa7BvvF2jUmqlu3DzpqEa" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                    description: '<iframe width="420" height="345" src="https://www.youtube.com/embed/ZtNcvoG3YdQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
                 },
                 geometry: {
                     type: "Point",
