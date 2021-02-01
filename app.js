@@ -6,6 +6,8 @@ const logger = require('morgan');
 const app = express();
 
 const indexRouter = require('./routes/index');
+const journeysRouter = require('./routes/journeys');
+const adminRouter = require('./routes/admin');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,13 +26,17 @@ app.use((req, res, next) => {
   next();
 });
 
-/**
- * TODO: Express matches the "/" here, so any subsequent routes will fail. Just 
- * in case you were wondering why adding routes after this has no effect. If we
- * want have all the routes here, probably make some logic to forward bare "/" 
- * to index and continue with next() for everything else.
- */
+// Root
 app.use('/', indexRouter);
+
+// journeys
+app.use('/journeys', journeysRouter);
+
+// admin
+app.use('/admin', adminRouter);
+
+// static content
+app.use("/s", express.static(path.resolve(__dirname, './static')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
