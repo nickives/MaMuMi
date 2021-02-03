@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "test": "mocha",
+    "test-debug": "mocha --inspect-brk",
     "start": "node ./bin/www",
     "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
@@ -28,6 +29,7 @@
     "debug": "^2.6.9",
     "express": "^4.17.1",
     "http-errors": "^1.7.2",
+    "mariadb": "^2.5.2",
     "morgan": "^1.10.0",
     "pug": "^3.0.0"
   }
