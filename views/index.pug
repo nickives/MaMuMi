@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    #animation
+      video(autoplay muted id='loading-animation') 
+        source(src='/s/anim/splash.mp4' type='video/mp4')
+        
+
+        
+    div.map.hidden
+
+      h1 MaMuMi
+      p Here is an example journey! #{hostname}
+
+      #gMap(style="width:100%;height:800px;")
+      #testOut
+
+      script(src= hostname + ":" + port + "/s/js/index.js")
+    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgQsUmoRWeiRlclZbkSmn3vIFEmJZaBN4")

@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  mamumi:
+    container_name: mamumi
+    image: mamumi-dev
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    command: ["npm", "run", "start.dev"]
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:5.5
+    restart: always
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+      - mariadb-logs-volume:/logs/db
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+  
+volumes:
+  mariadb-volume:
+  mariadb-logs-volume:

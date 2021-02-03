@@ -2,9 +2,12 @@
   "name": "mamumi",
   "version": "1.0.0",
   "description": "Mapping the Music of Migration",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "test-debug": "mocha --inspect-brk",
+    "start": "node ./bin/www",
+    "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -18,9 +21,16 @@
   "homepage": "https://github.com/kyle-dormer/MaMuMi#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "cookie-parser": "^1.4.5",
+    "debug": "^2.6.9",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.2",
+    "mariadb": "^2.5.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.0"
   }
 }
