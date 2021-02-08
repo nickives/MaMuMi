@@ -39,5 +39,31 @@ describe('Journey Construction Test', function () {
         assert.ok(!journey.points.includes(point1));
         // second remains
         assert.ok(journey.points.includes(point2));
+    }),
+
+    it('Should add Descriptions OK', function () {
+        const desc = {
+            en: 'English',
+            de: 'German'
+        }
+
+        journey.addDescription(desc);
+
+        assert.ok(journey.description.en == desc.en);
+        assert.ok(journey.description.de == desc.de);
+    }),
+
+    it('Should remove Descriptions OK', function () {
+        const desc = {
+            en: 'English',
+            de: 'German'
+        }
+
+        journey.addDescription(desc);
+        journey.removeDescription('en');
+
+        assert.ok(journey.description.en != desc.en);
+        assert.ok(journey.description.de == desc.de);
     })
+
 })

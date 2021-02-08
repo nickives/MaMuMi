@@ -11,6 +11,7 @@ class Journey {
         this.forename = forename;
         this.surname = surname;
         this.points = [];
+        this.description = {};
     }
 
     /**
@@ -38,6 +39,25 @@ class Journey {
         if (pos !== undefined) {
             this.points.splice(pos, 1);
         }
+    }
+
+    /**
+     * Add descriptions. This should be an object with two letter language keys
+     * and associated descriptions.
+     * 
+     * @param {*} description 
+     */
+    addDescription(description) {
+        this.description = {...this.description, ...description};
+    }
+
+    /**
+     * Remove description. This should be a two letter locale such as 'en'.
+     * 
+     * @param {String} locale 
+     */
+    removeDescription(locale) {
+        delete this.description[locale];
     }
 }
 
