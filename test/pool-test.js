@@ -7,9 +7,9 @@ const pool = mariadb.createPool({
     password: '',
     connectionLimit: 5,
     acquireTimeout: 1000,
-    database: 'mamumi',
+    database: 'mamumi-test',
     connectTimeout: 1000,
-    socketTimeout: 5000
+    socketTimeout: 1000
 });
 
 module.exports = {

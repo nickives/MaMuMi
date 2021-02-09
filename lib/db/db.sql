@@ -1,128 +1,109 @@
--- MySQL dump 10.13  Distrib 8.0.23, for macos10.15 (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 5.0.4
+-- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1    Database: mamumi
--- ------------------------------------------------------
--- Server version	5.5.64-MariaDB-1~trusty
+-- Host: mariadb
+-- Generation Time: Feb 09, 2021 at 09:02 AM
+-- Server version: 5.5.64-MariaDB-1~trusty
+-- PHP Version: 7.4.15
+
+SET FOREIGN_KEY_CHECKS=0;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `journeys`
+-- Database: `mamumi`
+--
+CREATE DATABASE IF NOT EXISTS `mamumi` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `mamumi`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_journeys`
 --
 
-DROP TABLE IF EXISTS `journeys`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `journeys` (
-  `id_journeys` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `tbl_journeys`;
+CREATE TABLE `tbl_journeys` (
+  `id_journeys` int(11) NOT NULL,
   `forename` varchar(65) NOT NULL,
-  `surname` varchar(65) NOT NULL,
-  PRIMARY KEY (`id_journeys`)
+  `surname` varchar(65) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `point_txt_de`
+-- Table structure for table `tbl_points`
 --
 
-DROP TABLE IF EXISTS `point_txt_de`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `point_txt_de` (
-  `id_point_txt_de` int(11) NOT NULL,
-  `description` varchar(1200) NOT NULL,
-  PRIMARY KEY (`id_point_txt_de`),
-  CONSTRAINT `fk_id_points_de` FOREIGN KEY (`id_point_txt_de`) REFERENCES `points` (`id_points`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `point_txt_en`
---
-
-DROP TABLE IF EXISTS `point_txt_en`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `point_txt_en` (
-  `id_point_txt_en` int(11) NOT NULL,
-  `description` varchar(1200) NOT NULL,
-  PRIMARY KEY (`id_point_txt_en`),
-  CONSTRAINT `fk_id_points_en` FOREIGN KEY (`id_point_txt_en`) REFERENCES `points` (`id_points`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `point_txt_es`
---
-
-DROP TABLE IF EXISTS `point_txt_es`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `point_txt_es` (
-  `id_point_txt_es` int(11) NOT NULL,
-  `description` varchar(1200) NOT NULL,
-  PRIMARY KEY (`id_point_txt_es`),
-  CONSTRAINT `fk_id_points_es` FOREIGN KEY (`id_point_txt_es`) REFERENCES `points` (`id_points`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `point_txt_fr`
---
-
-DROP TABLE IF EXISTS `point_txt_fr`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `point_txt_fr` (
-  `id_point_txt_fr` int(11) NOT NULL,
-  `description` varchar(1200) NOT NULL,
-  PRIMARY KEY (`id_point_txt_fr`),
-  CONSTRAINT `fk_id_points_fr` FOREIGN KEY (`id_point_txt_fr`) REFERENCES `points` (`id_points`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `points`
---
-
-DROP TABLE IF EXISTS `points`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `points` (
-  `id_points` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `tbl_points`;
+CREATE TABLE `tbl_points` (
+  `id_points` int(11) NOT NULL,
   `id_journeys` int(11) NOT NULL,
   `point_num` int(11) NOT NULL,
   `loc` point NOT NULL,
   `arrival_date` datetime DEFAULT NULL,
   `departure_date` datetime DEFAULT NULL,
   `video_link` varchar(45) NOT NULL,
-  PRIMARY KEY (`id_points`),
-  UNIQUE KEY `points_point_num` (`point_num`,`id_journeys`),
-  KEY `fk_id_journeys_idx` (`id_journeys`),
-  CONSTRAINT `fk_id_journeys` FOREIGN KEY (`id_journeys`) REFERENCES `journeys` (`id_journeys`) ON DELETE CASCADE ON UPDATE CASCADE
+  `desc_en` varchar(1200) DEFAULT NULL,
+  `desc_es` varchar(1200) DEFAULT NULL,
+  `desc_de` varchar(1200) DEFAULT NULL,
+  `desc_fr` varchar(1200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'mamumi'
+-- Indexes for dumped tables
 --
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+--
+-- Indexes for table `tbl_journeys`
+--
+ALTER TABLE `tbl_journeys`
+  ADD PRIMARY KEY (`id_journeys`);
+
+--
+-- Indexes for table `tbl_points`
+--
+ALTER TABLE `tbl_points`
+  ADD PRIMARY KEY (`id_points`),
+  ADD UNIQUE KEY `points_point_num` (`point_num`,`id_journeys`),
+  ADD KEY `fk_id_journeys_idx` (`id_journeys`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tbl_journeys`
+--
+ALTER TABLE `tbl_journeys`
+  MODIFY `id_journeys` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tbl_points`
+--
+ALTER TABLE `tbl_points`
+  MODIFY `id_points` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tbl_points`
+--
+ALTER TABLE `tbl_points`
+  ADD CONSTRAINT `fk_id_journeys` FOREIGN KEY (`id_journeys`) REFERENCES `tbl_journeys` (`id_journeys`) ON DELETE CASCADE ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2021-02-03 15:43:08
