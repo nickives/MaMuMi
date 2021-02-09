@@ -10,19 +10,19 @@ describe('Journey Construction Test', function () {
 
     beforeEach(function () {
         journey = new Journey(forename, surname);
-    })
+    });
 
     it('Should construct OK', function () {
         assert.strictEqual(journey.forename, forename);
         assert.strictEqual(journey.surname, surname);
-    }),
+    });
 
     it('Should add points OK', function () {
         const point = new Point();
         journey.addPoint(point);
 
         assert.ok(journey.points.includes(point));
-    }),
+    });
 
     it('Should remove points OK', function () {
         const point1 = new Point();
@@ -39,5 +39,5 @@ describe('Journey Construction Test', function () {
         assert.ok(!journey.points.includes(point1));
         // second remains
         assert.ok(journey.points.includes(point2));
-    })
+    });
 })

@@ -17,5 +17,5 @@ describe('Point Construction Test', function () {
       assert.strictEqual(point.video_link, video_link);
       assert.strictEqual(point.arrival_date, arrival_date);
       assert.strictEqual(point.departure_date, null);
-    })
-})
+    });
+});
