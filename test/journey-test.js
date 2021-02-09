@@ -39,9 +39,7 @@ describe('Journey Construction Test', function () {
         assert.ok(!journey.points.includes(point1));
         // second remains
         assert.ok(journey.points.includes(point2));
-<<<<<<< HEAD
-    });
-=======
+
     }),
 
     it('Should add Descriptions OK', function () {
@@ -69,5 +67,4 @@ describe('Journey Construction Test', function () {
         assert.ok(journey.description.de == desc.de);
     })
 
->>>>>>> main
-})
+});
