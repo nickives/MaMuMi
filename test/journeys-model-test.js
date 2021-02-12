@@ -26,19 +26,6 @@ describe('Journeys-model.js DB Tests', function () {
             sql = "TRUNCATE `tbl_journeys`";
             res = await conn.query(sql);
 
-            locale = {
-                en: "en",
-                de: "de",
-                fr: "fr",
-                es: "es",
-            }
-
-            for (const [key, value] of Object.entries(locale)) {
-                sql = `TRUNCATE \`tbl_point_txt_${value}\``;
-                res = await conn.query(sql);
-            };
-            
-
             sql = "SET foreign_key_checks=1"; // IMPORTANT!
             res = await conn.query(sql);
 
