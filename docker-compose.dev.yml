@@ -14,10 +14,12 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3000:3000
+    networks:
+      - mamumi
     command: ["npm", "run", "start.dev"]
 
   mariadb:
-    container_name: mariadb
+    container_name: mamumi_mariadb
     image: mariadb:5.5
     restart: always
     volumes:
@@ -25,9 +27,25 @@ services:
       - mariadb-logs-volume:/logs/db
     ports:
       - '3306:3306'
+    networks:
+      - mamumi
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+
+  phpmyadmin:
+    container_name: 'mamumi_phpmyadmin'
+    image: 'phpmyadmin'
+    ports:
+        - '8080:80'
+    networks:
+        - mamumi
+    environment:
+        - PMA_HOST=mariadb
   
 volumes:
   mariadb-volume:
   mariadb-logs-volume:
+
+networks:
+  mamumi:
+    driver: bridge
