@@ -19,7 +19,7 @@ class JourneyModel {
      * @param {Point[]} points - points to insert
      * @param {Connection} conn - MariaDB connection
      */
-    async #insertPoints(journey_id, points, conn) {
+    async insertPoints(journey_id, points, conn) {
         // insert points
         const length = points.length;
         for (let i = 0; i < length; ++i) {
@@ -76,7 +76,7 @@ class JourneyModel {
             let sql = "INSERT INTO `tbl_journeys` (`forename`, `surname`) VALUES (?, ?)";
             res = await conn.query(sql, [journey.forename, journey.surname]);
 
-            await this.#insertPoints(res.insertId, journey.points, conn);
+            await this.insertPoints(res.insertId, journey.points, conn);
            
             await conn.commit();
         } catch (err) {
@@ -180,7 +180,7 @@ class JourneyModel {
 
             sql = "DELETE FROM `tbl_points` WHERE `id_journeys` = ?";
             res = await conn.query(sql, id);
-            await this.#insertPoints(id, journey.points, conn);
+            await this.insertPoints(id, journey.points, conn);
 
             await conn.commit();
         } catch (err) {
