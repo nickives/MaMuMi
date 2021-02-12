@@ -20,6 +20,9 @@ There are 3 Docker configurations. Production, debug, and dev. Production is the
 To run the dev container:
 `docker-compose -f docker-compose.dev.yml up --build`
 
+To run the unit tests on a running container:
+`docker exect -it mamumi npm test`
+
 # MariaDB
 The database schema is in lib/db/db.sql. This script should populate the database with required tables. The dev container has the database open on port 3306.
 
