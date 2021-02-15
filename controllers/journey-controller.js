@@ -1,29 +1,44 @@
 // What needs to happen in this file:
 //
 // + Add locales            []
-// + create journey         []
+// + create journey         [X]
 // + return all journeys    []
 // + return journey by id   []
 // + update journey by id   []
 // + delete journey by id   []
 // -Sam
 
-const pool = require('../lib/db/pool-secret.js');
+const pool = require('../lib/db/pool-secret-template.js');
 const JourneyModel = require("../models/journeys-model");
 const model = new JourneyModel(pool);
 
-// i18n provides locales
-const i18n = require('i18n');
+const Journey = require('../static/js/lib/journey');
 
 /**
- * Creates a new journey recordnp
+ * i18n is being funky so I am commenting it out till it behaves
+
+// i18n provides locales
+const I18n = require('i18n');
+const i18n = new I18n();
+const path = require('path');
+
+i18n.configure({
+  locales: ['en', 'de'],
+  directory: path.join(__direname, '../locales')
+})
+*/
+
+/**
+ * Creates a new journey record
  * 
  * @param {*} req - The request 
- * @param {*} res - database response
+ * @returns database response
  */
 const journey_create = (req, res) => {
-    var journey = req.body;
-    res.send(JourneyModel.create(journey));
+    let journey = new Journey(req.forename, req.surname);
+    let dbResponse = model.create(req);
+    
+    res.send(dbResponse);
 }
 
 /**
@@ -33,7 +48,14 @@ const journey_create = (req, res) => {
  * @param {*} res - The database response
  */
 const journey_get = (req, res) => {
-    res.send('NOT IMPLEMENTED');
+  var journey_id = req.body.journey_id;
+  
+  try {
+    var journey = JourneyModel.read(journey_id);
+    res.send(journey);
+  } catch (err) {
+    res.send(err);
+  } 
 }
 
 /**
