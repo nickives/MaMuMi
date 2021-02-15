@@ -39,6 +39,21 @@ class JourneyController {
     this.view(res);
   }
 
+  /**
+   * Get a journey from the model using a given id_points
+   *
+   * @param {int} id - The journey primary key
+   *
+   * @returns The journey or database response
+   **/
+  async read(id) {
+    // Read the journey from the model
+    let res = await this.model.read(id);
+
+    // Return the database response to the view
+    this.view(res);
+  }
+
 }
 
 module.exports = JourneyController;
