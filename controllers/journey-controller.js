@@ -8,88 +8,28 @@
 // + delete journey by id   []
 // -Sam
 
-const pool = require('../lib/db/pool-secret-template.js');
-const JourneyModel = require("../models/journeys-model");
-const model = new JourneyModel(pool);
-
 const Journey = require('../static/js/lib/journey');
 
-/**
- * i18n is being funky so I am commenting it out till it behaves
+class JourneyController {
 
-// i18n provides locales
-const I18n = require('i18n');
-const i18n = new I18n();
-const path = require('path');
+  constructor(model, view) {
+    this.model = model;
+    this.view = view;
+  }
 
-i18n.configure({
-  locales: ['en', 'de'],
-  directory: path.join(__direname, '../locales')
-})
-*/
+  async create(journey) {
+    // Clone the journey to serialize
+    var newJourney = new Journey(journey.forename, journey.surname);
+    for (let i=0; i<journey.points.length; i++) {
+      newJourney.addPoint(journey.points[i]);
+    }
 
-/**
- * Creates a new journey record
- * 
- * @param {*} req - The request 
- * @returns database response
- */
-const journey_create = (req, res) => {
-    let journey = new Journey(req.forename, req.surname);
-    let dbResponse = model.create(req);
+    // Send journey to the model to create it
+    let res = await this.model.create(newJourney);
     
-    res.send(dbResponse);
+    // Return the database response
+    this.view(res);
+  }
 }
 
-/**
- * Fetches a journey from the database from a given id
- * 
- * @param {int} req - Journey id
- * @param {*} res - The database response
- */
-const journey_get = (req, res) => {
-  var journey_id = req.body.journey_id;
-  
-  try {
-    var journey = JourneyModel.read(journey_id);
-    res.send(journey);
-  } catch (err) {
-    res.send(err);
-  } 
-}
-
-/**
- * Returns all the journeys from the database
- * 
- * @param {*} req
- * @param {*} res - Every journey
- */
-const journey_get_all = (req, res) => {
-    res.send('NOT IMPLEMENTED');
-}
-
-/**
- * 
- * @param {*} req 
- * @param {*} res 
- */
-const journey_update = (req, res) => {
-    res.send('NOT IMPLEMENTED');
-}
-
-/**
- * 
- * @param {*} req 
- * @param {*} res 
- */
-const journey_delete = (req, res) => {
-    res.send('NOT IMPLEMENTED');
-}
-
-module.exports = {
-    journey_create,
-    journey_get,
-    journey_get_all,
-    journey_update,
-    journey_delete
-}
+module.exports = JourneyController;
