@@ -17,9 +17,17 @@ class JourneyController {
     this.view = view;
   }
 
+  /**
+   * Creates a new journey in the data base by passing Journey object
+   * to the model
+   *
+   * @param {Journey} journey - The journey object
+   * 
+   * @returns The database connection status
+   */
   async create(journey) {
     // Clone the journey to serialize
-    var newJourney = new Journey(journey.forename, journey.surname);
+    let newJourney = new Journey(journey.forename, journey.surname);
     for (let i=0; i<journey.points.length; i++) {
       newJourney.addPoint(journey.points[i]);
     }
@@ -30,6 +38,7 @@ class JourneyController {
     // Return the database response
     this.view(res);
   }
+
 }
 
 module.exports = JourneyController;
