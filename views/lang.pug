@@ -1,0 +1,53 @@
+extends layout
+
+block content
+    h1 Language Page
+
+    p Greeting 1
+    = __('greetingOne')
+    br
+    p Greeting 2
+    = __('greetingTwo')
+
+
+    br
+    a(href="#" id="en") en
+    |
+    |
+    a(href="#" id="es") es 
+    |
+    |
+    a(href="#" id="fr") fr
+    |
+    |
+    a(href="#" id="de") de
+    |
+    |
+    a(href="#" id="clear") clear
+
+
+    script.
+        document.getElementById("en").onclick = () => {
+            document.cookie = "lang=en";
+            location.reload();
+        };
+
+        document.getElementById("es").onclick = () => {
+            document.cookie = "lang=es";
+            location.reload();
+        };
+
+        document.getElementById("fr").onclick = () => {
+            document.cookie = "lang=fr";
+            location.reload();
+        };
+
+        document.getElementById("de").onclick = () => {
+            document.cookie = "lang=de";
+            location.reload();
+        };
+
+        document.getElementById("clear").onclick = () => {
+            document.cookie = "lang=";
+            location.reload();
+        };
