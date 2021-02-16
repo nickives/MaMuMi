@@ -5,9 +5,11 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 
+// routes
 const indexRouter = require('./routes/index');
 const journeysRouter = require('./routes/journeys');
 const adminRouter = require('./routes/admin');
+const langRouter = require('./routes/lang');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,6 +20,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// I18n
+const { I18n } = require('i18n')
+const i18n = new I18n({
+  locales: ['en', 'es', 'de', 'fr'],
+  fallbacks: {en: 'en-*', de: 'de-*', fr: 'fr-*', es: 'es-*' },
+  defaultLocale: 'en',
+  cookie: 'lang',
+  directory: path.join(__dirname, 'locales')
+})
+app.use(i18n.init);
 
 // app locals - all templates can see these
 app.use((req, res, next) => {
@@ -34,6 +47,9 @@ app.use('/journeys', journeysRouter);
 
 // admin
 app.use('/admin', adminRouter);
+
+// lang test
+app.use('/lang', langRouter);
 
 // static content
 app.use("/s", express.static(path.resolve(__dirname, './static')));
