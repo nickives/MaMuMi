@@ -20,7 +20,7 @@ class JourneyController {
 
   /**
    * A private function used to clone the journey data
-   * that was recieved from outside of this class. This
+   * that was received from outside of this class. This
    * is to serialize the data before it is entered into
    * the database.
    *
@@ -46,7 +46,7 @@ class JourneyController {
    */
   async create(journey) {
     // Clone the journey to serialize
-    let newJourney = await cloneJourney(journey);
+    let newJourney = await this.cloneJourney(journey);
     
 
     // Send journey to the model to create it
@@ -81,7 +81,7 @@ class JourneyController {
    */
   async update(id, journey) {
     // Clone the journey to serialize
-    let newJourney = cloneJourney(journey);
+    let newJourney = this.cloneJourney(journey);
 
     // Send the id and journey to the model to update
     let res = await this.model.update(id, journey);
