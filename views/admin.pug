@@ -1,4 +1,29 @@
 extends layout
 
 block content
-    h1 Admin Page
+    nav.navbar.fixed-top.flex-md-nowrap.p-0.shadow#dashboard-nav
+        a(href='/').navbar.brand.col-sm-3.col-md-2.mr-0#dashboard-logo
+            img(src='/a/login/logo.png')
+        ul.navbar-nav.px-3
+            li.nav-item.text-nowrap
+                a(href='/admin/login').nav-link Sign out
+
+    .container-fluid#dashboard-sidebar
+        .row 
+            nav.col-md-2.d-none.d-md-block.bg-light.sidebar
+                .sidebar-sticky 
+                    ul.nav.flex-column 
+                        li.nav-item 
+                            a(href='/admin/dashboard').nav-link Dashboard
+                        li.nav-item 
+                            a(href='/admin/all-journies').nav-link All journies
+                        li.nav-item 
+                            a(href='/admin/create-journey').nav-link Create journey
+                        li.nav-item 
+                            a(href='update-journey').nav-link Update journey
+                        li.nav-item 
+                            a(href='delete-journey').nav-link Delete journey
+
+        .main.col-md-9.ml-sm-auto.col-lg-10.px-4#dashboard-content
+            .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+                block main
