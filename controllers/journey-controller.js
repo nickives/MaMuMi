@@ -2,10 +2,11 @@
 //
 // + create journey         [X]
 // + return journey by id   [X]
+// + return all journeys    [X]
 // + update journey by id   [X]
 // + delete journey by id   [X]
 //
-// + TEST                   []
+// + TEST                   [X]
 //
 // -Sam
 
@@ -66,6 +67,19 @@ class JourneyController {
   async read(id) {
     // Read the journey from the model
     let res = await this.model.read(id);
+
+    // Return the database response to the view
+    this.view(res);
+  }
+
+  /**
+   * Fetch the first point from every journey
+   *
+   * @returns array of journeys or data base response
+   */
+  async readAll() {
+    // Read all the journeys from the model
+    let res = await this.model.readAll();
 
     // Return the database response to the view
     this.view(res);

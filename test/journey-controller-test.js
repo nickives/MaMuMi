@@ -59,4 +59,10 @@ describe('Journeys-controller.js api test', function () {
     assert.ok(expectation.verify());
   });
 
+  it('Should get all the journeys OK', async () => {
+    expectation = mockModel.expects("readAll").once();
+    await controller.readAll();
+    assert.ok(expectation.verify());
+  });
+
 });
