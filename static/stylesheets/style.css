@@ -127,7 +127,7 @@ div.login-wrapper .form-check-label {
 }
 
 .sidebar-sticky a:hover,
-.sidebar-sticky a:active {
+.sidebar-sticky a.active {
   color: #4d3c86;
 }
 
