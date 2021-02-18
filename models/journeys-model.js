@@ -207,7 +207,7 @@ class JourneyModel {
 
         try {
             let sql = "DELETE FROM `tbl_journeys` WHERE `id_journeys` = ?"
-            res = conn.query(sql, id);
+            res = await conn.query(sql, id);
         } catch (err) {
             throw err
         } finally {
@@ -215,6 +215,65 @@ class JourneyModel {
         }
 
         return res;
+    }
+
+
+    /**
+     * Read all journeys. This will return all journeys, but each journey will 
+     * only have the first point attached, or no points if non exist.
+     * 
+     * @return {[Journey]} Array of Journeys
+     */
+    async readAll() {
+        let res;
+        const conn = await this.pool.getConnection();
+
+        try {
+            let sql = "SELECT `tbl_journeys`.`id_journeys`, `forename`, `surname`,\
+                       `point_num`, `loc`, `arrival_date`, `departure_date`,\
+                       `video_link`, `desc_en`, `desc_es`, `desc_de`, `desc_fr`\
+                       FROM `tbl_journeys`\
+                       LEFT JOIN `tbl_points` ON `tbl_journeys`.`id_journeys` = `tbl_points`.`id_journeys`\
+                       WHERE `point_num` = 1 OR `point_num` IS NULL";
+            res = await conn.query(sql);
+        } catch (err) {
+            throw err
+        } finally {
+            if (conn) conn.end();
+        }
+
+        let journeysReturn = [];
+        res.forEach( (j) => {
+            let journey = new Journey(j.forename, j.surname);
+
+            // if a point exists
+            if (j.point_num !== null) {
+                let point = new Point(
+                    j.journey_id, 
+                    j.point_num,
+                    {
+                        lng: j.loc.coordinates[0],
+                        lat: j.loc.coordinates[1]
+                    },
+                    j.video_link,
+                    j.arrival_date,
+                    j.departure_date,
+                );
+
+                point.addDescription({
+                    en: j.desc_en,
+                    es: j.desc_es,
+                    de: j.desc_de,
+                    fr: j.desc_fr,
+                });
+
+                journey.addPoint(point);
+            }
+
+            journeysReturn.push(journey);
+        })
+
+        return journeysReturn;    
     }
 }
 
