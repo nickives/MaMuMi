@@ -8,7 +8,7 @@ let model = new JourneyModel(pool);
 
 // Create controller object
 const JourneyController = require("../controllers/journey-controller");
-let controller = new JourneyController(model, res.send);
+let controller = new JourneyController(model, {})
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
@@ -25,7 +25,7 @@ router.get('/:id', function(req, res) {
 
 //Read all journeys
 router.get('/', function(req, res) {
-  controller.readAll();
+  res.send(controller.readAll());
 });
 
 // Update a journey by and id
