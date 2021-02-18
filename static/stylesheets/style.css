@@ -1,3 +1,4 @@
+/* ===== Global ===== */
 * {
   box-sizing: border-box;
 }
@@ -79,4 +80,57 @@ div.login-wrapper .form-check-label {
 
 #login-form button:hover {
   background: #4d3c86;
+}
+
+/* ===== Admin Dashboard ===== */
+#dashboard-nav {
+  background-color: #d95bad;
+}
+
+#dashboard-nav #dashboard-logo {
+  max-width: 7%;
+}
+
+#dashboard-nav a:first-child img {
+  max-width: 100%;
+}
+
+#dashboard-nav ul.navbar-nav li a {
+  color: #fff;
+}
+
+#dashboard-nav ul.navbar-nav li a:hover {
+  color: #b4b3b3;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sidebar-sticky a {
+  color: #048abf;
+}
+
+.sidebar-sticky a:hover,
+.sidebar-sticky a:active {
+  color: #4d3c86;
+}
+
+#dashboard-content {
+  padding-top: 60px;
 }
