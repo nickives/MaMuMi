@@ -1,12 +1,52 @@
 const express = require('express');
 const router = express.Router();
 
+// Create model object
+const pool = require("../lib/db/pool-secret");
+const JourneyModel = require("../models/journeys-model");
+let model = new JourneyModel(pool);
+
+// Create controller object
+const JourneyController = require("../controllers/journey-controller");
+let controller = new JourneyController(model, res.send);
+
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
+// Create 
+router.post('/', function(req, res) {
+  controller.create(req);
+});
+
+// Read single journey
+router.get('/:id', function(req, res) {
+  let id = parseInt(req.params['id']);
+  controller.read(id);
+}
+
+//Read all journeys
+router.get('/', function(req, res) {
+  controller.readAll();
+}
+
+// Update a journey by and id
+router.post('/:id/update/:journey', function(req, res) {
+  let id = parseInt(req.params['id']);
+  let journey = req.params['journey'];
+  controller.update(id, journey);
+}
+
+// Delete an id by an id
+router.post('/:id/delete', function(req, res) {
+  let id = parseInt(req.params['id']);
+  controller.delete(id);
+}
+
+
 /**
+ * DUMMY DATA 
+ * 
  * Information that needs to be displayed inside the
  * marker description box is stored in the "description" field
- */
 router.get('/', function(req, res, next) {
 
     var data = {
@@ -53,5 +93,5 @@ router.get('/', function(req, res, next) {
     res.send(JSON.stringify(data))
 
 })
-
+*/
 module.exports = router;
