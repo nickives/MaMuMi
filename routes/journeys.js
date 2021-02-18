@@ -21,25 +21,25 @@ router.post('/', function(req, res) {
 router.get('/:id', function(req, res) {
   let id = parseInt(req.params['id']);
   controller.read(id);
-}
+});
 
 //Read all journeys
 router.get('/', function(req, res) {
   controller.readAll();
-}
+});
 
 // Update a journey by and id
 router.post('/:id/update/:journey', function(req, res) {
   let id = parseInt(req.params['id']);
   let journey = req.params['journey'];
   controller.update(id, journey);
-}
+});
 
 // Delete an id by an id
 router.post('/:id/delete', function(req, res) {
   let id = parseInt(req.params['id']);
   controller.delete(id);
-}
+});
 
 
 /**
