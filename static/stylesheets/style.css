@@ -1,33 +1,82 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
+html,
 body {
-    margin: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
 }
 
 div.animation {
-    display: block;
-    padding: 0;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgb(0, 0, 0, 0.4);
+  display: block;
+  padding: 0;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgb(0, 0, 0, 0.4);
 }
 
 div.animation video {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 div.map {
-    
+}
+
+/* ===== Login ===== */
+div.login-wrapper {
+  height: 100%;
+  background: rgb(4, 138, 191);
+  background: linear-gradient(
+      342deg,
+      rgba(4, 138, 191, 1) 22%,
+      rgba(217, 91, 173, 1) 56%,
+      rgba(77, 60, 134, 1) 76%
+    )
+    fixed;
+}
+
+div.login-wrapper label {
+  display: none;
+}
+
+div.login-wrapper .form-check-label {
+  display: inline-block;
+}
+
+#form-inner img {
+  max-width: 100%;
+  height: auto;
+}
+
+#login-form {
+  background: #fff;
+  border-radius: 10px;
+}
+
+#login-form h1 {
+  color: #4d3c86;
+}
+
+#login-form button {
+  padding: 10px 25px;
+  cursor: pointer;
+  outline: none;
+  background: #048abf;
+  border: none;
+}
+
+#login-form button:hover {
+  background: #4d3c86;
 }
