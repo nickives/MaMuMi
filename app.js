@@ -54,6 +54,9 @@ app.use('/lang', langRouter);
 // static content
 app.use("/s", express.static(path.resolve(__dirname, './static')));
 
+// assets
+app.use("/a", express.static(path.resolve(__dirname, './assets')));
+
 // bootstrap css
 app.use("/css", express.static(path.resolve(__dirname, './node_modules/bootstrap/dist/css')));
 
