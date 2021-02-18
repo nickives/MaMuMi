@@ -140,7 +140,7 @@ describe('Journeys-model.js DB Tests', function () {
         assert.ifError(res_read);
     });
 
-    
+  
     it('Should readAll() OK!' , async () => {
         let resJourney = await model.create(journey);
 
@@ -167,3 +167,4 @@ describe('Journeys-model.js DB Tests', function () {
         assert(journeyNoPointFound); 
     })
 })
+
