@@ -14,20 +14,9 @@ router.get('/dashboard', function(req, res, next) {
     res.render('dashboard');
 });
 
-router.get('/all-journies', function(req, res, next) {
-    res.render('all-journies');
+router.get('/journeys', function(req, res, next) {
+    res.render('journeys');
 });
 
-router.get('/create-journey', function(req, res, next) {
-    res.render('create-journey');
-});
-
-router.get('/update-journey', function(req, res, next) {
-    res.render('update-journey');
-});
-
-router.get('/delete-journey', function(req, res, next) {
-    res.render('delete-journey');
-});
 
 module.exports = router;
