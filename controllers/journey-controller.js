@@ -84,7 +84,7 @@ class JourneyController {
     let newJourney = this.cloneJourney(journey);
 
     // Send the id and journey to the model to update
-    let res = await this.model.update(id, journey);
+    let res = await this.model.update(id, newJourney);
 
     // Return the model response
     this.view(res);
