@@ -94,8 +94,6 @@ describe('Journeys-model.js DB Tests', function () {
         assert(point1Found);
         assert(point2Found);
 
-        // make sure descriptions are also attached
-
         // there shouldn't be any journey with this ID in the db
         out = await model.read(999999);
         assert.ifError(out);
@@ -141,4 +139,32 @@ describe('Journeys-model.js DB Tests', function () {
         let res_read = await model.read(res_create.insertId);
         assert.ifError(res_read);
     });
+
+  
+    it('Should readAll() OK!' , async () => {
+        let resJourney = await model.create(journey);
+
+        // We should have two types of journey for good measure
+        let journeyWithNoPoint = new Journey('Fred', 'isBest');
+        let resNoPoint = await model.create(journeyWithNoPoint);
+
+        let resAll = await model.readAll();
+
+        let journeyFound = false;
+        let journeyNoPointFound = false;
+        resAll.forEach( (j) => {
+            if (j.forename == journey.forename) {
+                if (j.points[0].video_link == journey.points[0].video_link) {
+                    journeyFound = true;
+                }
+                
+            } else if (j.forename == journeyWithNoPoint.forename) {
+                journeyNoPointFound = true;
+            }
+        })
+
+        assert(journeyFound);
+        assert(journeyNoPointFound); 
+    })
 })
+
