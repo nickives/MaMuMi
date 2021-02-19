@@ -31,9 +31,12 @@ class JourneyController {
    */
   async cloneJourney(journey) {
     let newJourney = new Journey(journey.forename, journey.surname);
-    for (let i=0; i<journey.points.length; i++) {
-      newJourney.addPoint(journey.points[i]);
+    if (journey.points !== undefined) {
+      for (let i=0; i<journey.points.length; i++) {
+        newJourney.addPoint(journey.points[i]);
+      }
     }
+
     return newJourney;
   }
 
@@ -82,7 +85,7 @@ class JourneyController {
     let res = await this.model.readAll();
 
     // Return the database response to the view
-    this.view.send(JSON.stringify(res));
+    this.view.send(JSON.stringify(output));
   }
 
   /**
