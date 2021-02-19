@@ -14,7 +14,8 @@ let controller = new JourneyController(model, {})
 
 // Create 
 router.post('/', function(req, res) {
-  controller.create(req);
+  let journey = JSON.deserialize(req.body);
+  controller.create(journey);
 });
 
 // Read single journey
@@ -29,9 +30,9 @@ router.get('/', function(req, res) {
 });
 
 // Update a journey by and id
-router.post('/:id/update/:journey', function(req, res) {
+router.post('/:id/update', function(req, res) {
   let id = parseInt(req.params['id']);
-  let journey = req.params['journey'];
+  let journey = JSON.deserialize(req.body);
   controller.update(id, journey);
 });
 
