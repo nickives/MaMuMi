@@ -3,4 +3,25 @@ block main
     script(src='/s/js/journey-crud.js')
     .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
         h1.h2 Journeys
+        .btn-toolbar.mb-2.mb-md-0
+            .btn-group.mr-2
+                button.btn.btn-outline-secondary#create-btn Create
 
+    //- Journey list
+    .pane-container.container-fluid
+        .row
+            .admin-pane.active-pane#journey-list 
+                .table-responsive
+                    table.table.table-sm 
+                        thead 
+                            tr 
+                                th #
+                                th Forename
+                                th Surname
+                                th Points
+                            tbody
+
+
+            //- Create journey
+            .admin-pane#create-journey
+                

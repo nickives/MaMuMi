@@ -134,3 +134,15 @@ div.login-wrapper .form-check-label {
 #dashboard-content {
   padding-top: 60px;
 }
+
+.admin-pane {
+  display: none;
+}
+
+.active-pane {
+  display: block;
+}
+
+#create-btn {
+  width: 75px;
+}
