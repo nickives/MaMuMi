@@ -8,6 +8,8 @@ const JourneyController = require("../controllers/journey-controller");
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
+router.use(express.json());
+
 // Create 
 router.post('/', function(req, res) {
  
@@ -17,7 +19,7 @@ router.post('/', function(req, res) {
   // Create controller object
   let controller = new JourneyController(model, res);
 
-  let journey = JSON.deserialize(req.body);
+  let journey = req.body;
 
   controller.create(journey);
 });
@@ -57,7 +59,7 @@ router.post('/:id/update', function(req, res) {
   let controller = new JourneyController(model, res);
 
   let id = parseInt(req.params['id']);
-  let journey = JSON.deserialize(req.body);
+  let journey = req.body;
 
   controller.update(id, journey);
 });
