@@ -8,24 +8,26 @@ let model = new JourneyModel(pool);
 
 // Create controller object
 const JourneyController = require("../controllers/journey-controller");
-let controller = new JourneyController(model, res.send);
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
 // Create 
 router.post('/', function(req, res) {
-  let journey = JSON.deserialize(req.body);
+  const journey = JSON.deserialize(req.body);
+  const controller = new JourneyController(model, res.send);
   controller.create(journey);
 });
 
 // Read single journey
 router.get('/:id', function(req, res) {
   let id = parseInt(req.params['id']);
+  const controller = new JourneyController(model, res.send);
   controller.read(id);
 });
 
 //Read all journeys
 router.get('/', function(req, res) {
+  const controller = new JourneyController(model, res.send);
   controller.readAll();
 });
 
@@ -33,12 +35,14 @@ router.get('/', function(req, res) {
 router.post('/:id/update', function(req, res) {
   let id = parseInt(req.params['id']);
   let journey = JSON.deserialize(req.body);
+  const controller = new JourneyController(model, res.send);
   controller.update(id, journey);
 });
 
 // Delete an id by an id
 router.post('/:id/delete', function(req, res) {
   let id = parseInt(req.params['id']);
+  const controller = new JourneyController(model, res.send);
   controller.delete(id);
 });
 
