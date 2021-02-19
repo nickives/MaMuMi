@@ -32,7 +32,7 @@ router.get('/:id', function(req, res) {
   let controller = new JourneyController(model, res.send);
 
   let id = parseInt(req.params['id']);
-  const controller = new JourneyController(model, res.send);
+
   controller.read(id);
 });
 
@@ -58,7 +58,7 @@ router.post('/:id/update', function(req, res) {
 
   let id = parseInt(req.params['id']);
   let journey = JSON.deserialize(req.body);
-  const controller = new JourneyController(model, res.send);
+
   controller.update(id, journey);
 });
 
@@ -72,7 +72,7 @@ router.post('/:id/delete', function(req, res) {
   let controller = new JourneyController(model, res.send);
 
   let id = parseInt(req.params['id']);
-  const controller = new JourneyController(model, res.send);
+
   controller.delete(id);
 });
 
