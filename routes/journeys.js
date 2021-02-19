@@ -6,31 +6,45 @@ const pool = require("../lib/db/pool-secret");
 const JourneyModel = require("../models/journeys-model");
 let model = new JourneyModel(pool);
 
-// Create controller object
-const JourneyController = require("../controllers/journey-controller");
-let controller = new JourneyController(model, res.send);
-
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
 // Create 
 router.post('/', function(req, res) {
+
+  // Create controller object
+  const JourneyController = require("../controllers/journey-controller");
+  let controller = new JourneyController(model, res.send);
+
   let journey = JSON.deserialize(req.body);
   controller.create(journey);
 });
 
 // Read single journey
 router.get('/:id', function(req, res) {
+
+  // Create controller object
+  const JourneyController = require("../controllers/journey-controller");
+  let controller = new JourneyController(model, res.send);
+
   let id = parseInt(req.params['id']);
   controller.read(id);
 });
 
 //Read all journeys
 router.get('/', function(req, res) {
+  // Create controller object
+  const JourneyController = require("../controllers/journey-controller");
+  let controller = new JourneyController(model, res.send);
+
   controller.readAll();
 });
 
 // Update a journey by and id
 router.post('/:id/update', function(req, res) {
+  // Create controller object
+  const JourneyController = require("../controllers/journey-controller");
+  let controller = new JourneyController(model, res.send);
+
   let id = parseInt(req.params['id']);
   let journey = JSON.deserialize(req.body);
   controller.update(id, journey);
@@ -38,6 +52,10 @@ router.post('/:id/update', function(req, res) {
 
 // Delete an id by an id
 router.post('/:id/delete', function(req, res) {
+  // Create controller object
+  const JourneyController = require("../controllers/journey-controller");
+  let controller = new JourneyController(model, res.send);
+
   let id = parseInt(req.params['id']);
   controller.delete(id);
 });
