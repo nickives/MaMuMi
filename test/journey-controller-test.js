@@ -8,7 +8,7 @@ const sinon = require('sinon');
 const { log } = require('console');
 
 describe('Journeys-controller.js api test', function () {
-  
+  let journey;
   let model = new JourneyModel(pool);
   let mockModel = sinon.mock(model);
 
