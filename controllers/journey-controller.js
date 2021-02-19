@@ -95,7 +95,7 @@ class JourneyController {
    */
   async update(id, journey) {
     // Clone the journey to serialize
-    let newJourney = this.cloneJourney(journey);
+    let newJourney = await this.cloneJourney(journey);
 
     // Send the id and journey to the model to update
     let res = await this.model.update(id, newJourney);
