@@ -7,13 +7,14 @@ const JourneyController = require("../controllers/journey-controller");
 const sinon = require('sinon');
 const { log } = require('console');
 
+const res = require('../node_modules/express/lib/response');
+
 describe('Journeys-controller.js api test', function () {
   let journey;
   let model = new JourneyModel(pool);
   let mockModel = sinon.mock(model);
 
-  let view;
-  let mockView = sinon.stub(view);
+  let mockView = sinon.stub(res);
 
   let controller = new JourneyController(model, mockView);
 

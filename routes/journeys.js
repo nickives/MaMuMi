@@ -15,7 +15,7 @@ router.post('/', function(req, res) {
   let model = new JourneyModel(pool);
 
   // Create controller object
-  let controller = new JourneyController(model, res.send);
+  let controller = new JourneyController(model, res);
 
   let journey = JSON.deserialize(req.body);
 
@@ -29,7 +29,7 @@ router.get('/:id', function(req, res) {
   let model = new JourneyModel(pool);
 
   // Create controller object
-  let controller = new JourneyController(model, res.send);
+  let controller = new JourneyController(model, res);
 
   let id = parseInt(req.params['id']);
 
@@ -42,7 +42,7 @@ router.get('/', function(req, res) {
   let model = new JourneyModel(pool);
 
   // Create controller object
-  let controller = new JourneyController(model, res.send);
+  let controller = new JourneyController(model, res);
 
   controller.readAll();
 });
@@ -54,7 +54,7 @@ router.post('/:id/update', function(req, res) {
   let model = new JourneyModel(pool);
 
   // Create controller object
-  let controller = new JourneyController(model, res.send);
+  let controller = new JourneyController(model, res);
 
   let id = parseInt(req.params['id']);
   let journey = JSON.deserialize(req.body);
@@ -69,7 +69,7 @@ router.post('/:id/delete', function(req, res) {
   let model = new JourneyModel(pool);
 
   // Create controller object
-  let controller = new JourneyController(model, res.send);
+  let controller = new JourneyController(model, res);
 
   let id = parseInt(req.params['id']);
 
