@@ -6,11 +6,13 @@ class Journey {
      * 
      * @param {String} forename - First name of migrant
      * @param {String} surname - Surname of migrant 
+     * @param {Number} id - Primary key of journey, positive integer
      */
-    constructor(forename, surname) {
+    constructor(forename, surname, id) {
         this.forename = forename;
         this.surname = surname;
         this.points = [];
+        this.id = id;
     }
 
     /**
