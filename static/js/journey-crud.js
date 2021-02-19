@@ -45,4 +45,20 @@
             alert('Journey update failed!');
         })
     }
+
+    async function _deleteJourney(journeyID) {
+        fetch(`/journeys/${journeyID}/delete`, {
+            method: 'POST',
+            mode: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: {}
+        }).then((res) => {
+            alert('Journey deleted!');
+        }).catch((error) => {
+            alert('Journey deletion failed!');
+        })
+    }
 })();
