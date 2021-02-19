@@ -54,7 +54,7 @@ class JourneyController {
     let res = await this.model.create(newJourney);
     
     // Return the database response
-    this.view(res);
+    this.view(JSON.stringify(res));
   }
 
   /**
@@ -69,7 +69,7 @@ class JourneyController {
     let res = await this.model.read(id);
 
     // Return the database response to the view
-    this.view(res);
+    this.view(JSON.stringify(res));
   }
 
   /**
@@ -82,7 +82,7 @@ class JourneyController {
     let res = await this.model.readAll();
 
     // Return the database response to the view
-    this.view(res);
+    this.view(JSON.stringify(res));
   }
 
   /**
@@ -101,7 +101,7 @@ class JourneyController {
     let res = await this.model.update(id, newJourney);
 
     // Return the model response
-    this.view(res);
+    this.view(JSON.stringify(res));
   }
 
   /**
@@ -115,7 +115,7 @@ class JourneyController {
     let res = this.model.delete(id);
 
     // Return the model response
-    this.view(res);
+    this.view(JSON.stringify(res));
   }
 
 }
