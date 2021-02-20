@@ -31,9 +31,12 @@ class JourneyController {
    */
   async cloneJourney(journey) {
     let newJourney = new Journey(journey.forename, journey.surname);
-    for (let i=0; i<journey.points.length; i++) {
-      newJourney.addPoint(journey.points[i]);
+    if (journey.points !== undefined) {
+      for (let i=0; i<journey.points.length; i++) {
+        newJourney.addPoint(journey.points[i]);
+      }
     }
+
     return newJourney;
   }
 
@@ -54,7 +57,7 @@ class JourneyController {
     let res = await this.model.create(newJourney);
     
     // Return the database response
-    this.view(JSON.stringify(res));
+    this.view.send(JSON.stringify(res));
   }
 
   /**
@@ -69,7 +72,7 @@ class JourneyController {
     let res = await this.model.read(id);
 
     // Return the database response to the view
-    this.view(JSON.stringify(res));
+    this.view.send(JSON.stringify(res));
   }
 
   /**
@@ -82,7 +85,7 @@ class JourneyController {
     let res = await this.model.readAll();
 
     // Return the database response to the view
-    this.view(JSON.stringify(res));
+    this.view.send(JSON.stringify(output));
   }
 
   /**
@@ -95,13 +98,13 @@ class JourneyController {
    */
   async update(id, journey) {
     // Clone the journey to serialize
-    let newJourney = this.cloneJourney(journey);
+    let newJourney = await this.cloneJourney(journey);
 
     // Send the id and journey to the model to update
     let res = await this.model.update(id, newJourney);
 
     // Return the model response
-    this.view(JSON.stringify(res));
+    this.view.send(JSON.stringify(res));
   }
 
   /**
@@ -115,7 +118,7 @@ class JourneyController {
     let res = this.model.delete(id);
 
     // Return the model response
-    this.view(JSON.stringify(res));
+    this.view.send(JSON.stringify(res));
   }
 
 }

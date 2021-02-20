@@ -153,16 +153,17 @@ describe('Journeys-model.js DB Tests', function () {
         let journeyFound = false;
         let journeyNoPointFound = false;
         resAll.forEach( (j) => {
-            if (j.forename == journey.forename) {
-                if (j.points[0].video_link == journey.points[0].video_link) {
-                    journeyFound = true;
+            if (j.id != null) { // make sure there's an id attached
+                if (j.forename == journey.forename) {
+                    if (j.points[0].video_link == journey.points[0].video_link) {
+                        journeyFound = true;
+                    }
+                    
+                } else if (j.forename == journeyWithNoPoint.forename) {
+                    journeyNoPointFound = true;
                 }
-                
-            } else if (j.forename == journeyWithNoPoint.forename) {
-                journeyNoPointFound = true;
             }
         })
-
         assert(journeyFound);
         assert(journeyNoPointFound); 
     })

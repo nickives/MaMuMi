@@ -7,7 +7,7 @@
     "test": "mocha",
     "test-debug": "mocha --inspect-brk",
     "start": "node ./bin/www",
-    "start-debug": "node --inspect-brk ./bin/www",
+    "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L --inspect-brk=0.0.0.0:9229 ./bin/www",
     "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
   "repository": {
@@ -23,7 +23,8 @@
   "devDependencies": {
     "chai": "^4.3.0",
     "mocha": "^8.3.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "sinon": "^9.2.4"
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
@@ -32,10 +33,9 @@
     "express": "^4.17.1",
     "http-errors": "^1.7.2",
     "i18n": "^0.13.2",
+    "jquery": "^3.5.1",
     "mariadb": "^2.5.2",
     "morgan": "^1.10.0",
-    "sinon": "^9.2.4",
-    "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "pug": "^3.0.0"
   }

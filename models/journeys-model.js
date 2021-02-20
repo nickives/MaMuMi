@@ -92,7 +92,7 @@ class JourneyModel {
     /**
      * Read a Journey
      * 
-     * @param {int} id - Primary key
+     * @param {Number} id - Primary key, must be positive integer
      * 
      * @returns {Journey} - Journey object, or null if nothing found
      * @throws database errors
@@ -109,7 +109,7 @@ class JourneyModel {
 
             journey.forename = res_j[0].forename;
             journey.surname = res_j[0].surname;
-            journey.id_journeys = id;
+            journey.id = id;
 
             // get points
             sql = "SELECT `id_points`, `point_num`, `loc`, `arrival_date`,\
@@ -244,7 +244,7 @@ class JourneyModel {
 
         let journeysReturn = [];
         res.forEach( (j) => {
-            let journey = new Journey(j.forename, j.surname);
+            let journey = new Journey(j.forename, j.surname, j.id_journeys);
 
             // if a point exists
             if (j.point_num !== null) {
