@@ -22,7 +22,6 @@
 
         _displayJourneys();
         _createBtn.addEventListener('click', _altPane);
-        _creationForm.addEventListener('submit', _addJourney);
     });
 
     async function _getJourneys() {
