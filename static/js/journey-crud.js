@@ -114,4 +114,16 @@ function initMap() {
         center: { lat: -34.397, lng: 150.644 },
         zoom: 8,
         });
+
+    map.setOptions({disableDoubleClickZoom: true });
+    const pointMarker = new google.maps.Marker({map: map});
+
+    map.addListener('dblclick', (e) => {
+        placeMarkerAndPanTo(e.latLng, map, pointMarker);
+    })
 }
+
+function placeMarkerAndPanTo(latLng, map, marker) {
+    marker.setPosition(latLng);
+    map.panTo(latLng);
+  }
