@@ -84,7 +84,7 @@
         _getJourneys().then(journeys => {
             if(journeys.length > 0) {  
             } else {
-                _tableContainer.innerText = 'No journeys added yet. Let\'s get started!';
+                _tableContainer.innerText = 'No journeys added yet. Click the create button to get started.';
             }
         })
     }
