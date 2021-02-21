@@ -57,15 +57,45 @@ block main
                                 th Delete 
 
     .modal.fade(tabindex='-1')#point-form
-        .modal-dialog.modal-lg
+        .modal-dialog.modal-xl
             .modal-content
                 .modal-header
                     h2.modal-title Create point
                     button(type='button' data-dismiss='modal' aria-label='Close').close
                         span(aria-hidden='true') &times;
                 .modal-body
-                    //- Form
-                    //- Map selector
+                    .container-fluid 
+                        .row 
+                            .col-6.border-right
+                                h3.h4.text-center Details
+                                form
+                                    .row.mb-3
+                                        .col-6.text-center
+                                            label(for='lat') Latitude
+                                            input(type='text' readonly required).form-control#lat
+                                        .col-6.text-center
+                                            label(for='lng') Longitude
+                                            input(type='text' readonly required).form-control#lng
+                                    .row.mb-3
+                                        .col-6.text-center
+                                            label(for='arrival') Arrival Date
+                                            input(type='date' required).form-control#arrival
+                                        .col-6.text-center
+                                            label(for='departure') Deperature Date
+                                            input(type='date' required).form-control#departure
+                                    .row.mb-3
+                                        .col-12.text-center 
+                                            label(for='video-link') Video Link
+                                            input(type='url' required).form-control#video-link
+                                    .row.mb-3
+                                        .col-12.text-center
+                                            label(for='desc') Description
+                                            textarea.form-control#desc
+
+                                            
+
+                            .col-6
+                                h3.h4.text-center Location
                 .modal-footer 
                     d.flex.w-100
                         button(type='button' data-dismiss='modal').btn.btn-secondary.w-50.rounded-0 Close
