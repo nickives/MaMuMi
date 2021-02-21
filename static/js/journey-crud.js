@@ -111,8 +111,8 @@
 // Callback function called by inline Google maps script
 function initMap() {
     map = new google.maps.Map(document.getElementById("gmap"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
+        center: { lat: 53.0000, lng: 9.0000 },
+        zoom: 2,
         });
 
     map.setOptions({disableDoubleClickZoom: true });
