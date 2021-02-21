@@ -54,10 +54,16 @@ class JourneyController {
     
 
     // Send journey to the model to create it
-    let res = await this.model.create(newJourney);
-    
+    try {
+      let res = await this.model.create(newJourney);
+      res = JSON.stringify(res);
+    } catch(err) {
+      res = JSON.stringify(res); 
+      this.view.status(422);
+    }
+
     // Return the database response
-    this.view.send(JSON.stringify(res));
+    this.view.send(res);
   }
 
   /**
@@ -119,7 +125,7 @@ class JourneyController {
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(404);
+      this.view.status(422);
     }
 
     // Return the model response
