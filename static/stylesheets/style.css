@@ -140,9 +140,18 @@ div.login-wrapper .form-check-label {
 }
 
 .active-pane {
-  display: block;
+  display: flex;
 }
 
-#create-btn {
+.create-btn {
   width: 75px;
+}
+
+#submit-journey-btn {
+  color: #ffffff;
+  background-color: #048abf;
+}
+
+#submit-journey-btn:hover {
+  background-color: #d95bad;
 }

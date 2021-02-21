@@ -13,7 +13,7 @@
     let _journeyList;
 
     document.addEventListener('DOMContentLoaded', () => {
-        _createBtn = document.getElementById('create-btn');
+        _createBtn = document.getElementById('pane-switch-btn');
         _listPane = document.getElementById('journey-list');
         _creationPane = document.getElementById('create-journey');
         _creationForm = document.querySelector('#create-journey form');
