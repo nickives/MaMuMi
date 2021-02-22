@@ -11,6 +11,8 @@
     let _creationForm;
     let _tableContainer;
     let _journeyList;
+    let _pointCreateForm;
+    let _pointCreateBtn;
 
     document.addEventListener('DOMContentLoaded', () => {
         _createBtn = document.getElementById('pane-switch-btn');
@@ -19,9 +21,12 @@
         _creationForm = document.querySelector('#create-journey form');
         _tableContainer = document.querySelector('.table-responsive');
         _journeyList = document.querySelector('#journey-list tbody');
+        _pointCreateForm = document.getElementById('point-create-form');
+        _pointCreateBtn = document.getElementById('point-create-btn');
 
         _displayJourneys();
         _createBtn.addEventListener('click', _altPane);
+        _pointCreateBtn.addEventListener('click', _createPoint);
     });
 
     async function _getJourneys() {
@@ -104,6 +109,12 @@
         }
 
         event.preventDefault();
+    }
+
+    function _createPoint(event) {
+        if(_pointCreateForm.reportValidity()) {
+
+        }
     }
 
 })();

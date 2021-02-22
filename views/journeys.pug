@@ -69,7 +69,7 @@ block main
                         .row 
                             .col-6.border-right.pl-0
                                 h3.h4.text-center Details
-                                form
+                                form#point-create-form
                                     .row.mb-3
                                         .col-6.text-center
                                             label(for='lat') Latitude
@@ -102,6 +102,6 @@ block main
                 .modal-footer
                     d.flex.w-100
                         button(type='button' data-dismiss='modal').btn.btn-secondary.w-50.rounded-0 Close
-                        button(type='button').btn.btn-primary.w-50.rounded-0 Submit
+                        button(type='submit').btn.btn-primary.w-50.rounded-0#point-create-btn Submit
 
         
