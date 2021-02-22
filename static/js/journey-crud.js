@@ -136,12 +136,26 @@
                 departureDate
             );
 
+            // English added for demonstration purposes - fixed with full localisation
             if (desc.length > 1) {
-                newPoint.addDescription(desc);
+                newPoint.addDescription({ en: desc });
             }
 
-            console.log(newPoint);
+            $('#point-form').modal('hide');
+            _clearPointForm();
+            initMap();
         }
+    }
+
+    function _clearPointForm() {
+        const inputs = document.getElementById('point-form').getElementsByTagName('input');
+        const desc = document.getElementById("desc");
+
+        Array.from(inputs).forEach(e => {
+            e.value = '';
+        });
+
+        desc.value = '';
     }
 })();
 
