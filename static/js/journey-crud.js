@@ -2,174 +2,177 @@
  * Handle CRUD operations for Journeys within admin dashboard
  */
 (function () {
-  "use strict";
+    "use strict";
 
-  let _pointCount = 0;
-  let _btnPressCount = 0;
-  let _createBtn;
-  let _listPane;
-  let _creationPane;
-  let _creationForm;
-  let _tableContainer;
-  let _journeyList;
-  let _pointCreateForm;
-  let _pointCreateBtn;
+    let _pointCount = 0;
+    let _btnPressCount = 0;
+    let _createBtn;
+    let _listPane;
+    let _creationPane;
+    let _creationForm;
+    let _tableContainer;
+    let _journeyList;
+    let _pointCreateForm;
+    let _pointCreateBtn;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    _createBtn = document.getElementById("pane-switch-btn");
-    _listPane = document.getElementById("journey-list");
-    _creationPane = document.getElementById("create-journey");
-    _creationForm = document.querySelector("#create-journey form");
-    _tableContainer = document.querySelector(".table-responsive");
-    _journeyList = document.querySelector("#journey-list tbody");
-    _pointCreateForm = document.getElementById("point-create-form");
-    _pointCreateBtn = document.getElementById("point-create-btn");
+    document.addEventListener("DOMContentLoaded", () => {
+        _createBtn = document.getElementById("pane-switch-btn");
+        _listPane = document.getElementById("journey-list");
+        _creationPane = document.getElementById("create-journey");
+        _creationForm = document.querySelector("#create-journey form");
+        _tableContainer = document.querySelector(".table-responsive");
+        _journeyList = document.querySelector("#journey-list tbody");
+        _pointCreateForm = document.getElementById("point-create-form");
+        _pointCreateBtn = document.getElementById("point-create-btn");
 
-    _displayJourneys();
-    _createBtn.addEventListener("click", _altPane);
-    _pointCreateBtn.addEventListener("click", _createPoint);
-  });
-
-  async function _getJourneys() {
-    return await (await fetch("/journeys")).json();
-  }
-
-  async function _getJourney(id) {
-    return await (await fetch(`/journeys/${id}`)).json();
-  }
-
-  async function _sendJourney(journeyObj) {
-    fetch("/journeys", {
-      method: "POST",
-      mode: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(journeyObj),
-    })
-      .then((res) => {
-        alert("Journey created!");
-      })
-      .catch((error) => {
-        alert("Journey creation failed!");
-      });
-  }
-
-  async function _updateJourney(journeyID, journeyObj) {
-    fetch(`/journeys/${journeyID}/update`, {
-      method: "POST",
-      mode: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(journeyObj),
-    })
-      .then((res) => {
-        alert("Journey successfully updated!");
-      })
-      .catch((error) => {
-        alert("Journey update failed!");
-      });
-  }
-
-  async function _deleteJourney(journeyID) {
-    fetch(`/journeys/${journeyID}/delete`, {
-      method: "POST",
-      mode: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: {},
-    })
-      .then((res) => {
-        alert("Journey deleted!");
-      })
-      .catch((error) => {
-        alert("Journey deletion failed!");
-      });
-  }
-
-  function _displayJourneys() {
-    _getJourneys().then((journeys) => {
-      if (journeys.length > 0) {
-      } else {
-        _tableContainer.innerText =
-          "No journeys added yet. Click the create button to get started.";
-      }
+        _displayJourneys();
+        _createBtn.addEventListener("click", _altPane);
+        _pointCreateBtn.addEventListener("click", _createPoint);
     });
-  }
 
-  function _altPane(event) {
-    if (!(++_btnPressCount % 2 == 0)) {
-      // Odd
-      _createBtn.innerText = "List";
-      _creationPane.classList.add("active-pane");
-      _listPane.classList.remove("active-pane");
-    } else {
-      // Even
-      _createBtn.innerText = "Create";
-      _creationPane.classList.remove("active-pane");
-      _listPane.classList.add("active-pane");
+    async function _getJourneys() {
+        return await (await fetch("/journeys")).json();
     }
 
-    event.preventDefault();
-  }
-
-  function _createPoint(event) {
-    if (_pointCreateForm.reportValidity()) {
-      const lat = document.getElementById("lat").value;
-      const lng = document.getElementById("lng").value;
-      const videoLink = document.getElementById("video-link").value;
-      const arrivalDate = document.getElementById("arrival").value;
-      const departureDate = document.getElementById("departure").value;
-      const desc = document.getElementById("desc").value;
-
-      const newPoint = new Point(
-        null,
-        ++_pointCount,
-        { lat: lat, lng: lng },
-        videoLink,
-        arrivalDate,
-        departureDate,
-        desc
-      );
-
-      console.log(newPoint);
+    async function _getJourney(id) {
+        return await (await fetch(`/journeys/${id}`)).json();
     }
-  }
+
+    async function _sendJourney(journeyObj) {
+        fetch("/journeys", {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(journeyObj),
+        })
+            .then((res) => {
+                alert("Journey created!");
+            })
+            .catch((error) => {
+                alert("Journey creation failed!");
+            });
+    }
+
+    async function _updateJourney(journeyID, journeyObj) {
+        fetch(`/journeys/${journeyID}/update`, {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(journeyObj),
+        })
+            .then((res) => {
+                alert("Journey successfully updated!");
+            })
+            .catch((error) => {
+                alert("Journey update failed!");
+            });
+    }
+
+    async function _deleteJourney(journeyID) {
+        fetch(`/journeys/${journeyID}/delete`, {
+            method: "POST",
+            mode: "same-origin",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: {},
+        })
+            .then((res) => {
+                alert("Journey deleted!");
+            })
+            .catch((error) => {
+                alert("Journey deletion failed!");
+            });
+    }
+
+    function _displayJourneys() {
+        _getJourneys().then((journeys) => {
+            if (journeys.length > 0) {
+            } else {
+                _tableContainer.innerText =
+                    "No journeys added yet. Click the create button to get started.";
+            }
+        });
+    }
+
+    function _altPane(event) {
+        if (!(++_btnPressCount % 2 == 0)) {
+            // Odd
+            _createBtn.innerText = "List";
+            _creationPane.classList.add("active-pane");
+            _listPane.classList.remove("active-pane");
+        } else {
+            // Even
+            _createBtn.innerText = "Create";
+            _creationPane.classList.remove("active-pane");
+            _listPane.classList.add("active-pane");
+        }
+
+        event.preventDefault();
+    }
+
+    function _createPoint(event) {
+        if (_pointCreateForm.reportValidity()) {
+            const lat = document.getElementById("lat").value;
+            const lng = document.getElementById("lng").value;
+            const videoLink = document.getElementById("video-link").value;
+            const arrivalDate = document.getElementById("arrival").value;
+            const departureDate = document.getElementById("departure").value;
+            const desc = document.getElementById("desc").value;
+
+            const newPoint = new Point(
+                null,
+                ++_pointCount,
+                { lat: lat, lng: lng },
+                videoLink,
+                arrivalDate,
+                departureDate
+            );
+
+            if (desc.length > 1) {
+                newPoint.addDescription(desc);
+            }
+
+            console.log(newPoint);
+        }
+    }
 })();
 
 // Callback function called by inline Google maps script
 function initMap() {
-  map = new google.maps.Map(document.getElementById("gmap"), {
-    center: { lat: 53.0, lng: 9.0 },
-    zoom: 2,
-  });
+    map = new google.maps.Map(document.getElementById("gmap"), {
+        center: { lat: 53.0, lng: 9.0 },
+        zoom: 2,
+    });
 
-  map.setOptions({ disableDoubleClickZoom: true });
+    map.setOptions({ disableDoubleClickZoom: true });
 
-  const pointMarker = new google.maps.Marker({ map: map });
-  const latInput = document.getElementById("lat");
-  const lngInput = document.getElementById("lng");
+    const pointMarker = new google.maps.Marker({ map: map });
+    const latInput = document.getElementById("lat");
+    const lngInput = document.getElementById("lng");
 
-  map.addListener("dblclick", (e) => {
-    placeMarkerAndPanTo(e.latLng, map, pointMarker);
-    setLatLng(e.latLng, latInput, lngInput);
-  });
+    map.addListener("dblclick", (e) => {
+        placeMarkerAndPanTo(e.latLng, map, pointMarker);
+        setLatLng(e.latLng, latInput, lngInput);
+    });
 }
 
 // Set position of marker and pan map to marker location
 function placeMarkerAndPanTo(latLng, map, marker) {
-  marker.setPosition(latLng);
-  map.panTo(latLng);
+    marker.setPosition(latLng);
+    map.panTo(latLng);
 }
 
 // Set lat/lng fields of Point form based on marker's location
 function setLatLng(latLng, latInput, lngInput) {
-  const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
-  latInput.value = loc.lat;
-  lngInput.value = loc.lng;
+    const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
+    latInput.value = loc.lat;
+    lngInput.value = loc.lng;
 }
