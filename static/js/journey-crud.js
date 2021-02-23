@@ -17,6 +17,7 @@
     let _pointCreateBtn;
     let _pointList;
     let _points = [];
+    let _journeys = [];
 
     document.addEventListener("DOMContentLoaded", () => {
         _createBtn = document.getElementById("pane-switch-btn");
@@ -99,8 +100,17 @@
     }
 
     function _displayJourneys() {
+        _journeyList.innerHTML = '';
+
         _getJourneys().then((journeys) => {
             if (journeys.length > 0) {
+                _journeys = journeys;
+
+                _journeys.forEach((e) => {
+                    _getJourney(e.id).then((journey) => {
+                        _appendJourney(journey);
+                    })
+                });
 
             } else {
                 _tableContainer.innerText =
@@ -172,6 +182,7 @@
                 <td>${pointObj.point_num}</td>
                 <td>${pointObj.arrival_date}</td>
                 <td>${pointObj.departure_date}</td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger border-0">X</button></td>
             </tr>
         `;
 
@@ -180,7 +191,6 @@
     }
 
     function _createJourney() {
-        // const journey = new Journey();
 
         if (_creationForm.reportValidity() && _points.length > 0) {
             const forename = document.getElementById('forename').value;
@@ -193,6 +203,7 @@
 
             _sendJourney(journey).then(() => {
                 _clearJourneyForm();
+                _displayJourneys();
             });
 
 
@@ -210,6 +221,20 @@
         });
 
         _pointList.querySelector('tbody').innerHTML = '';
+    }
+
+    function _appendJourney(journeyObj) {
+        const tdHtml = `
+        <tr>
+            <td>${journeyObj.id}</td>
+            <td>${journeyObj.forename}</td>
+            <td>${journeyObj.surname}</td>
+            <td>${journeyObj.points.length}</td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger border-0">X</button></td>
+        </tr>
+    `;
+
+        _journeyList.innerHTML += tdHtml;
     }
 })();
 
