@@ -101,6 +101,7 @@
     function _displayJourneys() {
         _getJourneys().then((journeys) => {
             if (journeys.length > 0) {
+
             } else {
                 _tableContainer.innerText =
                     "No journeys added yet. Click the create button to get started.";
@@ -190,8 +191,10 @@
                 journey.addPoint(e);
             });
 
-            _sendJourney(journey);
-            _clearJourneyForm();
+            _sendJourney(journey).then(() => {
+                _clearJourneyForm();
+            });
+
 
         } else if (!(_points.length > 0)) {
             alert("Add at least one point to Journey to save!");
@@ -206,7 +209,7 @@
             e.value = '';
         });
 
-        desc.value = '';
+        _pointList.querySelector('tbody').innerHTML = '';
     }
 })();
 
