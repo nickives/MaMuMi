@@ -14,6 +14,8 @@
     let _journeyList;
     let _pointCreateForm;
     let _pointCreateBtn;
+    let _pointList;
+    let _points = [];
 
     document.addEventListener("DOMContentLoaded", () => {
         _createBtn = document.getElementById("pane-switch-btn");
@@ -24,6 +26,7 @@
         _journeyList = document.querySelector("#journey-list tbody");
         _pointCreateForm = document.getElementById("point-create-form");
         _pointCreateBtn = document.getElementById("point-create-btn");
+        _pointList = document.querySelector("#point-options table");
 
         _displayJourneys();
         _createBtn.addEventListener("click", _altPane);
@@ -143,6 +146,7 @@
 
             $('#point-form').modal('hide');
             _clearPointForm();
+            _appendPoint(newPoint);
             initMap();
         }
     }
@@ -156,6 +160,19 @@
         });
 
         desc.value = '';
+    }
+
+    function _appendPoint(pointObj) {
+        const tdHtml = `
+            <tr>
+                <td>${pointObj.point_num}</td>
+                <td>${pointObj.arrival_date}</td>
+                <td>${pointObj.departure_date}</td>
+            </tr>
+        `;
+
+        _points.push(pointObj);
+        _pointList.querySelector('tbody').innerHTML += tdHtml;
     }
 })();
 
