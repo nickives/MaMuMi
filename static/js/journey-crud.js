@@ -17,6 +17,7 @@
     let _pointCreateBtn;
     let _pointList;
     let _points = [];
+    let _journeys = [];
 
     document.addEventListener("DOMContentLoaded", () => {
         _createBtn = document.getElementById("pane-switch-btn");
@@ -99,8 +100,18 @@
     }
 
     function _displayJourneys() {
+        _journeyList.innerHTML = '';
+
         _getJourneys().then((journeys) => {
             if (journeys.length > 0) {
+
+                journeys.forEach((e) => {
+                    _getJourney(e.id).then((journey) => {
+                        _journeys.push(journey);
+                        _appendJourney(journey);
+                    })
+                });
+
             } else {
                 _tableContainer.innerText =
                     "No journeys added yet. Click the create button to get started.";
@@ -171,6 +182,7 @@
                 <td>${pointObj.point_num}</td>
                 <td>${pointObj.arrival_date}</td>
                 <td>${pointObj.departure_date}</td>
+                <td><button type="button" class="btn btn-sm btn-outline-danger border-0">X</button></td>
             </tr>
         `;
 
@@ -179,7 +191,6 @@
     }
 
     function _createJourney() {
-        // const journey = new Journey();
 
         if (_creationForm.reportValidity() && _points.length > 0) {
             const forename = document.getElementById('forename').value;
@@ -190,8 +201,11 @@
                 journey.addPoint(e);
             });
 
-            _sendJourney(journey);
-            _clearJourneyForm();
+            _sendJourney(journey).then(() => {
+                _clearJourneyForm();
+                _displayJourneys();
+            });
+
 
         } else if (!(_points.length > 0)) {
             alert("Add at least one point to Journey to save!");
@@ -206,7 +220,21 @@
             e.value = '';
         });
 
-        desc.value = '';
+        _pointList.querySelector('tbody').innerHTML = '';
+    }
+
+    function _appendJourney(journeyObj) {
+        const tdHtml = `
+        <tr>
+            <td>${journeyObj.id}</td>
+            <td>${journeyObj.forename}</td>
+            <td>${journeyObj.surname}</td>
+            <td>${journeyObj.points.length}</td>
+            <td><button type="button" class="btn btn-sm btn-outline-danger border-0">X</button></td>
+        </tr>
+    `;
+
+        _journeyList.innerHTML += tdHtml;
     }
 })();
 
