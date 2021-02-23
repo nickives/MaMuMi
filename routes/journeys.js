@@ -35,7 +35,7 @@ router.get('/:id', function(req, res) {
 
   let id = parseInt(req.params['id']);
 
-  res.send(controller.read(id));
+  controller.read(id);
 });
 
 //Read all journeys
@@ -46,7 +46,7 @@ router.get('/', function(req, res) {
   // Create controller object
   let controller = new JourneyController(model, res);
 
-  res.send(controller.readAll());
+  controller.readAll();
 });
 
 // Update a journey by and id
