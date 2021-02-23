@@ -139,6 +139,10 @@ div.login-wrapper .form-check-label {
   display: none;
 }
 
+.admin-pane td {
+  cursor: pointer;
+}
+
 .active-pane {
   display: flex;
 }

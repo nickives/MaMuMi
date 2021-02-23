@@ -235,16 +235,29 @@
     }
 
     function _journeyListHandler(event) {
+        const tr = event.target.parentNode.parentNode;
+        const journeyID = tr.childNodes[1].innerText;
+
         if (event.target.tagName === 'TD') {
             // View/Update
+            _getJourney(journeyID).then(journey => {
+                _viewJourney(journey);
+                _altPane();
+            })
         } else if (event.target.tagName === 'BUTTON') {
             // Delete
-            const tr = event.target.parentNode.parentNode;
-            const journeyID = tr.childNodes[1].innerText;
-
             tr.parentNode.removeChild(tr);
             _deleteJourney(journeyID);
         }
+    }
+
+    function _viewJourney(journeyObj) {
+        document.getElementById('forename').value = journeyObj.forename;
+        document.getElementById('surname').value = journeyObj.surname;
+
+        journeyObj.points.forEach((point) => {
+            _appendPoint(point);
+        });
     }
 })();
 
