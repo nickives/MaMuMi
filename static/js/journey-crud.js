@@ -12,6 +12,7 @@
     let _creationForm;
     let _tableContainer;
     let _journeyList;
+    let _journeyCreateBtn;
     let _pointCreateForm;
     let _pointCreateBtn;
     let _pointList;
@@ -27,10 +28,12 @@
         _pointCreateForm = document.getElementById("point-create-form");
         _pointCreateBtn = document.getElementById("point-create-btn");
         _pointList = document.querySelector("#point-options table");
+        _journeyCreateBtn = document.getElementById('submit-journey-btn');
 
         _displayJourneys();
         _createBtn.addEventListener("click", _altPane);
         _pointCreateBtn.addEventListener("click", _createPoint);
+        _journeyCreateBtn.addEventListener("click", _createJourney);
     });
 
     async function _getJourneys() {
@@ -55,7 +58,7 @@
                 alert("Journey created!");
             })
             .catch((error) => {
-                alert("Journey creation failed!");
+                alert(error.message);
             });
     }
 
@@ -173,6 +176,37 @@
 
         _points.push(pointObj);
         _pointList.querySelector('tbody').innerHTML += tdHtml;
+    }
+
+    function _createJourney() {
+        // const journey = new Journey();
+
+        if (_creationForm.reportValidity() && _points.length > 0) {
+            const forename = document.getElementById('forename').value;
+            const surname = document.getElementById('surname').value;
+            const journey = new Journey(forename, surname, null);
+
+            _points.forEach(e => {
+                journey.addPoint(e);
+            });
+
+            _sendJourney(journey);
+            _clearJourneyForm();
+
+        } else if (!(_points.length > 0)) {
+            alert("Add at least one point to Journey to save!");
+        }
+    }
+
+    // TODO: Refactor this function into generalised input clearing function + remove other clearing func
+    function _clearJourneyForm() {
+        const inputs = document.getElementById('journey-options').getElementsByTagName('input');
+
+        Array.from(inputs).forEach(e => {
+            e.value = '';
+        });
+
+        desc.value = '';
     }
 })();
 
