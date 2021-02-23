@@ -54,10 +54,16 @@ class JourneyController {
     
 
     // Send journey to the model to create it
-    let res = await this.model.create(newJourney);
-    
+    try {
+      let res = await this.model.create(newJourney);
+      res = JSON.stringify(res);
+    } catch(err) {
+      res = JSON.stringify(res); 
+      this.view.status(422);
+    }
+
     // Return the database response
-    this.view.send(JSON.stringify(res));
+    this.view.send(res);
   }
 
   /**
@@ -69,10 +75,17 @@ class JourneyController {
    **/
   async read(id) {
     // Read the journey from the model
-    let res = await this.model.read(id);
+    try {
+      let res = await this.model.read(id);
+      res = JSON.stringify(res);
+    catch (err) {
+      // Catch error and set status to 404
+      res = JSON.stringify(err);
+      this.view.status(404);
+    }
 
-    // Return the database response to the view
-    this.view.send(JSON.stringify(res));
+    // Return response
+    this.view.send(res);
   }
 
   /**
@@ -82,10 +95,16 @@ class JourneyController {
    */
   async readAll() {
     // Read all the journeys from the model
-    let res = await this.model.readAll();
+    try {
+      let res = await this.model.readAll();
+      res = JSON.stringify(res);
+    catch (err) {
+      res = JSON.stringify(err);
+      this.view.status(404);
+    }
 
     // Return the database response to the view
-    this.view.send(JSON.stringify(output));
+    this.view.send(res);
   }
 
   /**
@@ -101,10 +120,16 @@ class JourneyController {
     let newJourney = await this.cloneJourney(journey);
 
     // Send the id and journey to the model to update
-    let res = await this.model.update(id, newJourney);
+    try {
+      let res = await this.model.update(id, newJourney);
+      res = JSON.stringify(res);
+    } catch (err) {
+      res = JSON.stringify(err);
+      this.view.status(422);
+    }
 
     // Return the model response
-    this.view.send(JSON.stringify(res));
+    this.view.send(res);
   }
 
   /**
@@ -115,12 +140,16 @@ class JourneyController {
    * @returns the database response
    */
   async delete(id) {
-    let res = this.model.delete(id);
-
+    try {
+      let res = this.model.delete(id);
+      res = JSON.stringify(res);
+    } catch (err) { 
+      res = JSON.stringify(err);
+      this.view.status(404);
+    }
     // Return the model response
-    this.view.send(JSON.stringify(res));
+    this.view.send(res);
   }
-
 }
 
 module.exports = JourneyController;
