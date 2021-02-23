@@ -51,11 +51,12 @@ class JourneyController {
   async create(journey) {
     // Clone the journey to serialize
     let newJourney = await this.cloneJourney(journey);
+    let res;
 
 
     // Send journey to the model to create it
     try {
-      let res = await this.model.create(newJourney);
+      res = await this.model.create(newJourney);
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(res);
@@ -74,9 +75,11 @@ class JourneyController {
    * @returns The journey or database response
    **/
   async read(id) {
+    let res;
+
     // Read the journey from the model
     try {
-      let res = await this.model.read(id);
+      res = await this.model.read(id);
       res = JSON.stringify(res);
 
 
@@ -87,6 +90,8 @@ class JourneyController {
       res = JSON.stringify(err);
       this.view.status(404);
     }
+
+    this.view.send(res);
   }
 
   /**
@@ -95,9 +100,10 @@ class JourneyController {
    * @returns array of journeys or data base response
    */
   async readAll() {
+    let res;
     // Read all the journeys from the model
     try {
-      let res = await this.model.readAll();
+      res = await this.model.readAll();
       res = JSON.stringify(res);
 
 
@@ -105,8 +111,9 @@ class JourneyController {
       this.view.send(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(404);
+      this.view.status(500); // this operation should never fail
     }
+    this.view.send(res);
   }
 
   /**
@@ -120,10 +127,11 @@ class JourneyController {
   async update(id, journey) {
     // Clone the journey to serialize
     let newJourney = await this.cloneJourney(journey);
+    let res;
 
     // Send the id and journey to the model to update
     try {
-      let res = await this.model.update(id, newJourney);
+      res = await this.model.update(id, newJourney);
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(err);
@@ -131,7 +139,7 @@ class JourneyController {
     }
 
     // Return the model response
-    this.view.send(res);
+    this.view.status(200);
   }
 
   /**
@@ -142,15 +150,16 @@ class JourneyController {
    * @returns the database response
    */
   async delete(id) {
+    let res;
     try {
       let res = this.model.delete(id);
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(404);
+      this.view.status(500); // This should never error
     }
     // Return the model response
-    this.view.send(res);
+    this.view.status(200);
   }
 }
 
