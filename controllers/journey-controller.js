@@ -64,7 +64,7 @@ class JourneyController {
     }
 
     // Return the database response
-    this.view.send(res);
+    this.view.send("OK");
   }
 
   /**
@@ -139,7 +139,7 @@ class JourneyController {
     }
 
     // Return the model response
-    this.view.status(200);
+    this.view.send("OK");
   }
 
   /**
@@ -159,7 +159,7 @@ class JourneyController {
       this.view.status(500); // This should never error
     }
     // Return the model response
-    this.view.status(200);
+    this.view.send("OK");
   }
 }
 
