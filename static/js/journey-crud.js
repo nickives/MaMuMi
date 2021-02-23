@@ -104,10 +104,10 @@
 
         _getJourneys().then((journeys) => {
             if (journeys.length > 0) {
-                _journeys = journeys;
 
-                _journeys.forEach((e) => {
+                journeys.forEach((e) => {
                     _getJourney(e.id).then((journey) => {
+                        _journeys.push(journey);
                         _appendJourney(journey);
                     })
                 });
