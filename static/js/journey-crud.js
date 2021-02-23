@@ -35,6 +35,7 @@
         _createBtn.addEventListener("click", _altPane);
         _pointCreateBtn.addEventListener("click", _createPoint);
         _journeyCreateBtn.addEventListener("click", _createJourney);
+        _journeyList.addEventListener("click", _journeyListHandler);
     });
 
     async function _getJourneys() {
@@ -85,11 +86,7 @@
         fetch(`/journeys/${journeyID}/delete`, {
             method: "POST",
             mode: "same-origin",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: {},
+            body: ""
         })
             .then((res) => {
                 alert("Journey deleted!");
@@ -235,6 +232,19 @@
     `;
 
         _journeyList.innerHTML += tdHtml;
+    }
+
+    function _journeyListHandler(event) {
+        if (event.target.tagName === 'TD') {
+            // View/Update
+        } else if (event.target.tagName === 'BUTTON') {
+            // Delete
+            const tr = event.target.parentNode.parentNode;
+            const journeyID = tr.childNodes[1].innerText;
+
+            tr.parentNode.removeChild(tr);
+            _deleteJourney(journeyID);
+        }
     }
 })();
 
