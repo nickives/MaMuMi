@@ -4,17 +4,24 @@
 (function () {
     "use strict";
 
+
+    // Defining vars
     let _pointCount = 0;
     let _btnPressCount = 0;
-    let _createBtn;
     let _listPane;
+    // Create Journey
+    let _createBtn;
     let _creationPane;
     let _creationForm;
     let _tableContainer;
     let _journeyList;
     let _journeyCreateBtn;
+    
+    // Create point
     let _pointCreateForm;
     let _pointCreateBtn;
+
+    // Read 
     let _pointList;
     let _points = [];
     let _journeys = [];
@@ -132,6 +139,9 @@
         event.preventDefault();
     }
 
+    /**
+     * Create a point
+     */
     function _createPoint(event) {
         if (_pointCreateForm.reportValidity()) {
             const lat = document.getElementById("lat").value;
@@ -162,6 +172,9 @@
         }
     }
 
+    /**
+     * Clear the points form 
+     */
     function _clearPointForm() {
         const inputs = document.getElementById('point-form').getElementsByTagName('input');
         const desc = document.getElementById("desc");
@@ -173,6 +186,11 @@
         desc.value = '';
     }
 
+    /**
+     * Add a point object to the point form
+     * 
+     * @param {*} pointObj 
+     */
     function _appendPoint(pointObj) {
         const tdHtml = `
             <tr>
@@ -186,6 +204,24 @@
         _points.push(pointObj);
         _pointList.querySelector('tbody').innerHTML += tdHtml;
     }
+
+    /**
+     * Remove a point from a journey
+     * 
+     * @param {*} event 
+     */
+    function _pointFormhandler(event) {
+        const tr = event.target.parentNode.parentNode;
+        const pointNumber = tr.childNodes[1].innerText;
+
+        if (event.target.tagName === 'TD') {
+            // View/Update
+        } else if (event.target.tagName === 'BUTTON') {
+            // Delete
+            tr.parentNode.removeChild(tr);
+        }
+    }
+    
 
     function _createJourney() {
 
