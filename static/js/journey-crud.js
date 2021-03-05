@@ -220,7 +220,15 @@
         if (event.target.tagName === 'TD') {
             // View/Update
         } else if (event.target.tagName === 'BUTTON') {
-            // Delete
+
+            // remove the point from the points array
+            _points = _points.filter(function(point) {
+                if (point.point_num != pointNumber) {
+                    return point;
+                }
+            });
+
+            // Delete from the view
             tr.parentNode.removeChild(tr);
         }
     }
