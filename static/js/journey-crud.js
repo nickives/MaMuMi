@@ -43,6 +43,7 @@
         _pointCreateBtn.addEventListener("click", _createPoint);
         _journeyCreateBtn.addEventListener("click", _createJourney);
         _journeyList.addEventListener("click", _journeyListHandler);
+        _pointList.addEventListener("click", _pointFormhandler);
     });
 
     async function _getJourneys() {
@@ -207,6 +208,8 @@
 
     /**
      * Remove a point from a journey
+     * 
+     *  THIS DOES NOT UPDATE LATER POINT NUMBERS
      * 
      * @param {*} event 
      */
