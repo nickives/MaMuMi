@@ -5,6 +5,8 @@ const router = express.Router();
 const pool = require("../lib/db/pool-secret");
 const JourneyModel = require("../models/journeys-model");
 const JourneyController = require("../controllers/journey-controller");
+const Journey = require('../static/js/lib/journey');
+const Point = require('../static/js/lib/point');
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
@@ -78,4 +80,60 @@ router.post('/:id/delete', function(req, res) {
   controller.delete(id);
 });
 
+
+router.get('/:id/geojson', function(req, res) {
+  let model = new JourneyModel(pool);
+  let controller = new JourneyController(model, res);
+  let id = parseInt(req.params['id']);
+  controller.geoJSON(id);
+})
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+router.get('/insert-random/:count', function(req, res) {
+  let model = new JourneyModel(pool);
+  let count = parseInt(req.params['count']);
+
+  for (var i = 0; i < count; ++i) {
+
+    try {
+      let journey = new Journey("Person" + i, "Surname" + i);
+      let numPoints = getRandomInt(2, 5);
+
+      for (var p = 0; p < numPoints; ++p) {
+        let point = new Point(null, p + 1, {
+          lat: getRandom(-80, 80),
+          lng: getRandom(-180, 180)
+        },
+        "http://you.tube",
+        new Date(), new Date());
+        point.addDescription({
+          en: "En" + p,
+          es: "Es" + p,
+          el: "El" + p,
+          bg: "Bg" + p,
+          it: "It" + p,
+          no: "No" + p
+
+        })
+        journey.addPoint(point);
+      }
+  
+      model.create(journey);
+
+    } catch (err) {
+      res.status(500).send('JSON.stringify(err)');
+    }
+  }
+
+  res.send("ok");
+})
 module.exports = router;
