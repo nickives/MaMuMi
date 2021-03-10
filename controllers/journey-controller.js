@@ -111,7 +111,7 @@ class JourneyController {
       this.view.send(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(500); // this operation should never fail
+      this.view.status(500).send('res'); // this operation should never fail
     }
     this.view.send(res);
   }
@@ -160,6 +160,47 @@ class JourneyController {
     }
     // Return the model response
     this.view.send("OK");
+  }
+
+  /**
+   * Get the GeoJSON line for a given journey
+   * 
+   * @param {int} id 
+   */
+  async geoJSON(id) {
+    let res;
+    try {
+      res = await this.model.read(id);
+
+      if (res == null) {
+        this.view.sendStatus(404);
+      }
+
+      let geoJson = {
+        type: "FeatureCollection",
+        features: [{
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [] // [LNG, LAT]
+          },
+          properties: {
+            journey: res
+          }
+        }]
+      }
+      res.points.map(x => {
+        let num = x.point_num;
+        geoJson.features[0].geometry.coordinates[num-1] = [x.loc.lng, x.loc.lat]
+      });
+
+      let json = JSON.stringify(geoJson);
+
+      this.view.send(json);
+
+    } catch (err) {
+      this.view.sendStatus(500);
+    }
   }
 }
 
