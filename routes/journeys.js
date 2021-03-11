@@ -113,7 +113,7 @@ router.get('/insert-random/:count', function(req, res) {
           lat: getRandom(-80, 80),
           lng: getRandom(-180, 180)
         },
-        "http://you.tube",
+        'https://www.youtube.com/embed/0An_CT2-X08',
         new Date(), new Date());
         point.addDescription({
           en: "En" + p,

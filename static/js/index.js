@@ -22,17 +22,31 @@ const clearMarkers = (safeMarker) => {
         oldMarkerDesc.close();
     }
     oldMarkerDesc = undefined;
+
+    // remove old geoJSON
+    map.data.forEach(function (feature) {
+        map.data.remove(feature);
+    })
 }
 
 const addPoints = (journey) => {
 }
 
+const pointWindowContent = (point) => {
+    let desc = point.description.en;
+    let vidUrl = point.video_link;
+
+    return `<div id=\"infoWindow\">
+                <div id=\"infoDescription\">"${desc}"</div>
+                <div id=\"infoVideo\"><iframe width="560" height="315" src="${vidUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+            </div>`;
+}
 
 const drawInfoWindow = (marker, point_num) => {
     const markerDesc = new google.maps.InfoWindow();
     oldMarkerDesc = markerDesc;
-    var desc = marker.journey.points[point_num].description.en;
-    markerDesc.setContent("<div id=\"infoWindow\">"+desc+"</div>");
+    let point = marker.journey.points[point_num];
+    markerDesc.setContent(pointWindowContent(point));
     markerDesc.setPosition(marker.getPosition());
     markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
     markerDesc.open(map);
@@ -41,15 +55,11 @@ const drawInfoWindow = (marker, point_num) => {
 
 const drawJourney = async (id) => {
 
+
     let res = await fetch('/journeys/' + id + '/geojson');
     let geoJSON = await res.json();
-
-    // remo
-    map.data.forEach(function (feature) {
-        map.data.remove(feature);
-    })
-    map.data.addGeoJson(geoJSON);
     clearMarkers();
+    map.data.addGeoJson(geoJSON);
 
     const journey = geoJSON.features[0].properties.journey;
     journey.points.forEach( p => {
@@ -63,14 +73,13 @@ const drawJourney = async (id) => {
         if (p.point_num === 1) {
             oldMarker = marker;
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            drawInfoWindow(marker);
+            drawInfoWindow(marker, 0);
         }
 
         mapMarkers.push(marker);
 
-        const point_num = p.point_num;
+        const point_num = p.point_num  - 1;
         marker.addListener('click', () => {
-            console.log(point_num);
             if (oldMarkerDesc !== undefined) {
                 oldMarkerDesc.close();
             }
