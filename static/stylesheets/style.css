@@ -147,3 +147,12 @@ div.login-wrapper .form-check-label {
   border-color: #d3d3d3;
   border-radius: 6px;
 }
+
+#journey-submit {
+  background-color: #048ABF;
+  color: white;
+}
+
+#journey-submit:hover {
+  background-color: #049DBF;
+}
