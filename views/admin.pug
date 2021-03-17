@@ -2,22 +2,18 @@ extends layout
 
 block content
     script(src='/s/js/dashnav.js')
-    nav.navbar.fixed-top.flex-md-nowrap.p-0.shadow#dashboard-nav
-        a(href='/').navbar.brand.col-sm-3.col-md-2.mr-0#dashboard-logo
-            img(src='/a/login/logo.png')
-        ul.navbar-nav.px-3
-            li.nav-item.text-nowrap
-                a(href='/admin/login').nav-link Sign out
 
-    .container-fluid#dashboard-sidebar
-        .row 
-            nav.col-md-2.d-none.d-md-block.bg-light.sidebar
-                .sidebar-sticky 
-                    ul.nav.flex-column 
-                        li.nav-item 
-                            a(href='/admin/dashboard').nav-link Dashboard
-                        li.nav-item 
-                            a(href='/admin/journeys').nav-link Journeys
-
-        .main.col-md-9.ml-sm-auto.col-lg-10.px-4#dashboard-content
-            block main
+    .container-fluid.p-0
+        nav.col-md-1.sidebar.p-0
+            .sidebar-sticky
+                ul.nav
+                    li.nav-item 
+                        a(href='').d-block
+                            img(src='/s/icons/Burger_Stack.png').img-fluid
+                    li.nav-item 
+                        a(href='').d-block
+                            img(src='/s/icons/Pin.png').img-fluid
+                    li.nav-item 
+                        a(href='/admin/add-journey').d-block
+                            img(src='/s/icons/Plus.png').img-fluid
+        block main
