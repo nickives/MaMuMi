@@ -54,6 +54,7 @@
         return await (await fetch(`/journeys/${id}`)).json();
     }
 
+    // Send journey to journey db
     async function _sendJourney(journeyObj) {
         fetch("/journeys", {
             method: "POST",
@@ -72,6 +73,7 @@
             });
     }
 
+    // Send updated journey information to the journey db
     async function _updateJourney(journeyID, journeyObj) {
         fetch(`/journeys/${journeyID}/update`, {
             method: "POST",
@@ -90,6 +92,7 @@
             });
     }
 
+    // Remove journey from journey db
     async function _deleteJourney(journeyID) {
         fetch(`/journeys/${journeyID}/delete`, {
             method: "POST",
@@ -142,6 +145,8 @@
 
     /**
      * Create a point
+     * 
+     * This will need refactoring
      */
     function _createPoint(event) {
         if (_pointCreateForm.reportValidity()) {
@@ -175,6 +180,8 @@
 
     /**
      * Clear the points form 
+     * 
+     * This will need refactoring
      */
     function _clearPointForm() {
         const inputs = document.getElementById('point-form').getElementsByTagName('input');
@@ -190,7 +197,7 @@
     /**
      * Add a point object to the point form
      * 
-     * @param {*} pointObj 
+     * This will need refactoring
      */
     function _appendPoint(pointObj) {
         const tdHtml = `
@@ -234,6 +241,7 @@
     }
     
 
+    // Construct a new Journey object
     function _createJourney() {
 
         if (_creationForm.reportValidity() && _points.length > 0) {
@@ -267,6 +275,7 @@
         _pointList.querySelector('tbody').innerHTML = '';
     }
 
+    // Add journey to the journey display list
     function _appendJourney(journeyObj) {
         const tdHtml = `
         <tr>
