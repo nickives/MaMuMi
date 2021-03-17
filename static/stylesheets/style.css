@@ -83,24 +83,16 @@ div.login-wrapper .form-check-label {
 }
 
 /* ===== Admin Dashboard ===== */
-#dashboard-nav {
-  background-color: #d95bad;
+.main-content {
+  padding-left: 6rem;
 }
 
-#dashboard-nav #dashboard-logo {
-  max-width: 7%;
+.main-content .form-group-container {
+  
 }
 
-#dashboard-nav a:first-child img {
-  max-width: 100%;
-}
-
-#dashboard-nav ul.navbar-nav li a {
-  color: #fff;
-}
-
-#dashboard-nav ul.navbar-nav li a:hover {
-  color: #b4b3b3;
+.main-content .form-group-container .form-title {
+  
 }
 
 .sidebar {
@@ -109,30 +101,20 @@ div.login-wrapper .form-check-label {
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 60px 0 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  max-width: 80px;
+  background-color: #048ABF;
 }
 
 .sidebar-sticky {
   position: relative;
   top: 0;
   height: calc(100vh - 48px);
-  padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-.sidebar-sticky a {
-  color: #048abf;
-}
-
-.sidebar-sticky a:hover,
-.sidebar-sticky a.active {
-  color: #4d3c86;
-}
-
-#dashboard-content {
-  padding-top: 60px;
+.sidebar-sticky a:hover, .sidebar-sticky a.active {
+  background-color: #049DBF;
 }
 
 .admin-pane {
@@ -151,13 +133,9 @@ div.login-wrapper .form-check-label {
   width: 75px;
 }
 
-#submit-journey-btn {
-  color: #ffffff;
-  background-color: #048abf;
-}
+/* ===== Journey Creation ===== */
+.form-group-container {
 
-#submit-journey-btn:hover {
-  background-color: #d95bad;
 }
 
 /* ===== Point Creation ===== */
