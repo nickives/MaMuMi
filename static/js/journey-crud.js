@@ -209,6 +209,9 @@
      * This will need refactoring
      */
     function _appendPoint(pointObj) {
+        // get the identifier for this div
+        _markerNumber = getMapSize(_markerArray);
+
         const tdHtml = `
             <tr>
                 <td>${pointObj.point_num}</td>
