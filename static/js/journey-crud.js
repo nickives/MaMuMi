@@ -26,6 +26,10 @@
     let _points = [];
     let _journeys = [];
 
+    // Multiple marker handeling badness
+    let _markerNumber;
+    let _markerArray = {};
+
     document.addEventListener("DOMContentLoaded", () => {
         _createBtn = document.getElementById("pane-switch-btn");
         _listPane = document.getElementById("journey-list");
@@ -331,13 +335,19 @@ function initMap() {
 
     map.setOptions({ disableDoubleClickZoom: true });
 
-    const pointMarker = new google.maps.Marker({ map: map });
+    // Get from query selector
     const latInput = document.getElementById("lat");
     const lngInput = document.getElementById("lng");
 
+    // Marker number is set when a marker div is opened for editting or 
+    // when a new marker div is created
     map.addListener("dblclick", (e) => {
-        placeMarkerAndPanTo(e.latLng, map, pointMarker);
-        setLatLng(e.latLng, latInput, lngInput);
+        if (_markerArray[_markerNumber] == undefined) {
+            createNewMarker(e.latLng, map);
+        } else {
+            placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
+            setLatLng(e.latLng, latInput, lngInput);
+        }
     });
 }
 
@@ -352,4 +362,20 @@ function setLatLng(latLng, latInput, lngInput) {
     const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
     latInput.value = loc.lat;
     lngInput.value = loc.lng;
+}
+
+// Return the size of a given map
+function getMapSize(x) {
+    var len = 0;
+    for (var count in x) {
+            len++;
+    }
+    return len;
+}
+
+// add a new marker to the map and add it to the marker array
+function createNewMarker(latLng, map) {
+    var key = getMapSize(_markerArray) + 1;
+    _markerArray[key] = new google.maps.Marker({ map: map });
+    placeMarkerAndPanTo(latLng, map, _markerArray[key]);
 }
