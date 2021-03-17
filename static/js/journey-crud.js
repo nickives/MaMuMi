@@ -35,12 +35,14 @@
         _journeyList = document.querySelector("#journey-list tbody");
         _pointCreateForm = document.getElementById("point-create-form");
         _pointCreateBtn = document.getElementById("point-create-btn");
+        _pointAppendBtn = document.getElementById("#point-append-btn");
         _pointList = document.querySelector("#point-options table");
         _journeyCreateBtn = document.getElementById('submit-journey-btn');
 
         _displayJourneys();
         _createBtn.addEventListener("click", _altPane);
         _pointCreateBtn.addEventListener("click", _createPoint);
+        _pointAppendBtn.addEventListener("click", _appendPoint);
         _journeyCreateBtn.addEventListener("click", _createJourney);
         _journeyList.addEventListener("click", _journeyListHandler);
         _pointList.addEventListener("click", _pointFormhandler);
@@ -150,8 +152,11 @@
      */
     function _createPoint(event) {
         if (_pointCreateForm.reportValidity()) {
+
+            // Are these going to be hidden?
             const lat = document.getElementById("lat").value;
             const lng = document.getElementById("lng").value;
+
             const videoLink = document.getElementById("video-link").value;
             const arrivalDate = document.getElementById("arrival").value;
             const departureDate = document.getElementById("departure").value;
