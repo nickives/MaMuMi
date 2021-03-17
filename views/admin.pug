@@ -4,16 +4,17 @@ block content
     script(src='/s/js/dashnav.js')
 
     .container-fluid.p-0
-        nav.col-md-1.sidebar.p-0
-            .sidebar-sticky
-                ul.nav
-                    li.nav-item 
-                        a(href='').d-block
-                            img(src='/s/icons/Burger_Stack.png').img-fluid
-                    li.nav-item 
-                        a(href='').d-block
-                            img(src='/s/icons/Pin.png').img-fluid
-                    li.nav-item 
-                        a(href='/admin/add-journey').d-block
-                            img(src='/s/icons/Plus.png').img-fluid
-        block main
+        .row
+            nav.col-md-1.sidebar.p-0
+                .sidebar-sticky
+                    ul.nav
+                        li.nav-item 
+                            a(href='').d-block
+                                img(src='/s/icons/Burger_Stack.png').img-fluid
+                        li.nav-item 
+                            a(href='').d-block
+                                img(src='/s/icons/Pin.png').img-fluid
+                        li.nav-item 
+                            a(href='/admin/add-journey').d-block
+                                img(src='/s/icons/Plus.png').img-fluid
+            block main

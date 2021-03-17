@@ -1,17 +1,39 @@
 extends admin 
 block main 
-    .col-md-4.main-content.pt-1
+    .col-md-5.col-lg-3.pt-1.ml-2
         form
-            .form-group-container
-                .form-title.d-flex.flex-row.justify-content-between
-                    h2.h5 Journey Details 
+            .form-container.mb-3
+                .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2
+                    h2.h6.m-0 Journey Details 
                     small Required
-                .form-group
-                    label(for='forename').d-bloc Forename
-                    input(type='text' name='forename')#forname
-                .form-group
-                    label(for='surname') Surname
-                    input(type='text' name='surname')#surname
-            .form-group-container
+                .form-group-container
+                    .form-group.row.m-0
+                        label(for='forename').col-md-3.col-form-label-sm Forename
+                        input(type='text' name='forename').col-md-9.form-control.form-control-sm#forname
+                    .form-group.row.m-0
+                        label(for='surname').col-md-3.col-form-label-sm Surname
+                        input(type='text' name='surname').col-md-9.form-control.form-control-sm#surname
+            .form-container
+                .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2
+                    h2.h6.m-0 Journey Pins 
+                    small Required
+                .form-group-container
+                    .table-responsive
+                        table.table.table-borderless.table-sm
+                            thead 
+                                tr 
+                                    th(scope='col') Order
+                                    th(scope='col') Arrival
+                                    th(scope='col') Departure
+                                    th(scope='col') Location
+                                    th(scope='col') 
+                            tbody 
+                              tr 
+                                td(colspan='100%')
+                                    button(type='button').btn.btn-block.btn-outline-secondary.create-btn
+                                        span +
+                                     
+
+  
 
                 

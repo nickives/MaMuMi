@@ -84,7 +84,7 @@ div.login-wrapper .form-check-label {
 
 /* ===== Admin Dashboard ===== */
 .main-content {
-  padding-left: 6rem;
+  margin-left: 5rem;
 }
 
 .main-content .form-group-container {
@@ -96,7 +96,7 @@ div.login-wrapper .form-check-label {
 }
 
 .sidebar {
-  position: fixed;
+  position: sticky;
   top: 0;
   bottom: 0;
   left: 0;
@@ -117,28 +117,33 @@ div.login-wrapper .form-check-label {
   background-color: #049DBF;
 }
 
-.admin-pane {
-  display: none;
-}
-
-.admin-pane td {
-  cursor: pointer;
-}
-
-.active-pane {
-  display: flex;
-}
-
-.create-btn {
-  width: 75px;
-}
-
 /* ===== Journey Creation ===== */
-.form-group-container {
-
+.form-title {
+  background-color: #048ABF;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 6px 6px 0 0;
 }
 
-/* ===== Point Creation ===== */
-#gmap-container {
-  height: 91% !important;
+.form-container {
+  border-bottom: 2px solid #d3d3d3;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.form-container input {
+  border-radius: 6px;
+}
+
+.form-container table th {
+  font-weight: normal;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.form-group-container table .create-btn {
+  border-color: #d3d3d3;
+  border-radius: 6px;
 }
