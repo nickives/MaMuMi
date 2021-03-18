@@ -457,6 +457,7 @@ async function myMap() {
     map = new google.maps.Map(document.getElementById("gMap"), {
         center: { lat: 51.508742, lng: -0.120850 },
         zoom: 5,
+        mapTypeControl: false,
         mapTypeControlOptions: {
         mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
         },
