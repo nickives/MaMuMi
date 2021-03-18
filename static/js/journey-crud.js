@@ -26,6 +26,10 @@
     let _points = [];
     let _journeys = [];
 
+    // Multiple marker handeling badness
+    let _markerNumber;
+    let _markerArray = {};
+
     document.addEventListener("DOMContentLoaded", () => {
         _createBtn = document.getElementById("pane-switch-btn");
         _listPane = document.getElementById("journey-list");
@@ -35,12 +39,14 @@
         _journeyList = document.querySelector("#journey-list tbody");
         _pointCreateForm = document.getElementById("point-create-form");
         _pointCreateBtn = document.getElementById("point-create-btn");
+        _pointAppendBtn = document.getElementById("#point-append-btn");
         _pointList = document.querySelector("#point-options table");
         _journeyCreateBtn = document.getElementById('submit-journey-btn');
 
         _displayJourneys();
         _createBtn.addEventListener("click", _altPane);
         _pointCreateBtn.addEventListener("click", _createPoint);
+        _pointAppendBtn.addEventListener("click", _appendPoint);
         _journeyCreateBtn.addEventListener("click", _createJourney);
         _journeyList.addEventListener("click", _journeyListHandler);
         _pointList.addEventListener("click", _pointFormhandler);
@@ -54,6 +60,7 @@
         return await (await fetch(`/journeys/${id}`)).json();
     }
 
+    // Send journey to journey db
     async function _sendJourney(journeyObj) {
         fetch("/journeys", {
             method: "POST",
@@ -72,6 +79,7 @@
             });
     }
 
+    // Send updated journey information to the journey db
     async function _updateJourney(journeyID, journeyObj) {
         fetch(`/journeys/${journeyID}/update`, {
             method: "POST",
@@ -90,6 +98,7 @@
             });
     }
 
+    // Remove journey from journey db
     async function _deleteJourney(journeyID) {
         fetch(`/journeys/${journeyID}/delete`, {
             method: "POST",
@@ -142,11 +151,16 @@
 
     /**
      * Create a point
+     * 
+     * This will need refactoring
      */
     function _createPoint(event) {
         if (_pointCreateForm.reportValidity()) {
+
+            // Are these going to be hidden?
             const lat = document.getElementById("lat").value;
             const lng = document.getElementById("lng").value;
+
             const videoLink = document.getElementById("video-link").value;
             const arrivalDate = document.getElementById("arrival").value;
             const departureDate = document.getElementById("departure").value;
@@ -175,6 +189,8 @@
 
     /**
      * Clear the points form 
+     * 
+     * This will need refactoring
      */
     function _clearPointForm() {
         const inputs = document.getElementById('point-form').getElementsByTagName('input');
@@ -190,9 +206,12 @@
     /**
      * Add a point object to the point form
      * 
-     * @param {*} pointObj 
+     * This will need refactoring
      */
     function _appendPoint(pointObj) {
+        // get the identifier for this div
+        _markerNumber = getMapSize(_markerArray);
+
         const tdHtml = `
             <tr>
                 <td>${pointObj.point_num}</td>
@@ -234,6 +253,7 @@
     }
     
 
+    // Construct a new Journey object
     function _createJourney() {
 
         if (_creationForm.reportValidity() && _points.length > 0) {
@@ -267,6 +287,7 @@
         _pointList.querySelector('tbody').innerHTML = '';
     }
 
+    // Add journey to the journey display list
     function _appendJourney(journeyObj) {
         const tdHtml = `
         <tr>
@@ -317,13 +338,19 @@ function initMap() {
 
     map.setOptions({ disableDoubleClickZoom: true });
 
-    const pointMarker = new google.maps.Marker({ map: map });
+    // Get from query selector
     const latInput = document.getElementById("lat");
     const lngInput = document.getElementById("lng");
 
+    // Marker number is set when a marker div is opened for editting or 
+    // when a new marker div is created
     map.addListener("dblclick", (e) => {
-        placeMarkerAndPanTo(e.latLng, map, pointMarker);
-        setLatLng(e.latLng, latInput, lngInput);
+        if (_markerArray[_markerNumber] == undefined) {
+            createNewMarker(e.latLng, map);
+        } else {
+            placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
+            setLatLng(e.latLng, latInput, lngInput);
+        }
     });
 }
 
@@ -338,4 +365,20 @@ function setLatLng(latLng, latInput, lngInput) {
     const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
     latInput.value = loc.lat;
     lngInput.value = loc.lng;
+}
+
+// Return the size of a given map
+function getMapSize(x) {
+    var len = 0;
+    for (var count in x) {
+            len++;
+    }
+    return len;
+}
+
+// add a new marker to the map and add it to the marker array
+function createNewMarker(latLng, map) {
+    var key = getMapSize(_markerArray) + 1;
+    _markerArray[key] = new google.maps.Marker({ map: map });
+    placeMarkerAndPanTo(latLng, map, _markerArray[key]);
 }
