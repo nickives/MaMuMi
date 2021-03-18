@@ -394,6 +394,11 @@ function createNewMarker(latLng, map) {
     placeMarkerAndPanTo(latLng, map, _markerArray[key]);
 }
 
+// Will return an array of point objects
+function getPoints() {
+
+}
+
 
 // ### Add new point to the form ###
 
@@ -487,11 +492,27 @@ function _appendPoint(pointObj) {
 // ### Submit journey to the db ###
 
 function _createJourney() {
-    const forename;
-    const surname;
-    const journey = new Journey(forename, surname, null);
+    let forename = document.getElementsById('forename').value;
+    let surname = document.getElementsById('surname').value;
+    let journey = new Journey(forename, surname, null);
 
+    _sendJourney(journey);
+}
 
+function _sendJourney(journeyObj) {
+    fetch("/journeys", {
+        method: "POST",
+        mode: "same-origin",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(journeyObj),
+    }).then((res) => {
+        alert("Journey has been created");
+    }).catch((error) => {
+        alert(error.message);
+    });
 }
 
 
