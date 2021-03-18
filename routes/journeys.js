@@ -104,6 +104,10 @@ router.get('/insert-random/:count', function(req, res) {
 
   for (var i = 0; i < count; ++i) {
 
+    let lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur maximus ex ac mi sollicitudin, sit amet ullamcorper lorem egestas. Sed volutpat, velit sed commodo auctor, lacus nisi varius urna, a euismod massa ipsum semper turpis. Sed ultricies venenatis mauris, et rhoncus ipsum porta ut. Mauris eget mauris nibh. Aenean id nunc turpis. Aenean vitae sapien tempor, tincidunt odio vel, pretium mi. Aenean nec leo sed mauris elementum ultrices. Aliquam et urna nec velit posuere sollicitudin. Curabitur non diam diam. Nullam posuere nulla vel diam suscipit aliquam. Sed malesuada ligula justo, nec venenatis justo aliquet a. Aliquam erat volutpat. Cras ullamcorper quis tellus et hendrerit. Fusce vulputate lacus a dignissim egestas. Donec non diam elementum, facilisis enim quis, dignissim dolor. Cras ut semper metus, non condimentum eros.
+
+    Mauris sit amet bibendum tortor, ac ullamcorper libero. Nunc in porta purus, ut venenatis quam. Sed iaculis vestibulum placerat. Praesent efficitur aliquam.`;
+
     try {
       let journey = new Journey("Person" + i, "Surname" + i);
       let numPoints = getRandomInt(2, 5);
@@ -116,12 +120,12 @@ router.get('/insert-random/:count', function(req, res) {
         'https://www.youtube.com/embed/0An_CT2-X08',
         new Date(), new Date());
         point.addDescription({
-          en: "En" + p,
-          es: "Es" + p,
-          el: "El" + p,
-          bg: "Bg" + p,
-          it: "It" + p,
-          no: "No" + p
+          en: "En" + p + lorem,
+          es: "Es" + p + lorem,
+          el: "El" + p + lorem,
+          bg: "Bg" + p + lorem,
+          it: "It" + p + lorem,
+          no: "No" + p + lorem
 
         })
         journey.addPoint(point);
