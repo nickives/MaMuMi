@@ -423,7 +423,9 @@ function getPoints() {
                 departureDate
             );
 
-            newPoint.addDescription({ en: "Hello" })
+            desc = children[i+1].querySelector("textarea").innerText;
+
+            newPoint.addDescription({ en: desc });
 
             points.push(newPoint);
         }
@@ -536,6 +538,7 @@ function _createJourney() {
 }
 
 function _sendJourney(journeyObj) {
+    console.log(JSON.stringify(journeyObj));
     fetch("/journeys", {
         method: "POST",
         mode: "same-origin",
