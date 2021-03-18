@@ -396,6 +396,13 @@ function createNewMarker(latLng, map) {
 
 // Will return an array of point objects
 function getPoints() {
+    let points;
+    let children = document.querySelector("tbody").children;
+    for (var i=0; i<children.length; i+=2) {
+        if (children[i].className == "shadow point") {
+
+        }
+    }
 
 }
 
