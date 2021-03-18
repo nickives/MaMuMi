@@ -423,7 +423,7 @@ function getPoints() {
                 departureDate
             );
 
-            desc = children[i+1].querySelector("textarea").innerText;
+            desc = children[i+1].querySelector("textarea").value;
 
             newPoint.addDescription({ en: desc });
 
@@ -481,8 +481,7 @@ function _appendPoint(pointObj) {
                 </div>
 
                 <div class="form-group-container">
-                    <textarea class="form-control form-control-sm">
-                    </textarea>
+                    <textarea class="form-control form-control-sm"></textarea>
                 </div>                    
 
                 <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
