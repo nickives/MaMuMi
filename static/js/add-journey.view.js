@@ -396,9 +396,11 @@ function createNewMarker(latLng, map) {
 // Will return an array of point objects
 function getPoints() {
     let points = [];
+    let newPoint;
     let latLng;
     let pointCount;
     let videoLink;
+    let desc;
     let arrivalDate;
     let departureDate;
 
@@ -412,15 +414,18 @@ function getPoints() {
             arrivalDate = children[i+1].querySelector("input.arrival").value;
             departureDate = children[i+1].querySelector("input.departure").value;
 
-            points.push(new Point(
+            newPoint = new Point(
                 null,
                 pointCount,
                 {lat: latLng.lat(), lng: latLng.lng()},
                 videoLink,
                 arrivalDate,
                 departureDate
-            ));
+            );
 
+            newPoint.addDescription({ en: "Hello" })
+
+            points.push(newPoint);
         }
     }
     return points;
@@ -526,6 +531,7 @@ function _createJourney() {
         journey.addPoint(e);
     });
 
+    console.log(journey);
     _sendJourney(journey);
 }
 
