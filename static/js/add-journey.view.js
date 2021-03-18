@@ -352,7 +352,6 @@ function initMap() {
     const lngInput = document.getElementById("lng");
 
     map.addListener("dblclick", (e) => {
-        console.log(_markerNumber);
         if (_markerArray[_markerNumber] !== undefined) {
             placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
             setLatLng(e.latLng, latInput, lngInput);
@@ -396,14 +395,35 @@ function createNewMarker(latLng, map) {
 
 // Will return an array of point objects
 function getPoints() {
-    let points;
+    let points = [];
+    let latLng;
+    let pointCount;
+    let videoLink;
+    let arrivalDate;
+    let departureDate;
+
     let children = document.querySelector("tbody").children;
     for (var i=0; i<children.length; i+=2) {
         if (children[i].className == "shadow point") {
 
+            pointCount = children[i].childNodes[1].innerText;
+            latLng = _markerArray[pointCount].getPosition();
+            videoLink = children[i+1].querySelector("input[type='url']").value;
+            arrivalDate = children[i+1].querySelector("input.arrival").value;
+            departureDate = children[i+1].querySelector("input.departure").value;
+
+            points.push(new Point(
+                null,
+                pointCount,
+                {lat: latLng.lat(), lng: latLng.lng()},
+                videoLink,
+                arrivalDate,
+                departureDate
+            ));
+
         }
     }
-
+    return points;
 }
 
 
@@ -465,11 +485,11 @@ function _appendPoint(pointObj) {
 
                 <div class="form-group-container form-row">
                     <div class="col">
-                        <input type="date" class="form-control form-control-sm">
+                        <input type="date" class="form-control form-control-sm arrival">
                     </div>
 
                     <div class="col">
-                        <input type="date" class="form-control form-control-sm">
+                        <input type="date" class="form-control form-control-sm departure">
                     </div>
                 </div>
 
@@ -498,9 +518,13 @@ function _appendPoint(pointObj) {
 // ### Submit journey to the db ###
 
 function _createJourney() {
-    let forename = document.getElementsById('forename').value;
-    let surname = document.getElementsById('surname').value;
+    let forename = document.getElementById('forename').value;
+    let surname = document.getElementById('surname').value;
     let journey = new Journey(forename, surname, null);
+
+    getPoints().forEach(e => {
+        journey.addPoint(e);
+    });
 
     _sendJourney(journey);
 }
@@ -544,5 +568,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const form = e.target.parentElement.nextElementSibling;
             $(form).toggle(300);
         }
+    });
+
+    _submitJouneyBtn = document.getElementById("journey-submit");
+    _submitJouneyBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        _createJourney();
     });
 });
