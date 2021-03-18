@@ -1,6 +1,16 @@
 /*
 ** View logic for the add-journey view
 */
+let _markerArray = {};
+let _markerNumber;
+
+// Create point
+let _pointCreateBtn;
+let _pointList;
+
+// Read 
+let _points = [];
+
 function initMap() {
     map = new google.maps.Map(document.getElementById("gmap"), {
         center: { lat: 53.0, lng: 9.0 },
@@ -333,15 +343,23 @@ function initMap() {
         ]
     });
 
+
+    // ### Marker and Map ###
+
     map.setOptions({ disableDoubleClickZoom: true });
 
-    const pointMarker = new google.maps.Marker({ map: map });
     const latInput = document.getElementById("lat");
     const lngInput = document.getElementById("lng");
 
     map.addListener("dblclick", (e) => {
-        placeMarkerAndPanTo(e.latLng, map, pointMarker);
-        setLatLng(e.latLng, latInput, lngInput);
+        console.log(_markerNumber);
+         if (_markerArray[_markerNumber] !== undefined) {
+            placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
+            setLatLng(e.latLng, latInput, lngInput);
+        } else {
+            createNewMarker(e.latLng, map);
+        }
+
     });
 }
 
@@ -360,18 +378,135 @@ function togglePointForm() {
 
 }
 
+// Return the size of a given map
+function getMapSize(x) {
+    var len = 0;
+    for (var count in x) {
+            len++;
+    }
+    return len;
+}
+
+// add a new marker to the map and add it to the marker array
+function createNewMarker(latLng, map) {
+    var key = getMapSize(_markerArray) + 1;
+    _markerArray[key] = new google.maps.Marker({ map: map });
+    placeMarkerAndPanTo(latLng, map, _markerArray[key]);
+}
+
+
+// ### Add new point to the form ###
+
+function _appendPoint(pointObj) {
+
+    const tr = document.createElement('tr');
+    tr.classList.add("shadow", "point");
+    if (pointObj.point_num !== undefined ) {
+        _markerNumber = pointObj.point_num;
+    } else {
+        _markerNumber = getMapSize(_markerArray) + 1;
+    }
+
+
+    const pointHeader = `
+        <td>${_markerNumber}</td>
+        <td>${pointObj.arrival_date}</td>
+        <td>${pointObj.departure_date}</td>
+        <td></td>
+        <td>
+            <button type="button" class="btn btn-sm">O</button>
+        </td>
+    `;
+
+    tr.innerHTML = pointHeader;
+
+    const trBody = document.createElement('tr');
+    trBody.classList.add("point-form");
+
+    const pointBody = `
+        <td colspan="100%">
+            <div class="form-container">
+                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
+                    <h3 class="h6 m-0>Pin Location"</h3>
+                    <small>Required</small>
+                </div>
+
+                <div class="form-group-container">
+                    <div class="form-group row m-0">
+                        <input type="text" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
+                    <h3 class="h6 m-0">Description</h3>
+                    <small>Required</small>
+                </div>
+
+                <div class="form-group-container">
+                    <textarea class="form-control form-control-sm">
+                    </textarea>
+                </div>                    
+
+                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
+                    <h3 class="h6 m-0">Arrival Departure Dates</h3>
+                    <small>Required</small>
+                </div>
+
+                <div class="form-group-container form-row">
+                    <div class="col">
+                        <input type="date" class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col">
+                        <input type="date" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
+                    <h3 class="h6 m-0">Video URL</h3>
+                    <small>Required</small>
+                </div>
+
+                <div class="form-group-container>
+                    <div class="form-group row m-0">
+                        <input type="url" class="form-control form-control-sm">
+                    </div>
+                </div>
+            </div
+        </td>
+    `;
+
+    trBody.innerHTML = pointBody;
+
+
+    _pointCreateBtn.parentElement.parentElement.before(tr);
+    _pointCreateBtn.parentElement.parentElement.before(trBody);
+
+}
+
+
+
+// ### Form layout and response code ###
+
 document.addEventListener('DOMContentLoaded', initMap);
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    _pointList = document.querySelector("tbody");
+
+    _pointCreateBtn = document.getElementById("point-create-btn");
+    _pointCreateBtn.addEventListener("click", _appendPoint);
 
     document.querySelectorAll('.point-form').forEach((e) => {
         $(e).toggle();
     });
 
-    document.querySelectorAll('.point').forEach((e) => {
-        e.addEventListener('click', (element) => {
-            const form = element.target.parentElement.nextElementSibling;
+    document.querySelector('tbody').addEventListener('click', (e) => {
+        if (e.target.nodeName !== "BUTTON") {
+            _markerNumber = e.target.parentNode.childNodes[1].innerText;
+            
+            const form = e.target.parentElement.nextElementSibling;
             $(form).toggle(300);
-        })
-    })
+        }
+    });
 });
