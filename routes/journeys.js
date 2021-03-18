@@ -5,6 +5,8 @@ const router = express.Router();
 const pool = require("../lib/db/pool-secret");
 const JourneyModel = require("../models/journeys-model");
 const JourneyController = require("../controllers/journey-controller");
+const Journey = require('../static/js/lib/journey');
+const Point = require('../static/js/lib/point');
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
@@ -78,4 +80,64 @@ router.post('/:id/delete', function(req, res) {
   controller.delete(id);
 });
 
+
+router.get('/:id/geojson', function(req, res) {
+  let model = new JourneyModel(pool);
+  let controller = new JourneyController(model, res);
+  let id = parseInt(req.params['id']);
+  controller.geoJSON(id);
+})
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandom(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+router.get('/insert-random/:count', function(req, res) {
+  let model = new JourneyModel(pool);
+  let count = parseInt(req.params['count']);
+
+  for (var i = 0; i < count; ++i) {
+
+    let lorem = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur maximus ex ac mi sollicitudin, sit amet ullamcorper lorem egestas. Sed volutpat, velit sed commodo auctor, lacus nisi varius urna, a euismod massa ipsum semper turpis. Sed ultricies venenatis mauris, et rhoncus ipsum porta ut. Mauris eget mauris nibh. Aenean id nunc turpis. Aenean vitae sapien tempor, tincidunt odio vel, pretium mi. Aenean nec leo sed mauris elementum ultrices. Aliquam et urna nec velit posuere sollicitudin. Curabitur non diam diam. Nullam posuere nulla vel diam suscipit aliquam. Sed malesuada ligula justo, nec venenatis justo aliquet a. Aliquam erat volutpat. Cras ullamcorper quis tellus et hendrerit. Fusce vulputate lacus a dignissim egestas. Donec non diam elementum, facilisis enim quis, dignissim dolor. Cras ut semper metus, non condimentum eros.
+
+    Mauris sit amet bibendum tortor, ac ullamcorper libero. Nunc in porta purus, ut venenatis quam. Sed iaculis vestibulum placerat. Praesent efficitur aliquam.`;
+
+    try {
+      let journey = new Journey("Person" + i, "Surname" + i);
+      let numPoints = getRandomInt(2, 5);
+
+      for (var p = 0; p < numPoints; ++p) {
+        let point = new Point(null, p + 1, {
+          lat: getRandom(-80, 80),
+          lng: getRandom(-180, 180)
+        },
+        'https://www.youtube.com/embed/0An_CT2-X08',
+        new Date(), new Date());
+        point.addDescription({
+          en: "En" + p + lorem,
+          es: "Es" + p + lorem,
+          el: "El" + p + lorem,
+          bg: "Bg" + p + lorem,
+          it: "It" + p + lorem,
+          no: "No" + p + lorem
+
+        })
+        journey.addPoint(point);
+      }
+  
+      model.create(journey);
+
+    } catch (err) {
+      res.status(500).send('JSON.stringify(err)');
+    }
+  }
+
+  res.send("ok");
+})
 module.exports = router;

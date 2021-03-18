@@ -1,5 +1,124 @@
 
-var map, markers, geoJSON;
+var map, geoJSON;
+const mapMarkers = [];
+var oldMarkerDesc = undefined;
+var oldMarker = undefined;
+
+/**
+ * Clear markers and close any InfoWindows
+ * 
+ * @param {google.maps.Marker} safeMarker Don't delete this marker.
+ */
+const clearMarkers = (safeMarker) => {
+    // clear all markers
+    mapMarkers.forEach(m => {
+        if (m !== safeMarker) {
+            m.setMap(null);
+        }
+    })
+
+    // reset info window
+    if (oldMarkerDesc !== undefined) {
+        oldMarkerDesc.close();
+    }
+    oldMarkerDesc = undefined;
+
+    // remove old geoJSON
+    map.data.forEach(function (feature) {
+        map.data.remove(feature);
+    })
+}
+
+const addPoints = (journey) => {
+}
+
+const pointWindowContent = (point) => {
+    let desc = point.description.en;
+    let vidUrl = point.video_link;
+
+    return `<div id=\"infoWindow\">
+                <div id=\"infoDescription\">"${desc}"</div>
+                <div id=\"infoVideo\"><iframe width="560" height="315" src="${vidUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+            </div>`;
+}
+
+const drawInfoWindow = (marker, point_num) => {
+    const markerDesc = new google.maps.InfoWindow();
+    oldMarkerDesc = markerDesc;
+    let point = marker.journey.points[point_num];
+    markerDesc.setContent(pointWindowContent(point));
+    markerDesc.setPosition(marker.getPosition());
+    markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
+    markerDesc.open(map);
+}
+
+
+const drawJourney = async (id) => {
+
+
+    let res = await fetch('/journeys/' + id + '/geojson');
+    let geoJSON = await res.json();
+    clearMarkers();
+    map.data.addGeoJson(geoJSON);
+
+    const journey = geoJSON.features[0].properties.journey;
+    journey.points.forEach( p => {
+        const marker = new google.maps.Marker({
+            position: p.loc,
+            map: map,
+            journey: journey
+        });
+
+        // first point of journey should be bouncing and have info window
+        if (p.point_num === 1) {
+            oldMarker = marker;
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            drawInfoWindow(marker, 0);
+        }
+
+        mapMarkers.push(marker);
+
+        const point_num = p.point_num  - 1;
+        marker.addListener('click', () => {
+            if (oldMarkerDesc !== undefined) {
+                oldMarkerDesc.close();
+            }
+            // clear previous bouncing and set this one bouncing
+            oldMarker.setAnimation(null);
+            oldMarker = marker;
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            drawInfoWindow(marker, point_num);
+        })
+    })
+}
+
+const drawJourneyStarts = async () => {
+    clearMarkers();
+
+    try {
+        let res = await fetch('/journeys')
+        let journeys = await res.json();
+
+        journeys.forEach( (journey) => {
+            if (journey.points !== undefined) {
+                const marker = new google.maps.Marker({
+                    position: journey.points[0].loc,
+                    map: map,
+                    journey: journey
+                })
+    
+                mapMarkers.push(marker);
+
+                marker.addListener('click', async () => {
+                    await drawJourney(marker.journey.id);
+                })
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function myMap() {
 
@@ -81,6 +200,7 @@ async function updateMap() {
     // ### Display decription box for a marker ###
     const markerDesc = new google.maps.InfoWindow();
 
+    /*
     $.getJSON("http://" + location.hostname + ":" + location.port + "/journeys", function(data) {
         geoJSON = data;
         map.data.addGeoJson(data);
@@ -115,7 +235,7 @@ async function updateMap() {
         markerDesc.setPosition(event.feature.getGeometry().get());
         markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
         markerDesc.open(map);
-    });
+    });*/
 }
 
 async function animation() {
@@ -127,8 +247,9 @@ async function animation() {
     }
 }
 
-$(document).ready( function () {
+window.onload = () => {
     animation();
     myMap();
+    drawJourneyStarts();
     updateMap();
-});
+};

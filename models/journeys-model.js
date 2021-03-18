@@ -29,10 +29,10 @@ class JourneyModel {
             let sql = "INSERT INTO `tbl_points` (`id_journeys`, `point_num`, `loc`,\
                                                 `arrival_date`, `departure_date`,\
                                                 `video_link`, `desc_en`, `desc_es`,\
-                                                `desc_de`, `desc_fr`)\
+                                                `desc_el`, `desc_it`, `desc_no`, `desc_bg`)\
                     VALUES (:id, :point_num, ST_PointFromText( ( CONCAT('POINT(', :lng,\
                             ' ', :lat, ')') ),'4326'), :arrive_date, :depart_date, :video,\
-                            :d_en, :d_es,:d_de, :d_fr)"
+                            :d_en, :d_es,:d_el, :d_it, :d_no, :d_bg)"
 
             let res_p = await conn.query(
                 {
@@ -49,8 +49,10 @@ class JourneyModel {
                     video: point.video_link,
                     d_en: (point.description.en ? point.description.en : ""),
                     d_es: (point.description.es ? point.description.es : ""),
-                    d_de: (point.description.de ? point.description.de : ""),
-                    d_fr: (point.description.fr ? point.description.fr : ""),
+                    d_el: (point.description.el ? point.description.el : ""),
+                    d_it: (point.description.it ? point.description.it : ""),
+                    d_no: (point.description.no ? point.description.no : ""),
+                    d_bg: (point.description.bg ? point.description.bg : ""),
                 }
             );
         }
@@ -114,7 +116,7 @@ class JourneyModel {
             // get points
             sql = "SELECT `id_points`, `point_num`, `loc`, `arrival_date`,\
                            `departure_date`, `video_link`, `desc_en`, `desc_es`,\
-                           `desc_de`, `desc_fr`\
+                           `desc_el`, `desc_it`, `desc_no`, `desc_bg`\
                            FROM `tbl_points`\
                    WHERE `id_journeys` = ?";
             let res_p = await conn.query(sql, id);
@@ -139,8 +141,10 @@ class JourneyModel {
                 point.addDescription({
                     en: p.desc_en,
                     es: p.desc_es,
-                    de: p.desc_de,
-                    fr: p.desc_fr,
+                    el: p.desc_el,
+                    bg: p.desc_bg,
+                    it: p.desc_it,
+                    no: p.desc_no
                 })
                 point.id_points = p.id_points;
 
@@ -231,7 +235,7 @@ class JourneyModel {
         try {
             let sql = "SELECT `tbl_journeys`.`id_journeys`, `forename`, `surname`,\
                        `point_num`, `loc`, `arrival_date`, `departure_date`,\
-                       `video_link`, `desc_en`, `desc_es`, `desc_de`, `desc_fr`\
+                       `video_link`, `desc_en`, `desc_es`, `desc_el`, `desc_it`, `desc_no`, `desc_bg`\
                        FROM `tbl_journeys`\
                        LEFT JOIN `tbl_points` ON `tbl_journeys`.`id_journeys` = `tbl_points`.`id_journeys`\
                        WHERE `point_num` = 1 OR `point_num` IS NULL";
@@ -263,8 +267,10 @@ class JourneyModel {
                 point.addDescription({
                     en: j.desc_en,
                     es: j.desc_es,
-                    de: j.desc_de,
-                    fr: j.desc_fr,
+                    el: j.desc_el,
+                    bg: j.desc_bg,
+                    it: j.desc_it,
+                    no: j.desc_no
                 });
 
                 journey.addPoint(point);

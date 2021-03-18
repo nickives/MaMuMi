@@ -21,7 +21,7 @@ services:
   mariadb:
     container_name: mamumi_mariadb
     image: mariadb:5.5
-    restart: always
+    restart: unless-stopped
     volumes:
       - mariadb-volume:/var/lib/mysql
       - mariadb-logs-volume:/logs/db
