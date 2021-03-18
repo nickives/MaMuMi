@@ -1,0 +1,43 @@
+extends admin 
+block main 
+    .col-md-5.col-lg-3.pt-1.ml-2
+        form
+            .form-container.mb-3
+                .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2
+                    h2.h6.m-0 Journey Details 
+                    small Required
+                .form-group-container
+                    .form-group.row.m-0
+                        label(for='forename').col-md-3.col-form-label-sm Forename
+                        input(type='text' name='forename').col-md-9.form-control.form-control-sm#forename
+                    .form-group.row.m-0
+                        label(for='surname').col-md-3.col-form-label-sm Surname
+                        input(type='text' name='surname').col-md-9.form-control.form-control-sm#surname
+            .form-container
+                .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2
+                    h2.h6.m-0 Journey Pins 
+                    small Required
+                .form-group-container
+                    .table-responsive
+                        table.table.table-borderless.table-sm
+                            thead 
+                                tr 
+                                    th(scope='col') Order
+                                    th(scope='col') Arrival
+                                    th(scope='col') Departure
+                                    th(scope='col') Location
+                                    th(scope='col') 
+                            tbody 
+                                tr#add-row 
+                                    td(colspan='100%')
+                                        button(type='button').btn.btn-block.btn-outline-secondary.create-btn#point-create-btn
+                                            span +
+            .form-container.mt-2
+                button(type='submit').btn.btn-block#journey-submit Submit
+    .col-md-6.col-lg-8.container-fluid.m-0#gmap-container
+        .row.h-100 
+            .col-12#gmap
+
+  
+
+                
