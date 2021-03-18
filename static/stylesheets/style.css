@@ -125,6 +125,20 @@ div.login-wrapper .form-check-label {
   border-radius: 6px 6px 0 0;
 }
 
+table .form-title {
+  background-color: #fff;
+  color: #000;
+}
+
+table .form-title h3 {
+  font-size: 0.8rem!important;
+  border-radius: 6px;
+}
+
+.form-group-container table td {
+  padding: 10px;
+}
+
 .form-container {
   border-bottom: 2px solid #d3d3d3;
   border-bottom-left-radius: 6px;
@@ -135,12 +149,22 @@ div.login-wrapper .form-check-label {
   border-radius: 6px;
 }
 
-.form-container table th {
+.form-container th {
   font-weight: normal;
   padding-left: 15px;
   padding-right: 15px;
   font-size: .875rem;
   line-height: 1.5;
+}
+
+.form-container table tbody tr {
+  border-radius: 6px;
+}
+
+.form-container table tbody tr:hover {
+  background-color: #048ABF;
+  color: #fff;
+  cursor: pointer;
 }
 
 .form-group-container table .create-btn {
@@ -155,4 +179,8 @@ div.login-wrapper .form-check-label {
 
 #journey-submit:hover {
   background-color: #049DBF;
+}
+
+.form-group-container table tbody tr#add-row:hover, .form-group-container table tbody tr.point-form {
+  background-color: #fff;
 }

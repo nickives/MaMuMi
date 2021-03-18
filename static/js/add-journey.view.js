@@ -356,4 +356,22 @@ function setLatLng(latLng, latInput, lngInput) {
     const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
 }
 
+function togglePointForm() {
+
+}
+
 document.addEventListener('DOMContentLoaded', initMap);
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    document.querySelectorAll('.point-form').forEach((e) => {
+        $(e).toggle();
+    });
+
+    document.querySelectorAll('.point').forEach((e) => {
+        e.addEventListener('click', (element) => {
+            const form = element.target.parentElement.nextElementSibling;
+            $(form).toggle(300);
+        })
+    })
+});

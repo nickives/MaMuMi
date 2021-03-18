@@ -29,17 +29,48 @@ block main
                                     th(scope='col') 
                             tbody 
                               //- Journeys go here
-                              tr
+                              tr.shadow.point
                                 td 1
                                 td 01/01/21
                                 td 15/01/21
                                 td London 
                                 td 
                                     button(type='button').btn.btn-sm O
-                              tr 
-                                td(colspan='100%')
-                                    button(type='button').btn.btn-block.btn-outline-secondary.create-btn#point-create-btn
-                                        span +
+                                tr.point-form
+                                    td(colspan='100%')
+                                            .form-container
+                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
+                                                        h3.h6.m-0 Pin Location
+                                                        small Required
+                                                    .form-group-container
+                                                        .form-group.row.m-0 
+                                                            input(type='text').form-control.form-control-sm
+                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
+                                                        h3.h6.m-0 Description
+                                                        small Required
+                                                    .form-group-container
+                                                        textarea.form-control.form-control-sm
+                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
+                                                        h3.h6.m-0 Arrival Departure Dates
+                                                        small Required
+                                                    .form-group-container.form-row
+                                                        .col
+                                                            input(type='date').form-control.form-control-sm
+                                                        .col
+                                                            input(type='date').form-control.form-control-sm
+                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
+                                                        h3.h6.m-0 Video URL
+                                                        small Required
+                                                    .form-group-container
+                                                        .form-group.row.m-0 
+                                                            input(type='url').form-control.form-control-sm
+
+
+                                    
+                                tr#add-row 
+                                    td(colspan='100%')
+                                        button(type='button').btn.btn-block.btn-outline-secondary.create-btn#point-create-btn
+                                            span +
             .form-container.mt-2
                 button(type='submit').btn.btn-block#journey-submit Submit
     .col-md-6.col-lg-8.container-fluid.m-0#gmap-container
