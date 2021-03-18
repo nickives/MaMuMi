@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Feb 09, 2021 at 09:02 AM
+-- Generation Time: Mar 18, 2021 at 12:00 PM
 -- Server version: 5.5.64-MariaDB-1~trusty
 -- PHP Version: 7.4.15
 
@@ -54,8 +54,10 @@ CREATE TABLE `tbl_points` (
   `video_link` varchar(45) NOT NULL,
   `desc_en` varchar(1200) DEFAULT NULL,
   `desc_es` varchar(1200) DEFAULT NULL,
-  `desc_de` varchar(1200) DEFAULT NULL,
-  `desc_fr` varchar(1200) DEFAULT NULL
+  `desc_bg` varchar(1200) DEFAULT NULL,
+  `desc_el` varchar(1200) DEFAULT NULL,
+  `desc_no` varchar(1200) NOT NULL,
+  `desc_it` varchar(1200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
