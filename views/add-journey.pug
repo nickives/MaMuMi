@@ -9,7 +9,7 @@ block main
                 .form-group-container
                     .form-group.row.m-0
                         label(for='forename').col-md-3.col-form-label-sm Forename
-                        input(type='text' name='forename').col-md-9.form-control.form-control-sm#forname
+                        input(type='text' name='forename').col-md-9.form-control.form-control-sm#forename
                     .form-group.row.m-0
                         label(for='surname').col-md-3.col-form-label-sm Surname
                         input(type='text' name='surname').col-md-9.form-control.form-control-sm#surname
@@ -28,45 +28,6 @@ block main
                                     th(scope='col') Location
                                     th(scope='col') 
                             tbody 
-                              //- Journeys go here
-                              tr.shadow.point
-                                td 1
-                                td 01/01/21
-                                td 15/01/21
-                                td London 
-                                td 
-                                    button(type='button').btn.btn-sm O
-                                tr.point-form
-                                    td(colspan='100%')
-                                            .form-container
-                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
-                                                        h3.h6.m-0 Pin Location
-                                                        small Required
-                                                    .form-group-container
-                                                        .form-group.row.m-0 
-                                                            input(type='text').form-control.form-control-sm
-                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
-                                                        h3.h6.m-0 Description
-                                                        small Required
-                                                    .form-group-container
-                                                        textarea.form-control.form-control-sm
-                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
-                                                        h3.h6.m-0 Arrival Departure Dates
-                                                        small Required
-                                                    .form-group-container.form-row
-                                                        .col
-                                                            input(type='date').form-control.form-control-sm
-                                                        .col
-                                                            input(type='date').form-control.form-control-sm
-                                                    .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2.border-bottom
-                                                        h3.h6.m-0 Video URL
-                                                        small Required
-                                                    .form-group-container
-                                                        .form-group.row.m-0 
-                                                            input(type='url').form-control.form-control-sm
-
-
-                                    
                                 tr#add-row 
                                     td(colspan='100%')
                                         button(type='button').btn.btn-block.btn-outline-secondary.create-btn#point-create-btn
