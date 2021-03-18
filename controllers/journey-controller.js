@@ -59,8 +59,7 @@ class JourneyController {
       res = await this.model.create(newJourney);
       res = JSON.stringify(res);
     } catch (err) {
-      res = JSON.stringify(res);
-      this.view.status(422);
+      this.view.status(422).send({message : err.message});
     }
 
     // Return the database response
@@ -88,7 +87,7 @@ class JourneyController {
     } catch (err) {
       // Catch error and set status to 404
       res = JSON.stringify(err);
-      this.view.status(404);
+      this.view.sendStatus(404);
     }
 
     this.view.send(res);
@@ -111,7 +110,7 @@ class JourneyController {
       this.view.send(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(500).send('res'); // this operation should never fail
+      this.view.sendStatus(500); // this operation should never fail
     }
     this.view.send(res);
   }
@@ -135,7 +134,7 @@ class JourneyController {
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(422);
+      this.view.sendStatus(422);
     }
 
     // Return the model response
@@ -156,7 +155,7 @@ class JourneyController {
       res = JSON.stringify(res);
     } catch (err) {
       res = JSON.stringify(err);
-      this.view.status(500); // This should never error
+      this.view.sendStatus(500); // This should never error
     }
     // Return the model response
     this.view.send("OK");

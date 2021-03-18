@@ -83,80 +83,104 @@ div.login-wrapper .form-check-label {
 }
 
 /* ===== Admin Dashboard ===== */
-#dashboard-nav {
-  background-color: #d95bad;
+.main-content {
+  margin-left: 5rem;
 }
 
-#dashboard-nav #dashboard-logo {
-  max-width: 7%;
+.main-content .form-group-container {
+  
 }
 
-#dashboard-nav a:first-child img {
-  max-width: 100%;
-}
-
-#dashboard-nav ul.navbar-nav li a {
-  color: #fff;
-}
-
-#dashboard-nav ul.navbar-nav li a:hover {
-  color: #b4b3b3;
+.main-content .form-group-container .form-title {
+  
 }
 
 .sidebar {
-  position: fixed;
+  position: sticky;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 100;
-  padding: 60px 0 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+  max-width: 80px;
+  background-color: #048ABF;
 }
 
 .sidebar-sticky {
   position: relative;
   top: 0;
   height: calc(100vh - 48px);
-  padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto;
 }
 
-.sidebar-sticky a {
-  color: #048abf;
+.sidebar-sticky a:hover, .sidebar-sticky a.active {
+  background-color: #049DBF;
 }
 
-.sidebar-sticky a:hover,
-.sidebar-sticky a.active {
-  color: #4d3c86;
+/* ===== Journey Creation ===== */
+.form-title {
+  background-color: #048ABF;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 6px 6px 0 0;
 }
 
-#dashboard-content {
-  padding-top: 60px;
+table .form-title {
+  background-color: #fff;
+  color: #000;
 }
 
-.admin-pane {
-  display: none;
+table .form-title h3 {
+  font-size: 0.8rem!important;
+  border-radius: 6px;
 }
 
-.active-pane {
-  display: flex;
+.form-group-container table td {
+  padding: 10px;
 }
 
-.create-btn {
-  width: 75px;
+.form-container {
+  border-bottom: 2px solid #d3d3d3;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
-#submit-journey-btn {
-  color: #ffffff;
-  background-color: #048abf;
+.form-container input {
+  border-radius: 6px;
 }
 
-#submit-journey-btn:hover {
-  background-color: #d95bad;
+.form-container th {
+  font-weight: normal;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: .875rem;
+  line-height: 1.5;
 }
 
-/* ===== Point Creation ===== */
-#gmap-container {
-  height: 91% !important;
+.form-container table tbody tr {
+  border-radius: 6px;
+}
+
+.form-container table tbody tr:hover {
+  background-color: #048ABF;
+  color: #fff;
+  cursor: pointer;
+}
+
+.form-group-container table .create-btn {
+  border-color: #d3d3d3;
+  border-radius: 6px;
+}
+
+#journey-submit {
+  background-color: #048ABF;
+  color: white;
+}
+
+#journey-submit:hover {
+  background-color: #049DBF;
+}
+
+.form-group-container table tbody tr#add-row:hover, .form-group-container table tbody tr.point-form {
+  background-color: #fff;
 }
