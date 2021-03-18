@@ -6,6 +6,7 @@
 - [MariaDB](#mariadb)
     - [IMPORTANT SETUP CONFIGURATION](#important-setup-configuration)
 - [Journey Classes](#journey-classes)
+- [Populate Journeys](#populate-journeys)
 
 <!-- /TOC -->
 # MaMuMi
@@ -41,3 +42,6 @@ var journey = new Journey();
 ```
 
 It is advised to use the class constructors to populate the required members. These are documented. Journey has add/remove point methods to further populate the journey.
+
+# Populate Journeys
+`/journeys/insert-random/{number}` will insert a random amount of random journeys with random points.
