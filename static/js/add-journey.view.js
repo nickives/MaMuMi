@@ -344,7 +344,7 @@ function initMap() {
     });
 
 
-    // ### Marker and Map ###
+// ### Marker and Map ###
 
     map.setOptions({ disableDoubleClickZoom: true });
 
@@ -427,7 +427,7 @@ function _appendPoint(pointObj) {
         <td colspan="100%">
             <div class="form-container">
                 <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
-                    <h3 class="h6 m-0>Pin Location"</h3>
+                    <h3 class="h6 m-0">Pin Location</h3>
                     <small>Required</small>
                 </div>
 
@@ -484,6 +484,15 @@ function _appendPoint(pointObj) {
 
 }
 
+// ### Submit journey to the db ###
+
+function _createJourney() {
+    const forename;
+    const surname;
+    const journey = new Journey(forename, surname, null);
+
+
+}
 
 
 // ### Form layout and response code ###
