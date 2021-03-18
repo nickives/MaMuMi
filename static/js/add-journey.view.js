@@ -344,7 +344,7 @@ function initMap() {
     });
 
 
-// ### Marker and Map ###
+    // ### Marker and Map ###
 
     map.setOptions({ disableDoubleClickZoom: true });
 
@@ -353,7 +353,7 @@ function initMap() {
 
     map.addListener("dblclick", (e) => {
         console.log(_markerNumber);
-         if (_markerArray[_markerNumber] !== undefined) {
+        if (_markerArray[_markerNumber] !== undefined) {
             placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
             setLatLng(e.latLng, latInput, lngInput);
         } else {
@@ -382,7 +382,7 @@ function togglePointForm() {
 function getMapSize(x) {
     var len = 0;
     for (var count in x) {
-            len++;
+        len++;
     }
     return len;
 }
@@ -413,17 +413,16 @@ function _appendPoint(pointObj) {
 
     const tr = document.createElement('tr');
     tr.classList.add("shadow", "point");
-    if (pointObj.point_num !== undefined ) {
+    if (pointObj.point_num !== undefined) {
         _markerNumber = pointObj.point_num;
     } else {
         _markerNumber = getMapSize(_markerArray) + 1;
     }
 
-
     const pointHeader = `
         <td>${_markerNumber}</td>
-        <td>${pointObj.arrival_date}</td>
-        <td>${pointObj.departure_date}</td>
+        <td>${pointObj.arrival_date !== undefined ? pointObj.arrival_date : ''}</td>
+        <td>${pointObj.departure_date !== undefined ? pointObj.departure_date : ''}</td>
         <td></td>
         <td>
             <button type="button" class="btn btn-sm">O</button>
@@ -528,7 +527,7 @@ function _sendJourney(journeyObj) {
 document.addEventListener('DOMContentLoaded', initMap);
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     _pointList = document.querySelector("tbody");
 
     _pointCreateBtn = document.getElementById("point-create-btn");
@@ -541,7 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('tbody').addEventListener('click', (e) => {
         if (e.target.nodeName !== "BUTTON") {
             _markerNumber = e.target.parentNode.childNodes[1].innerText;
-            
+
             const form = e.target.parentElement.nextElementSibling;
             $(form).toggle(300);
         }
