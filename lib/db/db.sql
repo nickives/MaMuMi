@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Mar 18, 2021 at 12:00 PM
+-- Generation Time: Jun 22, 2021 at 02:15 PM
 -- Server version: 5.5.64-MariaDB-1~trusty
 -- PHP Version: 7.4.15
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `mamumi`
 --
-CREATE DATABASE IF NOT EXISTS `mamumi` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `mamumi`;
 
 -- --------------------------------------------------------
 
@@ -31,10 +29,18 @@ USE `mamumi`;
 --
 
 DROP TABLE IF EXISTS `tbl_journeys`;
-CREATE TABLE `tbl_journeys` (
-  `id_journeys` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_journeys` (
+  `id_journeys` int(11) NOT NULL AUTO_INCREMENT,
   `forename` varchar(65) NOT NULL,
-  `surname` varchar(65) NOT NULL
+  `surname` varchar(65) NOT NULL,
+  `video_link` varchar(2048) NOT NULL,
+  `desc_en` varchar(1200) NOT NULL,
+  `desc_es` varchar(1200) NOT NULL,
+  `desc_bg` varchar(1200) NOT NULL,
+  `desc_el` varchar(1200) NOT NULL,
+  `desc_no` varchar(1200) NOT NULL,
+  `desc_it` varchar(1200) NOT NULL,
+  PRIMARY KEY (`id_journeys`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -44,55 +50,15 @@ CREATE TABLE `tbl_journeys` (
 --
 
 DROP TABLE IF EXISTS `tbl_points`;
-CREATE TABLE `tbl_points` (
-  `id_points` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tbl_points` (
+  `id_points` int(11) NOT NULL AUTO_INCREMENT,
   `id_journeys` int(11) NOT NULL,
   `point_num` int(11) NOT NULL,
   `loc` point NOT NULL,
-  `arrival_date` datetime DEFAULT NULL,
-  `departure_date` datetime DEFAULT NULL,
-  `video_link` varchar(45) NOT NULL,
-  `desc_en` varchar(1200) DEFAULT NULL,
-  `desc_es` varchar(1200) DEFAULT NULL,
-  `desc_bg` varchar(1200) DEFAULT NULL,
-  `desc_el` varchar(1200) DEFAULT NULL,
-  `desc_no` varchar(1200) NOT NULL,
-  `desc_it` varchar(1200) NOT NULL
+  PRIMARY KEY (`id_points`),
+  UNIQUE KEY `points_point_num` (`point_num`,`id_journeys`),
+  KEY `fk_id_journeys_idx` (`id_journeys`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `tbl_journeys`
---
-ALTER TABLE `tbl_journeys`
-  ADD PRIMARY KEY (`id_journeys`);
-
---
--- Indexes for table `tbl_points`
---
-ALTER TABLE `tbl_points`
-  ADD PRIMARY KEY (`id_points`),
-  ADD UNIQUE KEY `points_point_num` (`point_num`,`id_journeys`),
-  ADD KEY `fk_id_journeys_idx` (`id_journeys`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `tbl_journeys`
---
-ALTER TABLE `tbl_journeys`
-  MODIFY `id_journeys` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tbl_points`
---
-ALTER TABLE `tbl_points`
-  MODIFY `id_points` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

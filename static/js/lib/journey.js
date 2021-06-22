@@ -7,12 +7,34 @@ class Journey {
      * @param {String} forename - First name of migrant
      * @param {String} surname - Surname of migrant 
      * @param {Number} id - Primary key of journey, positive integer
+     * @param {String} video_link - link to media
      */
-    constructor(forename, surname, id) {
+    constructor(forename, surname, video_link, id) {
         this.forename = forename;
         this.surname = surname;
+        this.video_link = video_link;
         this.points = [];
         this.id = id;
+        this.description = {};       
+    }
+
+    /**
+     * Add descriptions. This should be an object with two letter language keys
+     * and associated descriptions.
+     * 
+     * @param {*} description 
+     */
+     addDescription(description) {
+        this.description = {...this.description, ...description};
+    }
+
+    /**
+     * Remove description. This should be a two letter locale such as 'en'.
+     * 
+     * @param {String} locale 
+     */
+     removeDescription(locale) {
+        delete this.description[locale];
     }
 
     /**

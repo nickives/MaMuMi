@@ -6,10 +6,9 @@ const JourneyModel = require("../models/journeys-model");
 const { log } = require('console');
 
 
-
 describe('Journeys-model.js DB Tests', function () {
 
-    let conn, point1, point2, journey, desc;
+    let conn, point1, point2, journey, desc, video_link;
     let model = new JourneyModel(pool);
 
     const truncateDB = async () => {
@@ -46,11 +45,12 @@ describe('Journeys-model.js DB Tests', function () {
             de: "De description",
             fr: "Fr description"
         };
-        journey = new Journey("Bob", "FromTesco");
+        video_link = "http://youtu.be";
+
+        journey = new Journey("Bob", "FromTesco", video_link);
+        journey.addDescription(desc);
         journey.addPoint(point1);
         journey.addPoint(point2);
-        point1.addDescription(desc);
-        point2.addDescription(desc);
     });
 
     afterEach(async () => {
@@ -104,8 +104,7 @@ describe('Journeys-model.js DB Tests', function () {
         
         // lets change some stuff
         journey.forename = "Freddy";
-        let point3 = new Point(null, 3, {lat: 52, lng: -2}, "point2", null, new Date());
-        point3.addDescription( { en: "New English Description" } );
+        let point3 = new Point(null, 3, {lat: 52, lng: -2}, "point2");
         journey.addPoint(point3);
         await model.update(res_create.insertId, journey);
 
@@ -119,8 +118,7 @@ describe('Journeys-model.js DB Tests', function () {
                 point1Found = true;
             } else if (point.point_num === point2.point_num) {
                 point2Found = true;
-            } else if (point.point_num === point3.point_num && 
-                       point.description.en === point3.description.en) {
+            } else if (point.point_num === point3.point_num) {
                 point3Found = true;
             }
         })
@@ -145,7 +143,7 @@ describe('Journeys-model.js DB Tests', function () {
         let resJourney = await model.create(journey);
 
         // We should have two types of journey for good measure
-        let journeyWithNoPoint = new Journey('Fred', 'isBest');
+        let journeyWithNoPoint = new Journey('Fred', 'isBest', video_link);
         let resNoPoint = await model.create(journeyWithNoPoint);
 
         let resAll = await model.readAll();

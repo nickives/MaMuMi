@@ -26,13 +26,9 @@ class JourneyModel {
             let point = points[i]; 
 
             // we have to concatenate the POINT to get the placeholder value in
-            let sql = "INSERT INTO `tbl_points` (`id_journeys`, `point_num`, `loc`,\
-                                                `arrival_date`, `departure_date`,\
-                                                `video_link`, `desc_en`, `desc_es`,\
-                                                `desc_el`, `desc_it`, `desc_no`, `desc_bg`)\
+            const sql = "INSERT INTO `tbl_points` (`id_journeys`, `point_num`, `loc`) \
                     VALUES (:id, :point_num, ST_PointFromText( ( CONCAT('POINT(', :lng,\
-                            ' ', :lat, ')') ),'4326'), :arrive_date, :depart_date, :video,\
-                            :d_en, :d_es,:d_el, :d_it, :d_no, :d_bg)"
+                            ' ', :lat, ')') ),'4326'))"
 
             let res_p = await conn.query(
                 {
@@ -44,15 +40,6 @@ class JourneyModel {
                     point_num: point.point_num, 
                     lng: point.loc.lng, 
                     lat: point.loc.lat, 
-                    arrive_date: point.arrival_date, 
-                    depart_date: point.departure_date, 
-                    video: point.video_link,
-                    d_en: (point.description.en ? point.description.en : ""),
-                    d_es: (point.description.es ? point.description.es : ""),
-                    d_el: (point.description.el ? point.description.el : ""),
-                    d_it: (point.description.it ? point.description.it : ""),
-                    d_no: (point.description.no ? point.description.no : ""),
-                    d_bg: (point.description.bg ? point.description.bg : ""),
                 }
             );
         }
@@ -75,8 +62,28 @@ class JourneyModel {
             await conn.beginTransaction();
 
             // insert journey
-            let sql = "INSERT INTO `tbl_journeys` (`forename`, `surname`) VALUES (?, ?)";
-            res = await conn.query(sql, [journey.forename, journey.surname]);
+            const sql = "INSERT INTO `tbl_journeys` (`forename`, `surname`,\
+                        `video_link`, `desc_en`, `desc_es`, `desc_el`,\
+                        `desc_it`, `desc_no`, `desc_bg`)\
+                        VALUES (:forename, :surname, :video_link,\
+                        :d_en, :d_es,:d_el, :d_it, :d_no, :d_bg)";
+            res = await conn.query(
+                {
+                    namedPlaceholders: true,
+                    sql: sql
+                },
+                {
+                    forename: journey.forename,
+                    surname: journey.surname,
+                    video_link: journey.video_link,
+                    d_en: (journey.description.en ? journey.description.en : ""),
+                    d_es: (journey.description.es ? journey.description.es : ""),
+                    d_el: (journey.description.el ? journey.description.el : ""),
+                    d_it: (journey.description.it ? journey.description.it : ""),
+                    d_no: (journey.description.no ? journey.description.no : ""),
+                    d_bg: (journey.description.bg ? journey.description.bg : ""),
+                }
+            );
 
             await this.insertPoints(res.insertId, journey.points, conn);
            
@@ -105,20 +112,28 @@ class JourneyModel {
 
         try {
             // get journey
-            let sql = "SELECT `forename`, `surname` FROM `tbl_journeys` WHERE `id_journeys` = ?";
+            let sql = "SELECT `forename`, `surname`, `video_link`, `desc_en`,\
+                        `desc_es`, `desc_bg`, `desc_el`, `desc_no`, `desc_it`\
+                        FROM `tbl_journeys` WHERE `id_journeys` = ?";
             let res_j = await conn.query(sql, id);
-            if (res_j.length === 0) return null;
+            if (res_j.length === 0) return null; // not found
 
             journey.forename = res_j[0].forename;
             journey.surname = res_j[0].surname;
+            journey.video_link = res_j[0].video_link;
             journey.id = id;
 
+            journey.addDescription({
+                en: res_j[0].desc_en,
+                es: res_j[0].desc_es,
+                el: res_j[0].desc_el,
+                bg: res_j[0].desc_bg,
+                it: res_j[0].desc_it,
+                no: res_j[0].desc_no
+            })
+
             // get points
-            sql = "SELECT `id_points`, `point_num`, `loc`, `arrival_date`,\
-                           `departure_date`, `video_link`, `desc_en`, `desc_es`,\
-                           `desc_el`, `desc_it`, `desc_no`, `desc_bg`\
-                           FROM `tbl_points`\
-                   WHERE `id_journeys` = ?";
+            sql = "SELECT `id_points`, `point_num`, `loc` FROM `tbl_points` WHERE `id_journeys` = ?";
             let res_p = await conn.query(sql, id);
 
             // add the points to the journey
@@ -133,19 +148,8 @@ class JourneyModel {
                         lng: p.loc.coordinates[0],
                         lat: p.loc.coordinates[1]
                     },
-                    p.video_link,
-                    p.arrival_date,
-                    p.departure_date,
                 );
 
-                point.addDescription({
-                    en: p.desc_en,
-                    es: p.desc_es,
-                    el: p.desc_el,
-                    bg: p.desc_bg,
-                    it: p.desc_it,
-                    no: p.desc_no
-                })
                 point.id_points = p.id_points;
 
                 journey.addPoint(point);
@@ -178,8 +182,31 @@ class JourneyModel {
             await conn.beginTransaction();
 
             // update journey
-            let sql = "UPDATE `tbl_journeys` SET `forename` = ?, `surname` = ? WHERE `id_journeys` = ?"
-            res = await conn.query(sql, [journey.forename, journey.surname, id]);
+            let sql = "UPDATE `tbl_journeys` SET `forename` = :forename,\
+                        `surname` = :surname, `video_link` = :video_link,\
+                        `desc_en` = :d_en, `desc_es` = :d_es, `desc_el` = :d_el,\
+                        `desc_it` = :d_it, `desc_no` = :d_no, `desc_bg` = :d_bg\
+                        WHERE `id_journeys` = :id_journeys";
+
+            res = await conn.query(
+                {
+                    namedPlaceholders: true,
+                    sql: sql
+                },
+                {
+                    id_journeys: id,
+                    forename: journey.forename,
+                    surname: journey.surname,
+                    video_link: journey.video_link,
+                    d_en: (journey.description.en ? journey.description.en : ""),
+                    d_es: (journey.description.es ? journey.description.es : ""),
+                    d_el: (journey.description.el ? journey.description.el : ""),
+                    d_it: (journey.description.it ? journey.description.it : ""),
+                    d_no: (journey.description.no ? journey.description.no : ""),
+                    d_bg: (journey.description.bg ? journey.description.bg : ""),
+                }
+            );
+
             if (res.affectedRows === 0) throw new Error('Journey not found');
 
             sql = "DELETE FROM `tbl_points` WHERE `id_journeys` = ?";
@@ -233,12 +260,15 @@ class JourneyModel {
         const conn = await this.pool.getConnection();
 
         try {
-            let sql = "SELECT `tbl_journeys`.`id_journeys`, `forename`, `surname`,\
-                       `point_num`, `loc`, `arrival_date`, `departure_date`,\
-                       `video_link`, `desc_en`, `desc_es`, `desc_el`, `desc_it`, `desc_no`, `desc_bg`\
-                       FROM `tbl_journeys`\
-                       LEFT JOIN `tbl_points` ON `tbl_journeys`.`id_journeys` = `tbl_points`.`id_journeys`\
-                       WHERE `point_num` = 1 OR `point_num` IS NULL";
+            let sql = "SELECT `tbl_journeys`.`id_journeys`, `tbl_journeys`.`forename`,\
+                        `tbl_journeys`.`surname`, `tbl_points`.`point_num`,\
+                        `tbl_points`.`loc`, `tbl_journeys`.`video_link`,\
+                        `tbl_journeys`.`desc_en`, `tbl_journeys`.`desc_es`,\
+                        `tbl_journeys`.`desc_el`, `tbl_journeys`.`desc_it`,\
+                        `tbl_journeys`.`desc_no`, `tbl_journeys`.`desc_bg`\
+                        FROM `tbl_journeys`\
+                        LEFT JOIN `tbl_points` ON `tbl_journeys`.`id_journeys` = `tbl_points`.`id_journeys`\
+                        WHERE `point_num` = 1 OR `point_num` IS NULL";
             res = await conn.query(sql);
         } catch (err) {
             throw err
@@ -248,7 +278,16 @@ class JourneyModel {
 
         let journeysReturn = [];
         res.forEach( (j) => {
-            let journey = new Journey(j.forename, j.surname, j.id_journeys);
+            const journey = new Journey(j.forename, j.surname, j.id_journeys, j.video_link);
+
+            journey.addDescription({
+                en: j.desc_en,
+                es: j.desc_es,
+                el: j.desc_el,
+                bg: j.desc_bg,
+                it: j.desc_it,
+                no: j.desc_no
+            });
 
             // if a point exists
             if (j.point_num !== null) {
@@ -259,19 +298,7 @@ class JourneyModel {
                         lng: j.loc.coordinates[0],
                         lat: j.loc.coordinates[1]
                     },
-                    j.video_link,
-                    j.arrival_date,
-                    j.departure_date,
                 );
-
-                point.addDescription({
-                    en: j.desc_en,
-                    es: j.desc_es,
-                    el: j.desc_el,
-                    bg: j.desc_bg,
-                    it: j.desc_it,
-                    no: j.desc_no
-                });
 
                 journey.addPoint(point);
             }
