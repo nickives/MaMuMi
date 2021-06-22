@@ -3,6 +3,7 @@ var map, geoJSON;
 const mapMarkers = [];
 var oldMarkerDesc = undefined;
 var oldMarker = undefined;
+var stopPan = false;
 
 /**
  * Clear markers and close any InfoWindows
@@ -29,68 +30,80 @@ const clearMarkers = (safeMarker) => {
     })
 }
 
-const addPoints = (journey) => {
-}
-
-const pointWindowContent = (point) => {
-    let desc = point.description.en;
-    let vidUrl = point.video_link;
-
-    return `<div id=\"infoWindow\">
-                <div id=\"infoDescription\">"${desc}"</div>
-                <div id=\"infoVideo\"><iframe width="560" height="315" src="${vidUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-            </div>`;
-}
-
-const drawInfoWindow = (marker, point_num) => {
-    const markerDesc = new google.maps.InfoWindow();
-    oldMarkerDesc = markerDesc;
-    let point = marker.journey.points[point_num];
-    markerDesc.setContent(pointWindowContent(point));
-    markerDesc.setPosition(marker.getPosition());
-    markerDesc.setOptions({pixelOffset: new google.maps.Size(0,-50)});
-    markerDesc.open(map);
-}
-
-
 const drawJourney = async (id) => {
-
-
-    let res = await fetch('/journeys/' + id + '/geojson');
-    let geoJSON = await res.json();
+    const res = await fetch('/journeys/' + id + '/geojson');
+    const geoJSON = await res.json();
     clearMarkers();
     map.data.addGeoJson(geoJSON);
 
     const journey = geoJSON.features[0].properties.journey;
-    journey.points.forEach( p => {
-        const marker = new google.maps.Marker({
-            position: p.loc,
-            map: map,
-            journey: journey
-        });
+    const point = journey.points[0]; // first Point
 
-        // first point of journey should be bouncing and have info window
-        if (p.point_num === 1) {
-            oldMarker = marker;
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            drawInfoWindow(marker, 0);
+    const marker = new google.maps.Marker({
+        position: point.loc,
+        map: map
+    });
+
+    const points = journey.points;
+    for (i = 0; i < journey.points.length; ++i) {
+
+        await panMap(map, marker, points[i].loc, points[i + 1].loc, 30);
+
+    }
+}
+
+/**
+ * Pan the map to the destination
+ *
+ * @param {Map}    map    Google Map
+ * @param {Marker} marker Google Map Marker
+ * @param {LatLng} start  Google Maps LatLng or LatLng literal 
+ * @param {LatLng} end    Google Maps LatLng or LatLng literal
+ * @param {int}    time   time in seconds for the pan to take.
+ */
+const panMap = async (map, marker, start, end, time) => {
+    // take away user control
+    map.setOptions(
+        {
+            draggable: false,
+            zoomControl: false,
+            scrollwheel: false,
+            disableDoubleClickZoom: true
         }
+    );
+    map.setCenter(start);
 
-        mapMarkers.push(marker);
+    const framerate = 60;
 
-        const point_num = p.point_num  - 1;
-        marker.addListener('click', () => {
-            if (oldMarkerDesc !== undefined) {
-                oldMarkerDesc.close();
-            }
-            // clear previous bouncing and set this one bouncing
-            oldMarker.setAnimation(null);
-            oldMarker = marker;
-            marker.setAnimation(google.maps.Animation.BOUNCE);
+    const steps = time * framerate;
+    const latStep = (end.lat - start.lat) / steps;
+    const lngStep = (end.lng - start.lng) / steps;
 
-            drawInfoWindow(marker, point_num);
-        })
-    })
+    const pos = {
+        lat: 0,
+        lng:0
+    }
+
+    pos.lat = start.lat;
+    pos.lng = start.lng;
+
+    for (i = 0; i <= steps; ++i) {
+        pos.lat += latStep;
+        pos.lng += lngStep;
+        if (i % 2 == 0) map.panTo(pos);
+        marker.setPosition(pos);
+        await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
+    }
+
+    // give it back
+    map.setOptions(
+        {
+            draggable: true,
+            zoomControl: true,
+            scrollwheel: true,
+            disableDoubleClickZoom: false
+        }
+    );
 }
 
 const drawJourneyStarts = async () => {
@@ -475,11 +488,14 @@ async function updateMap() {
     })
 
     // ### Display decription box for a marker ###
-    const markerDesc = new google.maps.InfoWindow();
+    //const markerDesc = new google.maps.InfoWindow();
 }
 
 async function animation() {
     const video = document.getElementById('loading-animation');
+
+    video.classList.add('hidden');
+    document.querySelector('div.map').classList.remove('hidden');
 
     video.onended = function() {
         video.classList.add('hidden');
