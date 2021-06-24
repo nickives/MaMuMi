@@ -1,4 +1,10 @@
 {
     "greetingOne": "Booyakasha",
-    "greetingTwo": "bigting"
+    "greetingTwo": "bigting",
+
+    "admin.dashboard.forename": "Forename",
+    "admin.dashboard.surname": "Surname",
+    "admin.dashboard.video_link": "Video URL",
+    "admin.dashboard.edit": "Edit",
+    "admin.dashboard.delete": "Delete"
 }
