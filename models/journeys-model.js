@@ -278,7 +278,7 @@ class JourneyModel {
 
         let journeysReturn = [];
         res.forEach( (j) => {
-            const journey = new Journey(j.forename, j.surname, j.id_journeys, j.video_link);
+            const journey = new Journey(j.forename, j.surname, j.video_link, j.id_journeys);
 
             journey.addDescription({
                 en: j.desc_en,
