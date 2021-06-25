@@ -30,12 +30,16 @@ class JourneyController {
    * @returns The cloned journey object
    */
   async cloneJourney(journey) {
-    let newJourney = new Journey(journey.forename, journey.surname);
+    let newJourney = new Journey(journey.forename, journey.surname, journey.video_link);
+
+    // TODO: We're not reconstructing the points here. Maybe we should be?
     if (journey.points !== undefined) {
       for (let i = 0; i < journey.points.length; i++) {
         newJourney.addPoint(journey.points[i]);
       }
     }
+
+    newJourney.addDescription(journey.description);
 
     return newJourney;
   }
@@ -57,7 +61,6 @@ class JourneyController {
     // Send journey to the model to create it
     try {
       res = await this.model.create(newJourney);
-      res = JSON.stringify(res);
     } catch (err) {
       this.view.status(422).send({message : err.message});
     }
