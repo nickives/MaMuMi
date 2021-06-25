@@ -6,12 +6,12 @@ block main
                 th= __('admin.dashboard.forename')
                 th= __('admin.dashboard.surname')
                 th= __('admin.dashboard.video_link')
-                th= __('admin.dashboard.edit')
-                th= __('admin.dashboard.delete')
+                th= __('Edit')
+                th= __('Delete')
             each j in journeys
                 tr
                     td= j.forename
                     td= j.surname
                     td= j.video_link
-                    td: a(href='/admin/edit-journey/' + j.id) Edit
-                    td: a(href='/admin/delete-journey/' + j.id) Delete
+                    td: a(href='/admin/edit-journey/' + j.id)= __('Edit')
+                    td: a(href='/admin/delete-journey/' + j.id)= __('Delete')
