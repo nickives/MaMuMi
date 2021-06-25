@@ -2,14 +2,12 @@
 ** View logic for the add-journey view
 */
 let _markerArray = {};
-let _markerNumber;
+let _markerNumber = 2;
+let map;
 
 // Create point
 let _pointCreateBtn;
-let _pointList;
-
-// Read 
-let _points = [];
+const markerArray = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("gmap"), {
@@ -342,90 +340,44 @@ function initMap() {
             }
         ]
     });
-
-
-    // ### Marker and Map ###
-
-    map.setOptions({ disableDoubleClickZoom: true });
-
-    const latInput = document.getElementById("lat");
-    const lngInput = document.getElementById("lng");
-
-    map.addListener("dblclick", (e) => {
-        if (_markerArray[_markerNumber] !== undefined) {
-            placeMarkerAndPanTo(e.latLng, map, _markerArray[_markerNumber]);
-            setLatLng(e.latLng, latInput, lngInput);
-        } else {
-            createNewMarker(e.latLng, map);
-        }
-
-    });
 }
 
-// Set position of marker and pan map to marker location
-function placeMarkerAndPanTo(latLng, map, marker) {
-    marker.setPosition(latLng);
-    map.panTo(latLng);
-}
-
-// Set lat/lng fields of Point form based on marker's location
-function setLatLng(latLng, latInput, lngInput) {
-    const loc = JSON.parse(JSON.stringify(latLng.toJSON()));
-}
-
-function togglePointForm() {
-
-}
-
-// Return the size of a given map
-function getMapSize(x) {
-    var len = 0;
-    for (var count in x) {
-        len++;
-    }
-    return len;
-}
-
-// add a new marker to the map and add it to the marker array
-function createNewMarker(latLng, map) {
-    var key = getMapSize(_markerArray) + 1;
-    _markerArray[key] = new google.maps.Marker({ map: map });
-    placeMarkerAndPanTo(latLng, map, _markerArray[key]);
+/**
+ * Create a new marker and add it to the map.
+ * 
+ * This method will create a new marker at the visible centre of the given map
+ * and return the marker object.
+ * 
+ * @param {Map} map Google Maps object
+ * @returns {Marker} Google Maps Marker
+ */
+function createNewMarker(map) {
+    const marker = new google.maps.Marker({ map: map });
+    marker.setPosition(map.getCenter());
+    return marker;
 }
 
 // Will return an array of point objects
 function getPoints() {
-    let points = [];
-    let newPoint;
+    const points = [];
     let latLng;
     let pointCount;
-    let videoLink;
-    let desc;
-    let arrivalDate;
-    let departureDate;
 
-    let children = document.querySelector("tbody").children;
+    let children = document.getElementById("point-body").children;
     for (var i=0; i<children.length; i+=2) {
         if (children[i].className == "shadow point") {
 
             pointCount = children[i].childNodes[1].innerText;
             latLng = _markerArray[pointCount].getPosition();
-            videoLink = children[i+1].querySelector("input[type='url']").value;
-            arrivalDate = children[i+1].querySelector("input.arrival").value;
-            departureDate = children[i+1].querySelector("input.departure").value;
 
-            newPoint = new Point(
+            const newPoint = new Point(
                 null,
                 pointCount,
-                {lat: latLng.lat(), lng: latLng.lng()},
-                videoLink,
-                arrivalDate,
-                departureDate
+                {
+                    lat: latLng.lat(),
+                    lng: latLng.lng()
+                },
             );
-
-            desc = children[i+1].querySelector("textarea").value;
-
-            newPoint.addDescription({ en: desc });
 
             points.push(newPoint);
         }
@@ -433,92 +385,85 @@ function getPoints() {
     return points;
 }
 
+/**
+ * Iterates over the marker array makes only one marker movable / bouncing
+ * 
+ * @param {[Marker]} markerArray Array of Markers
+ * @param {int} markerNumber Marker to set active
+ */
+function setActiveMarker(markerArray, markerNumber) {
+    for (i = 0; i < markerArray.length; ++i) {
+        if (i === markerNumber) {
+            markerArray[i].setAnimation(google.maps.Animation.BOUNCE);
+            markerArray[i].setDraggable(true);
+        } else {
+            markerArray[i].setAnimation(null);
+            markerArray[i].setDraggable(false);
+        }
+    }
+}
 
 // ### Add new point to the form ###
+function _appendPoint() {
 
-function _appendPoint(pointObj) {
-
-    const tr = document.createElement('tr');
-    tr.classList.add("shadow", "point");
-    if (pointObj.point_num !== undefined) {
-        _markerNumber = pointObj.point_num;
-    } else {
-        _markerNumber = getMapSize(_markerArray) + 1;
+    // every journey needs start and end, so don't add delete to them
+    if (markerArray.length >= 2) {
+        // Add delete point button to previous row
+        const previousRowDeleteTd = document.getElementById('point-row-' + markerArray.length).children[2];
+        const deleteString = `<a href="#" onclick="_deletePoint(${markerArray.length})">Delete</a>`;
+        previousRowDeleteTd.innerHTML = deleteString;
     }
 
-    const pointHeader = `
-        <td>${_markerNumber}</td>
-        <td>${pointObj.arrival_date !== undefined ? pointObj.arrival_date : ''}</td>
-        <td>${pointObj.departure_date !== undefined ? pointObj.departure_date : ''}</td>
-        <td></td>
-        <td>
-            <button type="button" class="btn btn-sm">O</button>
-        </td>
-    `;
+    // create new marker
+    const marker = createNewMarker(map);
+    const markerNumber = markerArray.push(marker);
+    setActiveMarker(markerArray, markerNumber - 1);
+    marker.setLabel(markerNumber.toString());
 
-    tr.innerHTML = pointHeader;
+    // create a new point row
+    const tr = document.createElement('tr');
+    tr.classList.add("shadow", "point");
+    tr.setAttribute('id', 'point-row-' + markerNumber);
 
-    const trBody = document.createElement('tr');
-    trBody.classList.add("point-form");
+    const pointRow = `
+        <td class='point-number'>${markerNumber}</td>
+        <td><input type="hidden" name="point-${markerNumber}" class="hidden-point"></td>
+        <td></td>`;
 
-    const pointBody = `
-        <td colspan="100%">
-            <div class="form-container">
-                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
-                    <h3 class="h6 m-0">Pin Location</h3>
-                    <small>Required</small>
-                </div>
+    tr.innerHTML = pointRow;
 
-                <div class="form-group-container">
-                    <div class="form-group row m-0">
-                        <input type="text" class="form-control form-control-sm">
-                    </div>
-                </div>
-
-                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
-                    <h3 class="h6 m-0">Description</h3>
-                    <small>Required</small>
-                </div>
-
-                <div class="form-group-container">
-                    <textarea class="form-control form-control-sm"></textarea>
-                </div>                    
-
-                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
-                    <h3 class="h6 m-0">Arrival Departure Dates</h3>
-                    <small>Required</small>
-                </div>
-
-                <div class="form-group-container form-row">
-                    <div class="col">
-                        <input type="date" class="form-control form-control-sm arrival">
-                    </div>
-
-                    <div class="col">
-                        <input type="date" class="form-control form-control-sm departure">
-                    </div>
-                </div>
-
-                <div class="form-title d-flex flex-row justify-content-between p-2 mb-2 border-bottom">
-                    <h3 class="h6 m-0">Video URL</h3>
-                    <small>Required</small>
-                </div>
-
-                <div class="form-group-container>
-                    <div class="form-group row m-0">
-                        <input type="url" class="form-control form-control-sm">
-                    </div>
-                </div>
-            </div
-        </td>
-    `;
-
-    trBody.innerHTML = pointBody;
-
-
+    // move add point button to after this row
     _pointCreateBtn.parentElement.parentElement.before(tr);
-    _pointCreateBtn.parentElement.parentElement.before(trBody);
+}
 
+/**
+ * Delete a point
+ */
+function _deletePoint(pointNumber) {
+    // remove the row
+    document.getElementById('point-row-' + pointNumber).remove();
+    // remove the marker
+    const index = pointNumber - 1;
+    markerArray[index].setMap(null)
+    markerArray.splice(index, 1);
+
+    // renumber the points
+    const tableBody = Array.from(document.getElementById('point-body').children);
+    let i = 1;
+    for (let row of tableBody) {
+        // the last row is the add button
+        if (i !== tableBody.length) {
+            row.setAttribute('id', 'point-row-' + i);
+            const markerNumber = row.children[0];
+            markerNumber.innerText = i;
+            const hiddenInput = row.children[1];
+            hiddenInput.setAttribute('name', 'point-' + i);
+    
+            // update marker labels as we go
+            markerArray[i - 1].setLabel(i.toString());
+            ++i;            
+        }
+    };
 }
 
 // ### Submit journey to the db ###
@@ -560,27 +505,15 @@ document.addEventListener('DOMContentLoaded', initMap);
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    _pointList = document.querySelector("tbody");
-
     _pointCreateBtn = document.getElementById("point-create-btn");
     _pointCreateBtn.addEventListener("click", _appendPoint);
-
-    document.querySelectorAll('.point-form').forEach((e) => {
-        $(e).toggle();
-    });
-
-    document.querySelector('tbody').addEventListener('click', (e) => {
-        if (e.target.nodeName !== "BUTTON") {
-            _markerNumber = e.target.parentNode.childNodes[1].innerText;
-
-            const form = e.target.parentElement.nextElementSibling;
-            $(form).toggle(300);
-        }
-    });
 
     _submitJouneyBtn = document.getElementById("journey-submit");
     _submitJouneyBtn.addEventListener('click', (e) => {
         e.preventDefault();
         _createJourney();
     });
+
+    _appendPoint();
+    _appendPoint();
 });
