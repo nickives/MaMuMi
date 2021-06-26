@@ -7,7 +7,7 @@
     "test": "mocha",
     "test-debug": "mocha --inspect-brk",
     "start": "node ./bin/www",
-    "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L --inspect-brk=0.0.0.0:9229 ./bin/www",
+    "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L --inspect=0.0.0.0:9229 ./bin/www",
     "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
   "repository": {
