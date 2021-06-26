@@ -67,7 +67,7 @@ router.post('/:id/update', function(req, res) {
 });
 
 // Delete an id by an id
-router.post('/:id/delete', function(req, res) {
+router.get('/:id/delete', function(req, res) {
   
   // Create model object
   let model = new JourneyModel(pool);

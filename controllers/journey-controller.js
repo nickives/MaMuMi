@@ -152,16 +152,22 @@ class JourneyController {
    * @returns the database response
    */
   async delete(id) {
+
+    if (isNaN(id)) {
+      res.status(404).send("Not Found");
+    }
     let res;
     try {
       let res = this.model.delete(id);
-      res = JSON.stringify(res);
+      if (res === null) {
+        res.status(404).send("Not Found");
+      }
     } catch (err) {
       res = JSON.stringify(err);
       this.view.sendStatus(500); // This should never error
     }
     // Return the model response
-    this.view.send("OK");
+    this.view.redirect('/admin/dashboard');
   }
 
   /**

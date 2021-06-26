@@ -417,9 +417,18 @@ function _appendPoint() {
     const pointRow = `
         <td class='point-number'>${markerNumber}</td>
         <td></td>
-        <td><a href="#" onclick="_deletePoint(${markerArray.length})">Delete</a></td>`;
+        <td><a href="#" data-point-num="${markerNumber}">Delete</a></td>`;
 
     tr.innerHTML = pointRow;
+
+    const deleteLink = tr.children[2].children[0];
+
+    deleteLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetMarkerNumber = parseInt(e.target.getAttribute('data-point-num'));
+        _deletePoint(targetMarkerNumber);
+    });
+
 
     // move add point button to after this row
     _pointCreateBtn.parentElement.parentElement.before(tr);
@@ -448,7 +457,7 @@ function _deletePoint(pointNumber) {
     
             // update delete link
             const deleteLink = row.children[2].children[0];
-            deleteLink.setAttribute('onclick', `_deletePoint(${i})`);
+            deleteLink.setAttribute('data-point-num', i.toString());
 
             // update marker labels as we go
             markerArray[i - 1].setLabel(i.toString());
@@ -531,5 +540,20 @@ document.addEventListener('DOMContentLoaded', () => {
         _createJourney();
     });
 
-    _appendPoint();
+    const pointString = document.getElementById('old-points').value;
+    if (pointString !== undefined) {
+        const points = JSON.parse(pointString);
+        points.sort( (a, b) => {
+            return a.point_num - b.point_num;
+        })
+
+        let i = 0;
+        for (const p of points) {
+            _appendPoint();
+            markerArray[i].setPosition(p.loc);
+            ++i
+        }
+    } else {
+        _appendPoint();
+    }
 });

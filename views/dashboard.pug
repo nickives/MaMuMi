@@ -14,4 +14,4 @@ block main
                     td= j.surname
                     td= j.video_link
                     td: a(href='/admin/edit-journey/' + j.id)= __('Edit')
-                    td: a(href='/admin/delete-journey/' + j.id)= __('Delete')
+                    td: a(href=`/journeys/${j.id}/delete`)= __('Delete')
