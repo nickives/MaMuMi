@@ -1,5 +1,5 @@
-const Journey = require("../static/js/lib/journey");
-const Point = require("../static/js/lib/point");
+const Journey = require("../lib/journey");
+const Point = require("../lib/point");
 
 class JourneyModel {
 
@@ -19,16 +19,17 @@ class JourneyModel {
      * @param {Point[]} points - points to insert
      * @param {Connection} conn - MariaDB connection
      */
-    async insertPoints(journey_id, points, conn) {
+    async _insertPoints(journey_id, points, conn) {
         // insert points
         const length = points.length;
         for (let i = 0; i < length; ++i) {
             let point = points[i]; 
 
             // we have to concatenate the POINT to get the placeholder value in
-            const sql = "INSERT INTO `tbl_points` (`id_journeys`, `point_num`, `loc`) \
-                    VALUES (:id, :point_num, ST_PointFromText( ( CONCAT('POINT(', :lng,\
-                            ' ', :lat, ')') ),'4326'))"
+            const sql = "INSERT INTO `tbl_points` (`id_journeys`, `point_num`, `loc`)\
+                        VALUES (:id, :point_num, ST_PointFromText(\
+                            (CONCAT('POINT(', :lng, ' ', :lat, ')')\
+                        ),'4326'))"
 
             let res_p = await conn.query(
                 {
@@ -85,7 +86,7 @@ class JourneyModel {
                 }
             );
 
-            await this.insertPoints(res.insertId, journey.points, conn);
+            await this._insertPoints(res.insertId, journey.points, conn);
            
             await conn.commit();
         } catch (err) {
@@ -211,7 +212,7 @@ class JourneyModel {
 
             sql = "DELETE FROM `tbl_points` WHERE `id_journeys` = ?";
             res = await conn.query(sql, id);
-            await this.insertPoints(id, journey.points, conn);
+            await this._insertPoints(id, journey.points, conn);
 
             await conn.commit();
         } catch (err) {
