@@ -5,8 +5,8 @@ const router = express.Router();
 const pool = require("../lib/db/pool-secret");
 const JourneyModel = require("../models/journeys-model");
 const JourneyController = require("../controllers/journey-controller");
-const Journey = require('../static/js/lib/journey');
-const Point = require('../static/js/lib/point');
+const Journey = require('../lib/journey');
+const Point = require('../lib/point');
 
 // BIG NOTE REMEMBER - ALL PATHS IN THIS FILE ALREADY HAVE /journeys PREPENDED AT THE START
 
