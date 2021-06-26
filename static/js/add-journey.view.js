@@ -461,7 +461,9 @@ function _deletePoint(pointNumber) {
 
 function _createJourney() {
     const journeyForm = document.getElementById('journey-form');
-    if (journeyForm.checkValidity()) {
+    if (markerArray.length < 2) {
+        alert('Journey requires start and finish!');
+    } else if (journeyForm.checkValidity()) {
         // construct journey
         const forename = document.getElementById('forename').value;
         const surname = document.getElementById('surname').value;
