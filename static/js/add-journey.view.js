@@ -406,14 +406,6 @@ function setActiveMarker(markerArray, markerNumber) {
 // ### Add new point to the form ###
 function _appendPoint() {
 
-    // every journey needs start and end, so don't add delete to them
-    if (markerArray.length >= 2) {
-        // Add delete point button to previous row
-        const previousRowDeleteTd = document.getElementById('point-row-' + markerArray.length).children[2];
-        const deleteString = `<a href="#" onclick="_deletePoint(${markerArray.length})">Delete</a>`;
-        previousRowDeleteTd.innerHTML = deleteString;
-    }
-
     // create new marker
     const marker = createNewMarker(map);
     const markerNumber = markerArray.push(marker);
@@ -428,7 +420,7 @@ function _appendPoint() {
     const pointRow = `
         <td class='point-number'>${markerNumber}</td>
         <td><input type="hidden" name="point-${markerNumber}" class="hidden-point"></td>
-        <td></td>`;
+        <td><a href="#" onclick="_deletePoint(${markerArray.length})">Delete</a></td>`;
 
     tr.innerHTML = pointRow;
 
@@ -456,12 +448,18 @@ function _deletePoint(pointNumber) {
             row.setAttribute('id', 'point-row-' + i);
             const markerNumber = row.children[0];
             markerNumber.innerText = i;
-            const hiddenInput = row.children[1];
+
+            // update hidden form input
+            const hiddenInput = row.children[1].children[0];
             hiddenInput.setAttribute('name', 'point-' + i);
     
+            // update delete link
+            const deleteLink = row.children[2].children[0];
+            deleteLink.setAttribute('onclick', `_deletePoint(${i})`);
+
             // update marker labels as we go
             markerArray[i - 1].setLabel(i.toString());
-            ++i;            
+            ++i;
         }
     };
 }
@@ -514,6 +512,5 @@ document.addEventListener('DOMContentLoaded', () => {
         _createJourney();
     });
 
-    _appendPoint();
     _appendPoint();
 });
