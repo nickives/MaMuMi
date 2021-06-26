@@ -10,7 +10,7 @@
 //
 // -Sam
 
-const Journey = require('../static/js/lib/journey');
+const Journey = require('../lib/journey');
 
 class JourneyController {
 
@@ -72,7 +72,7 @@ class JourneyController {
   /**
    * Get a journey from the model using a given id_points
    *
-   * @param {int} id - The journey primary key
+   * @param {Number} id - The journey primary key
    *
    * @returns The journey or database response
    **/
@@ -121,7 +121,7 @@ class JourneyController {
   /**
    * Update a given journey
    *
-   * @param {int} id - The journey id to update
+   * @param {Number} id - The journey id to update
    * @param {Journey} journey - The data to update the journey
    *
    * @returns The database response
@@ -147,7 +147,7 @@ class JourneyController {
   /**
    * Delete a given journey from a given id_points
    *
-   * @param {int} id - The id of the journey to delete
+   * @param {Number} id - The id of the journey to delete
    *
    * @returns the database response
    */
@@ -167,7 +167,7 @@ class JourneyController {
   /**
    * Get the GeoJSON line for a given journey
    * 
-   * @param {int} id 
+   * @param {Number} id 
    */
   async geoJSON(id) {
     let res;
