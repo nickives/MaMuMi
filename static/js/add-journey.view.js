@@ -1,8 +1,9 @@
+import { Journey } from '/s/js/lib/journey.mjs'
+import { Point } from '/s/js/lib/point.mjs'
+
 /*
 ** View logic for the add-journey view
 */
-let _markerArray = {};
-let _markerNumber = 2;
 let map;
 
 // Create point
@@ -360,27 +361,23 @@ function createNewMarker(map) {
 // Will return an array of point objects
 function getPoints() {
     const points = [];
-    let latLng;
-    let pointCount;
 
-    let children = document.getElementById("point-body").children;
-    for (var i=0; i<children.length; i+=2) {
-        if (children[i].className == "shadow point") {
+    for (var i = 0; i < markerArray.length; ++i) {
 
-            pointCount = children[i].childNodes[1].innerText;
-            latLng = _markerArray[pointCount].getPosition();
+        const pointNumber = i + 1;
+        const latLng = markerArray[i].getPosition();
 
-            const newPoint = new Point(
-                null,
-                pointCount,
-                {
-                    lat: latLng.lat(),
-                    lng: latLng.lng()
-                },
-            );
+        const newPoint = new Point(
+            null,
+            pointNumber,
+            {
+                lat: latLng.lat(),
+                lng: latLng.lng()
+            },
+        );
 
-            points.push(newPoint);
-        }
+        points.push(newPoint);
+
     }
     return points;
 }
@@ -392,7 +389,7 @@ function getPoints() {
  * @param {int} markerNumber Marker to set active
  */
 function setActiveMarker(markerArray, markerNumber) {
-    for (i = 0; i < markerArray.length; ++i) {
+    for (let i = 0; i < markerArray.length; ++i) {
         if (i === markerNumber) {
             markerArray[i].setAnimation(google.maps.Animation.BOUNCE);
             markerArray[i].setDraggable(true);
@@ -419,7 +416,7 @@ function _appendPoint() {
 
     const pointRow = `
         <td class='point-number'>${markerNumber}</td>
-        <td><input type="hidden" name="point-${markerNumber}" class="hidden-point"></td>
+        <td></td>
         <td><a href="#" onclick="_deletePoint(${markerArray.length})">Delete</a></td>`;
 
     tr.innerHTML = pointRow;
@@ -448,10 +445,6 @@ function _deletePoint(pointNumber) {
             row.setAttribute('id', 'point-row-' + i);
             const markerNumber = row.children[0];
             markerNumber.innerText = i;
-
-            // update hidden form input
-            const hiddenInput = row.children[1].children[0];
-            hiddenInput.setAttribute('name', 'point-' + i);
     
             // update delete link
             const deleteLink = row.children[2].children[0];
@@ -467,16 +460,40 @@ function _deletePoint(pointNumber) {
 // ### Submit journey to the db ###
 
 function _createJourney() {
-    let forename = document.getElementById('forename').value;
-    let surname = document.getElementById('surname').value;
-    let journey = new Journey(forename, surname, null);
+    const journeyForm = document.getElementById('journey-form');
+    if (journeyForm.checkValidity()) {
+        // construct journey
+        const forename = document.getElementById('forename').value;
+        const surname = document.getElementById('surname').value;
+        const video_link = document.getElementById('video_link').value;
+        const journey = new Journey(forename, surname, video_link);
 
-    getPoints().forEach(e => {
-        journey.addPoint(e);
-    });
+        // construct descriptions
+        const desc_en = document.getElementById('desc_en').value;
+        const desc_es = document.getElementById('desc_es').value;
+        const desc_bg = document.getElementById('desc_bg').value;
+        const desc_el = document.getElementById('desc_el').value;
+        const desc_no = document.getElementById('desc_no').value;
+        const desc_it = document.getElementById('desc_it').value;
+        const descriptions = {
+            desc_en: desc_en,
+            desc_es: desc_es,
+            desc_bg: desc_bg,
+            desc_el: desc_el,
+            desc_no: desc_no,
+            desc_it: desc_it
+        };
+        journey.addDescription(descriptions);
 
-    console.log(journey);
-    _sendJourney(journey);
+        getPoints().forEach(e => {
+            journey.addPoint(e);
+        });
+
+        console.log(journey);
+        _sendJourney(journey);
+    } else {
+        alert('invalid form');
+    }
 }
 
 function _sendJourney(journeyObj) {
@@ -506,8 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
     _pointCreateBtn = document.getElementById("point-create-btn");
     _pointCreateBtn.addEventListener("click", _appendPoint);
 
-    _submitJouneyBtn = document.getElementById("journey-submit");
-    _submitJouneyBtn.addEventListener('click', (e) => {
+    const _submitJourneyBtn = document.getElementById("journey-submit");
+    _submitJourneyBtn.addEventListener('click', (e) => {
         e.preventDefault();
         _createJourney();
     });

@@ -1,4 +1,4 @@
-class Journey {
+export class Journey {
     
     /**
      * A Journey has a name for the person undertaking it, and comprises an
@@ -64,5 +64,3 @@ class Journey {
         }
     }
 }
-
-module.exports = Journey;
