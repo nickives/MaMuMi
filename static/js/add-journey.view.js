@@ -487,12 +487,12 @@ function _createJourney() {
         const desc_no = document.getElementById('desc_no').value;
         const desc_it = document.getElementById('desc_it').value;
         const descriptions = {
-            desc_en: desc_en,
-            desc_es: desc_es,
-            desc_bg: desc_bg,
-            desc_el: desc_el,
-            desc_no: desc_no,
-            desc_it: desc_it
+            en: desc_en,
+            es: desc_es,
+            bg: desc_bg,
+            el: desc_el,
+            no: desc_no,
+            it: desc_it
         };
         journey.addDescription(descriptions);
 
