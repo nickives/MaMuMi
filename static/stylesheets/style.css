@@ -33,6 +33,7 @@ div.animation video {
 }
 
 div.map {
+  height: 900px;
 }
 
 /* ===== Login ===== */
@@ -183,4 +184,25 @@ table .form-title h3 {
 
 .form-group-container table tbody tr#add-row:hover, .form-group-container table tbody tr.point-form {
   background-color: #fff;
+}
+
+#main-header {
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .fade-out {
+    max-height: 150px;
+    text-overflow: ellipsis;
+  }
+
+  .video-iframe {
+    max-width: 900px;
+    max-height: 100%;
+  }
+
+  div.map {
+    height: 600px;
+
+  }
 }

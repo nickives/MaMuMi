@@ -5,16 +5,34 @@ block content
       video(autoplay muted id='loading-animation') 
         source(src='/s/anim/splash.mp4' type='video/mp4')
         
+    div.hidden#hidden-page
+      nav.py-2.bg-dark.text-white#main-header
+        .container-fluid.d-flex.d-wrap
+          ul.nav.me-auto
+            li.nav-item
+              a(href="https://mamumi.eu"): img(src="/s/img/logo.png", alt="MaMuMi", width="90.22", height="50.75")#logo
+          .btn-group
+            button.btn English
+            button(data-bs-toggle="dropdown", aria-expanded="false").btn.dropdown-toggle.dropdown-toggle-split
+              span.visually-hidden Toggle Dropdown
+            ul.dropdown-menu
+              li.dropdown-item: a(href="#", data-lang="bg").nav-link-lang Български
+              li.dropdown-item: a(href="#", data-lang="el").nav-link-lang Ελληνικά
+              li.dropdown-item: a(href="#", data-lang="it").nav-link-lang Italiano
+              li.dropdown-item: a(href="#", data-lang="no").nav-link-lang Norsk
+              li.dropdown-item: a(href="#", data-lang="es").nav-link-lang Español
 
-        
-    div.map.hidden
+      .container-fluid: .row
+        .col-lg-5
+          .container 
+            .row: p#journey-name Title 
+            .row.vid-row: p#journey-video-link Video 
+            .row.fade-out: p#journey-description Desc
+        .col-lg-7.map
+          a(href="")#clearJourney Clear current journey
 
-      h1 MaMuMi
-      p Here is an example journey! #{hostname}
-      a(href="javascript:drawJourneyStarts()") Clear current journey
+          #gMap(style="width:100%;height:100%;")
+          #testOut
 
-      #gMap(style="width:100%;height:800px;")
-      #testOut
-
-      script(src= hostname + ":" + port + "/s/js/index.js")
+      script(type="module", src="/s/js/index.mjs")
     script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgQsUmoRWeiRlclZbkSmn3vIFEmJZaBN4")

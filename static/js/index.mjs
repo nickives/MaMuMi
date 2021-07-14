@@ -1,3 +1,4 @@
+import Cookies from '/s/js/js.cookie.min.mjs'
 
 var map, geoJSON;
 const mapMarkers = [];
@@ -34,10 +35,26 @@ const drawJourney = async (id) => {
     const res = await fetch('/journeys/' + id + '/geojson');
     const geoJSON = await res.json();
     clearMarkers();
-    map.data.addGeoJson(geoJSON);
+    //map.data.addGeoJson(geoJSON);
 
     const journey = geoJSON.features[0].properties.journey;
     const point = journey.points[0]; // first Point
+
+    document.getElementById('journey-name').innerText = journey.forename;
+
+    const videoHTML = `<iframe class="video-iframe" width="560" height="315" src="${journey.video_link}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+    document.getElementById('journey-video-link').innerHTML = videoHTML;
+    const description = document.getElementById('journey-description');
+    const language = Cookies.get({ name: 'lang' });
+    switch (language) {
+        case 'es': description.innerHTML = journey.description.es;
+        case 'el': description.innerHTML = journey.description.el;
+        case 'bg': description.innerHTML = journey.description.bg;
+        case 'no': description.innerHTML = journey.description.no;
+        case 'it': description.innerHTML = journey.description.it;
+        default: description.innerHTML = journey.description.en;
+    }
 
     const marker = new google.maps.Marker({
         position: point.loc,
@@ -45,7 +62,7 @@ const drawJourney = async (id) => {
     });
 
     const points = journey.points;
-    for (i = 0; i < journey.points.length; ++i) {
+    for (let i = 0; i < journey.points.length; ++i) {
 
         await panMap(map, marker, points[i].loc, points[i + 1].loc, 30);
 
@@ -59,7 +76,7 @@ const drawJourney = async (id) => {
  * @param {Marker} marker Google Map Marker
  * @param {LatLng} start  Google Maps LatLng or LatLng literal 
  * @param {LatLng} end    Google Maps LatLng or LatLng literal
- * @param {int}    time   time in seconds for the pan to take.
+ * @param {Number} time   time in seconds for the pan to take.
  */
 const panMap = async (map, marker, start, end, time) => {
     // take away user control
@@ -73,7 +90,7 @@ const panMap = async (map, marker, start, end, time) => {
     );
     map.setCenter(start);
 
-    const framerate = 60;
+    const framerate = 30;
 
     const steps = time * framerate;
     const latStep = (end.lat - start.lat) / steps;
@@ -87,11 +104,21 @@ const panMap = async (map, marker, start, end, time) => {
     pos.lat = start.lat;
     pos.lng = start.lng;
 
-    for (i = 0; i <= steps; ++i) {
+    const poly = new google.maps.Polyline({
+        strokeColor: "#000000",
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+    });
+    poly.setMap(map);
+
+    const path = poly.getPath();
+
+    for (let i = 0; i <= steps; ++i) {
         pos.lat += latStep;
         pos.lng += lngStep;
-        if (i % 2 == 0) map.panTo(pos);
+        map.setCenter(pos);
         marker.setPosition(pos);
+        path.push(new google.maps.LatLng(pos));
         await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
     }
 
@@ -495,11 +522,23 @@ async function animation() {
     const video = document.getElementById('loading-animation');
 
     video.classList.add('hidden');
-    document.querySelector('div.map').classList.remove('hidden');
+    const hidden = document.querySelector('#hidden-page').classList.remove('hidden');
 
     video.onended = function() {
         video.classList.add('hidden');
         document.querySelector('div.map').classList.remove('hidden');
+    }
+}
+
+function changeLanguage(event) {
+    console.log(event);``
+}
+
+function registerLanguageSelect() {
+    const links = document.querySelectorAll('nav-link-lang');
+
+    for (const l of links) {
+        l.addEventListener('click', changeLanguage);
     }
 }
 
@@ -508,4 +547,5 @@ window.onload = () => {
     myMap();
     drawJourneyStarts();
     updateMap();
+    registerLanguageSelect();
 };
