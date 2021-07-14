@@ -115,7 +115,6 @@ class JourneyController {
       res = JSON.stringify(err);
       this.view.sendStatus(500); // this operation should never fail
     }
-    this.view.send(res);
   }
 
   /**
