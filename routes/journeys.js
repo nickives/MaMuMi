@@ -113,13 +113,12 @@ router.get('/insert-random/:count', function(req, res) {
       const numPoints = getRandomInt(2, 5);
 
       journey.addDescription({
-        en: "En" + p + lorem,
-        es: "Es" + p + lorem,
-        el: "El" + p + lorem,
-        bg: "Bg" + p + lorem,
-        it: "It" + p + lorem,
-        no: "No" + p + lorem
-
+        en: "En<p>" + lorem,
+        es: "Es<p>" + lorem,
+        el: "El<p>" + lorem,
+        bg: "Bg<p>" + lorem,
+        it: "It<p>" + lorem,
+        no: "No<p>" + lorem
       });
 
       for (var p = 0; p < numPoints; ++p) {
