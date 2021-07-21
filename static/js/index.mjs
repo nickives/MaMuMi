@@ -145,7 +145,8 @@ const drawJourneyStarts = async () => {
                 const marker = new google.maps.Marker({
                     position: journey.points[0].loc,
                     map: map,
-                    journey: journey
+                    journey: journey,
+                    icon: '/s/img/pin.png'
                 })
     
                 mapMarkers.push(marker);
@@ -530,12 +531,14 @@ async function animation() {
     }
 }
 
-function changeLanguage(event) {
-    console.log(event);``
+function changeLanguage(e) {
+    const lang = e.target.attributes['data-lang'];
+    Cookies.set('lang', lang);
+    location.reload();
 }
 
 function registerLanguageSelect() {
-    const links = document.querySelectorAll('nav-link-lang');
+    const links = document.querySelectorAll('.nav-link-lang');
 
     for (const l of links) {
         l.addEventListener('click', changeLanguage);
