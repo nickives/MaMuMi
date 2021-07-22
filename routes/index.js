@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const JourneyModel = require('../models/journeys-model');
+const pool = require("../lib/db/pool-secret");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index');
+router.get('/', async function(req, res, next) {
+    const journeys = await new JourneyModel(pool).readAll();
+    res.render('index', { journeys: journeys });
 });
 
 module.exports = router;
