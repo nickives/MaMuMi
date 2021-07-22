@@ -206,3 +206,15 @@ table .form-title h3 {
 
   }
 }
+
+.nav-link-lang {
+  color: #a9a9a9;
+}
+
+.lang-btn {
+  color: #a9a9a9;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+}

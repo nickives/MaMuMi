@@ -532,7 +532,7 @@ async function animation() {
 }
 
 function changeLanguage(e) {
-    const lang = e.target.attributes['data-lang'];
+    const lang = e.target.attributes['data-lang'].value;
     Cookies.set('lang', lang);
     location.reload();
 }

@@ -1,6 +1,9 @@
 extends layout
 
 block content
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap")
     #animation
       video(autoplay muted id='loading-animation') 
         source(src='/s/anim/splash.mp4' type='video/mp4')
@@ -12,20 +15,43 @@ block content
             li.nav-item
               a(href="https://mamumi.eu"): img(src="/s/img/logo.png", alt="MaMuMi", width="90.22", height="50.75")#logo
           .btn-group
-            button.btn English
+            button.btn.lang-btn
+              img(src=`/s/img/${__('lang.current.code')}.png`, alt="", srcset="")
+              |&nbsp;
+              = __('lang.current.name')
             button(data-bs-toggle="dropdown", aria-expanded="false").btn.dropdown-toggle.dropdown-toggle-split
+              img(src="/s/img/dropdown.png", alt="", srcset="")
               span.visually-hidden Toggle Dropdown
             ul.dropdown-menu
-              li.dropdown-item: a(href="#", data-lang="en").nav-link-lang English
-              li.dropdown-item: a(href="#", data-lang="bg").nav-link-lang Български
-              li.dropdown-item: a(href="#", data-lang="el").nav-link-lang Ελληνικά
-              li.dropdown-item: a(href="#", data-lang="it").nav-link-lang Italiano
-              li.dropdown-item: a(href="#", data-lang="no").nav-link-lang Norsk
-              li.dropdown-item: a(href="#", data-lang="es").nav-link-lang Español
+              li.dropdown-item
+                img(src=`/s/img/${__('lang.1.code')}.png`, alt="", srcset="")
+                |&nbsp;
+                a(href="#", data-lang=`${__('lang.1.code')}`).nav-link-lang= __('lang.1.name')
+              li.dropdown-item
+                img(src=`/s/img/${__('lang.2.code')}.png`, alt="", srcset="")
+                |&nbsp;
+                a(href="#", data-lang=`"${__('lang.2.code')}"`).nav-link-lang= __('lang.2.name')
+              li.dropdown-item
+                img(src=`/s/img/${__('lang.3.code')}.png`, alt="", srcset="")
+                |&nbsp;
+                a(href="#", data-lang=`"${__('lang.3.code')}"`).nav-link-lang= __('lang.3.name')
+              li.dropdown-item
+                img(src=`/s/img/${__('lang.4.code')}.png`, alt="", srcset="")
+                |&nbsp;
+                a(href="#", data-lang=`"${__('lang.4.code')}"`).nav-link-lang= __('lang.4.name')
+              li.dropdown-item
+                img(src=`/s/img/${__('lang.5.code')}.png`, alt="", srcset="")
+                |&nbsp;
+                a(href="#", data-lang=`"${__('lang.5.code')}"`).nav-link-lang= __('lang.5.name')
 
       .container-fluid: .row
         .col-lg-5
-          .container 
+          .container.journey-list
+            p= __('index.journey.select')
+            each j in journeys
+               .journey-name= j.forename
+               .journey-short-desc= j.surname
+          .container.journey-display.hidden
             .row: p#journey-name Title 
             .row.vid-row: p#journey-video-link Video 
             .row.fade-out: p#journey-description Desc
