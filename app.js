@@ -24,8 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // I18n
 const { I18n } = require('i18n')
 const i18n = new I18n({
-  locales: ['en', 'es', 'de', 'fr'],
-  fallbacks: {en: 'en-*', de: 'de-*', fr: 'fr-*', es: 'es-*' },
+  locales: ['en', 'bg', 'el', 'it', 'no', 'es'],
+  fallbacks: {en: 'en-*', bg: 'bg-*', el: 'el-*', it: 'it-*', no: 'no-*', es: 'es-*' },
   defaultLocale: 'en',
   cookie: 'lang',
   directory: path.join(__dirname, 'locales')
