@@ -4,6 +4,7 @@ block content
     link(rel="preconnect", href="https://fonts.googleapis.com")
     link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
     link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap")
     #animation
       video(autoplay muted id='loading-animation') 
         source(src='/s/anim/splash.mp4' type='video/mp4')
@@ -14,12 +15,12 @@ block content
           ul.nav.me-auto
             li.nav-item
               a(href="https://mamumi.eu"): img(src="/s/img/logo.png", alt="MaMuMi", width="90.22", height="50.75")#logo
-          .btn-group
+          .btn-group.language-select
             button.btn.lang-btn
               img(src=`/s/img/${__('lang.current.code')}.png`, alt="", srcset="")
               |&nbsp;
               = __('lang.current.name')
-            button(data-bs-toggle="dropdown", aria-expanded="false").btn.dropdown-toggle.dropdown-toggle-split
+            button(data-bs-toggle="dropdown", aria-expanded="false").btn.dropdown-toggle-split
               img(src="/s/img/dropdown.png", alt="", srcset="")
               span.visually-hidden Toggle Dropdown
             ul.dropdown-menu
@@ -45,18 +46,24 @@ block content
                 a(href="#", data-lang=`"${__('lang.5.code')}"`).nav-link-lang= __('lang.5.name')
 
       .container-fluid: .row
-        .col-lg-5
-          .container.journey-list
-            p= __('index.journey.select')
-            each j in journeys
-               .journey-name= j.forename
-               .journey-short-desc= j.surname
-          .container.journey-display.hidden
+        .col-lg-3
+          .container#journey-list
+            h1= __('index.journey.select')
+            .journey-scroll
+              each j in journeys
+                .row.journey-item(data-id=`${j.id}`, id=`journey-row-${j.id}`)
+                  .col
+                    h1.journey-name= j.forename
+                    .journey-short-desc Point to Point
+                  .col.play-col.hidden
+                    img(src="/s/img/play.png", alt="", srcset="").play-img
+
+          .container.hidden#journey-display
             .row: p#journey-name Title 
             .row.vid-row: p#journey-video-link Video 
             .row.fade-out: p#journey-description Desc
-        .col-lg-7.map
-          a(href="")#clearJourney Clear current journey
+        .col-lg-9.map
+
 
           #gMap(style="width:100%;height:100%;")
           #testOut

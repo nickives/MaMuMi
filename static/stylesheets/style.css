@@ -33,7 +33,7 @@ div.animation video {
 }
 
 div.map {
-  height: 900px;
+  height: auto;
 }
 
 /* ===== Login ===== */
@@ -217,4 +217,79 @@ table .form-title h3 {
 
 body {
   font-family: 'Open Sans', sans-serif;
+  font-size: 1.1em;
+  color: #727272;
+}
+
+.language-select * {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2em;
+  color: #b2b2b2;
+}
+
+#journey-list > h1 {
+  padding-top: 1em;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.75em;
+  color: #333333;
+}
+
+#journey-list {
+  max-height: calc(100vh - 66.75px);
+}
+
+.journey-scroll {
+  max-height: 86vh;
+  overflow:scroll;
+}
+
+.journey-item {
+  padding-top: 0.33em;
+  padding-bottom: 0.33em;
+  cursor: pointer;
+}
+
+.journey-selected {
+  margin-left: 1.5em;
+  padding-left: 0.5em;
+  background-color: rgb(4, 173, 191);
+  box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.8);
+}
+
+.journey-selected > .journey-short-desc {
+  color: white;
+}
+
+.journey-item > * > h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25em;
+  color: #333333;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #FFFFFF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.play-col {
+  align-self: center;
+}
+
+.play-img {
+  max-width: 2.5em;
 }

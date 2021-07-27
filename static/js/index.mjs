@@ -2,9 +2,6 @@ import Cookies from '/s/js/js.cookie.min.mjs'
 
 var map, geoJSON;
 const mapMarkers = [];
-var oldMarkerDesc = undefined;
-var oldMarker = undefined;
-var stopPan = false;
 
 /**
  * Clear markers and close any InfoWindows
@@ -19,12 +16,6 @@ const clearMarkers = (safeMarker) => {
         }
     })
 
-    // reset info window
-    if (oldMarkerDesc !== undefined) {
-        oldMarkerDesc.close();
-    }
-    oldMarkerDesc = undefined;
-
     // remove old geoJSON
     map.data.forEach(function (feature) {
         map.data.remove(feature);
@@ -32,12 +23,12 @@ const clearMarkers = (safeMarker) => {
 }
 
 const drawJourney = async (id) => {
-    const res = await fetch('/journeys/' + id + '/geojson');
-    const geoJSON = await res.json();
+    const res = await fetch('/journeys/' + id);
+    const journey = await res.json();
+    document.getElementById('journey-list').classList.add('hidden');
+    document.getElementById('journey-display').classList.remove('hidden');
     clearMarkers();
-    //map.data.addGeoJson(geoJSON);
 
-    const journey = geoJSON.features[0].properties.journey;
     const point = journey.points[0]; // first Point
 
     document.getElementById('journey-name').innerText = journey.forename;
@@ -58,7 +49,8 @@ const drawJourney = async (id) => {
 
     const marker = new google.maps.Marker({
         position: point.loc,
-        map: map
+        map: map,
+        icon: '/s/img/pin_selected.png'
     });
 
     const points = journey.points;
@@ -148,12 +140,18 @@ const drawJourneyStarts = async () => {
                     journey: journey,
                     icon: '/s/img/pin.png'
                 })
-    
-                mapMarkers.push(marker);
 
-                marker.addListener('click', async () => {
+                const journeyRow = document.getElementById(`journey-row-${marker.journey.id}`);
+                const playButton = journeyRow.childNodes[1];
+                playButton.addEventListener('click', async () => {
                     await drawJourney(marker.journey.id);
-                })
+                });
+
+                marker.addListener('click', function () {
+                    selectJourney(journeyRow);
+                });
+
+                mapMarkers.push(marker);
             }
         })
     } catch (err) {
@@ -212,6 +210,15 @@ async function myMap() {
             },
             {
                 "featureType": "administrative.country",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.country",
                 "elementType": "geometry.stroke",
                 "stylers": [
                     {
@@ -251,6 +258,24 @@ async function myMap() {
             },
             {
                 "featureType": "administrative.province",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.province",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.province",
                 "elementType": "labels",
                 "stylers": [
                     {
@@ -267,6 +292,24 @@ async function myMap() {
                     },
                     {
                         "hue": "#ff0000"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.locality",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.locality",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "visibility": "off"
                     }
                 ]
             },
@@ -305,22 +348,10 @@ async function myMap() {
             },
             {
                 "featureType": "landscape",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape",
                 "elementType": "geometry.stroke",
                 "stylers": [
                     {
-                        "visibility": "off"
-                    },
-                    {
-                        "hue": "#00ffbf"
+                        "visibility": "on"
                     }
                 ]
             },
@@ -336,6 +367,18 @@ async function myMap() {
                     },
                     {
                         "hue": "#39ff00"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape.natural",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "color": "#cbe5be"
                     }
                 ]
             },
@@ -364,6 +407,18 @@ async function myMap() {
                 ]
             },
             {
+                "featureType": "landscape.natural.landcover",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "color": "#cbe5be"
+                    }
+                ]
+            },
+            {
                 "featureType": "landscape.natural.terrain",
                 "elementType": "all",
                 "stylers": [
@@ -384,6 +439,18 @@ async function myMap() {
                     },
                     {
                         "color": "#92e88e"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape.natural.terrain",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "color": "#b8d7b4"
                     }
                 ]
             },
@@ -488,6 +555,15 @@ async function myMap() {
                         "visibility": "on"
                     }
                 ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#049dbf"
+                    }
+                ]
             }
         ],
         { name: "Styled Map" }
@@ -499,6 +575,8 @@ async function myMap() {
         center: { lat: 51.508742, lng: -0.120850 },
         zoom: 5,
         mapTypeControl: false,
+        fullscreenControl: false,
+        streetViewControl: false,
         mapTypeControlOptions: {
         mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
         },
@@ -545,10 +623,42 @@ function registerLanguageSelect() {
     }
 }
 
+function selectJourney(journeyRow) {
+    if (selectJourney.selectedJourney !== undefined) {
+        selectJourney.selectedJourney.classList.remove('journey-selected');
+        selectJourney.selectedJourney.childNodes[1].classList.add('hidden');
+        selectJourney.marker.setIcon('/s/img/pin.png');
+    }
+
+    selectJourney.selectedJourney = journeyRow;
+    selectJourney.selectedJourney.classList.add('journey-selected');
+
+    selectJourney.selectedJourney.childNodes[1].classList.remove('hidden');
+
+    const id = selectJourney.selectedJourney.attributes['data-id'].value;
+
+    const marker = mapMarkers.find(marker => marker.journey.id == id);
+    marker.setIcon('/s/img/pin_selected.png');
+    selectJourney.marker = marker;
+    const journey = marker.journey;
+
+    map.panTo(marker.getPosition());
+}
+
+function registerJourneySelect() {
+    const journeys = document.querySelectorAll('.journey-item');
+    for (const j of journeys) {
+        j.addEventListener('click', (e) => {
+            selectJourney(e.currentTarget);
+        });
+    }
+}
+
 window.onload = () => {
     animation();
     myMap();
     drawJourneyStarts();
     updateMap();
     registerLanguageSelect();
+    registerJourneySelect();
 };
