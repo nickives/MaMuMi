@@ -189,7 +189,7 @@ table .form-title h3 {
 #main-header {
   width: 100%;
 }
-
+/* Phone Screen */
 @media (max-width: 960px) {
   .fade-out {
     max-height: 150px;
@@ -201,7 +201,9 @@ table .form-title h3 {
 
   }
 }
+/* End Phone Screen */
 
+/* Navbar */
 .nav-link-lang {
   color: #a9a9a9;
 }
@@ -291,6 +293,7 @@ body {
   max-width: 2.5em;
 }
 
+/* Just for 'beta' text next to logo. Will be removed in prod */
 #beta {
   font-family: 'Poppins', sans-serif;
   font-size: 1.25em;
