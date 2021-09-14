@@ -190,7 +190,7 @@ table .form-title h3 {
   width: 100%;
 }
 /* Phone Screen */
-@media (max-width: 960px) {
+@media (max-width: 992px) {
   .fade-out {
     max-height: 150px;
     text-overflow: ellipsis;
