@@ -47,7 +47,7 @@ block content
                 a(href="#", data-lang=`"${__('lang.5.code')}"`).nav-link-lang= __('lang.5.name')
 
       .container-fluid: .row
-        .col-lg-4
+        .col-lg-4.order-lg-1.order-xl-1.order-xxl-1.order-2.order-sm-2.order-md-2
           .container#journey-list
             h1= __('index.journey.select')
             .journey-scroll
@@ -62,10 +62,10 @@ block content
           .container.hidden#journey-display
             .row: h1#journey-name Name 
             .row: h1#journey-subtitle Subtitle 
-            .row.player-row: audio(src="", controls)#journey-audio-player
+            .row.player-row: audio(src="", controls, preload=auto)#journey-audio-player
             .row.fade-out: p#journey-description Desc
             .row: a(href="#")#close-journey Close Journey
-        .col-lg-8.map
+        .col-lg-8.map.order-lg-2.order-xl-2.order-xxl-2.order-1.order-sm-1.order-md-1
 
 
           #gMap(style="width:100%;height:100%;")
