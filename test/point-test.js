@@ -1,4 +1,4 @@
-const Point = require('../static/js/lib/point');
+const Point = require('../lib/point');
 const assert = require('assert');
 
 describe('Point Construction Test', function () {

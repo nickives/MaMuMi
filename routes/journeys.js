@@ -13,7 +13,7 @@ const Point = require('../lib/point');
 router.use(express.json());
 
 // Create 
-router.post('/', function(req, res) {
+router.post('/', function(req, res, next) {
  
   // Create model object
   let model = new JourneyModel(pool);
@@ -21,9 +21,7 @@ router.post('/', function(req, res) {
   // Create controller object
   let controller = new JourneyController(model, res);
 
-  let journey = req.body;
-
-  controller.create(journey);
+  controller.create(req);
 });
 
 // Read single journey

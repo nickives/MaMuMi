@@ -196,11 +196,6 @@ table .form-title h3 {
     text-overflow: ellipsis;
   }
 
-  .video-iframe {
-    max-width: 900px;
-    max-height: 100%;
-  }
-
   div.map {
     height: 600px;
 
@@ -236,6 +231,7 @@ body {
 
 #journey-list {
   max-height: calc(100vh - 66.75px);
+  min-height: 600px;
 }
 
 .journey-scroll {
@@ -260,7 +256,8 @@ body {
   color: white;
 }
 
-.journey-item > * > h1 {
+/* journey select title */
+.journey-item > * > h1, #journey-display > * > h1 {
   font-family: 'Poppins', sans-serif;
   font-size: 1.25em;
   color: #333333;
@@ -292,4 +289,10 @@ body {
 
 .play-img {
   max-width: 2.5em;
+}
+
+#beta {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.25em;
+  color: #b2b2b2;
 }

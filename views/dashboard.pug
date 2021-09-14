@@ -3,15 +3,13 @@ block main
     .content-section.col
         table.table
             tr
-                th= __('admin.dashboard.forename')
-                th= __('admin.dashboard.surname')
-                th= __('admin.dashboard.video_link')
+                th= __('admin.dashboard.name')
+                th= __('admin.dashboard.subtitle')
                 th= __('Edit')
                 th= __('Delete')
             each j in journeys
                 tr
-                    td= j.forename
-                    td= j.surname
-                    td= j.video_link
+                    td= j.name
+                    td= j.subtitle
                     td: a(href='/admin/edit-journey/' + j.id)= __('Edit')
                     td: a(href=`/journeys/${j.id}/delete`)= __('Delete')

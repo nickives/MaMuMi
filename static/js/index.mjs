@@ -1,25 +1,22 @@
 import Cookies from '/s/js/js.cookie.min.mjs'
 
-var map, geoJSON;
+var map, panningMarker, panningLine;
 const mapMarkers = [];
+let stopJourney = false;
+let isPanning = false;
 
 /**
  * Clear markers and close any InfoWindows
  * 
  * @param {google.maps.Marker} safeMarker Don't delete this marker.
  */
-const clearMarkers = (safeMarker) => {
+const clearMap = (safeMarker) => {
     // clear all markers
     mapMarkers.forEach(m => {
         if (m !== safeMarker) {
             m.setMap(null);
         }
-    })
-
-    // remove old geoJSON
-    map.data.forEach(function (feature) {
-        map.data.remove(feature);
-    })
+    });
 }
 
 const drawJourney = async (id) => {
@@ -27,15 +24,13 @@ const drawJourney = async (id) => {
     const journey = await res.json();
     document.getElementById('journey-list').classList.add('hidden');
     document.getElementById('journey-display').classList.remove('hidden');
-    clearMarkers();
+    clearMap();
 
     const point = journey.points[0]; // first Point
 
-    document.getElementById('journey-name').innerText = journey.forename;
+    document.getElementById('journey-name').innerText = journey.name;
 
-    const videoHTML = `<iframe class="video-iframe" width="560" height="315" src="${journey.video_link}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-
-    document.getElementById('journey-video-link').innerHTML = videoHTML;
+    document.getElementById('journey-audio-player').src = journey.audio_uri;
     const description = document.getElementById('journey-description');
     const language = Cookies.get({ name: 'lang' });
     switch (language) {
@@ -54,7 +49,7 @@ const drawJourney = async (id) => {
     });
 
     const points = journey.points;
-    for (let i = 0; i < journey.points.length; ++i) {
+    for (let i = 0; i < points.length - 1; ++i) {
 
         await panMap(map, marker, points[i].loc, points[i + 1].loc, 30);
 
@@ -70,7 +65,7 @@ const drawJourney = async (id) => {
  * @param {LatLng} end    Google Maps LatLng or LatLng literal
  * @param {Number} time   time in seconds for the pan to take.
  */
-const panMap = async (map, marker, start, end, time) => {
+async function panMap(map, marker, start, end, time) {
     // take away user control
     map.setOptions(
         {
@@ -105,14 +100,25 @@ const panMap = async (map, marker, start, end, time) => {
 
     const path = poly.getPath();
 
+    isPanning = true;
+    panningMarker = marker;
+    panningLine = poly;
     for (let i = 0; i <= steps; ++i) {
-        pos.lat += latStep;
-        pos.lng += lngStep;
-        map.setCenter(pos);
-        marker.setPosition(pos);
-        path.push(new google.maps.LatLng(pos));
-        await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
+        if (stopJourney || !isPanning) {
+            stopJourney = false;
+            marker.setMap(null);
+            poly.setMap(null);
+            break;
+        } else {
+            pos.lat += latStep;
+            pos.lng += lngStep;
+            map.setCenter(pos);
+            marker.setPosition(pos);
+            path.push(new google.maps.LatLng(pos));
+            await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
+        }        
     }
+    isPanning = false;
 
     // give it back
     map.setOptions(
@@ -126,7 +132,7 @@ const panMap = async (map, marker, start, end, time) => {
 }
 
 const drawJourneyStarts = async () => {
-    clearMarkers();
+    clearMap();
 
     try {
         let res = await fetch('/journeys')
@@ -160,412 +166,10 @@ const drawJourneyStarts = async () => {
 }
 
 async function myMap() {
-
+    const style = await fetch('/s/js/map-style.json')
+                    .then(function (response) { return response.json() });
     const styledMapType = new google.maps.StyledMapType(
-        [
-            {
-                "featureType": "all",
-                "elementType": "labels.text.stroke",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative",
-                "elementType": "labels.text.fill",
-                "stylers": [
-                    {
-                        "color": "#444444"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.country",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.country",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.country",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.country",
-                "elementType": "geometry.stroke",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.country",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.province",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "hue": "#00ff39"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.province",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.province",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.province",
-                "elementType": "geometry.stroke",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.province",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.locality",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "hue": "#ff0000"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.locality",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.locality",
-                "elementType": "geometry.stroke",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.neighborhood",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative.land_parcel",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "color": "#e05858"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "hue": "#3200ff"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape",
-                "elementType": "geometry.stroke",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "saturation": "-16"
-                    },
-                    {
-                        "hue": "#39ff00"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#cbe5be"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.landcover",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "color": "#fdf4f4"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.landcover",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "color": "#ffffff"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.landcover",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#cbe5be"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.terrain",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#89e86e"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.terrain",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#92e88e"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.terrain",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#b8d7b4"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi.attraction",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "color": "#916464"
-                    },
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "saturation": -100
-                    },
-                    {
-                        "lightness": 45
-                    },
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "geometry",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "labels.text",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road.highway",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road.arterial",
-                "elementType": "labels.icon",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "transit",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "water",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "color": "#46bcec"
-                    },
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "water",
-                "elementType": "geometry.fill",
-                "stylers": [
-                    {
-                        "color": "#049dbf"
-                    }
-                ]
-            }
-        ],
+        style,
         { name: "Styled Map" }
     );
 
@@ -577,24 +181,11 @@ async function myMap() {
         mapTypeControl: false,
         fullscreenControl: false,
         streetViewControl: false,
-        mapTypeControlOptions: {
-        mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain", "styled_map"],
-        },
     });
 
     //Associate the styled map with the MapTypeId and set it to display.
     map.mapTypes.set("styled_map", styledMapType);
     map.setMapTypeId("styled_map");
-}
-
-async function updateMap() {
-
-    map.data.forEach(function (feature) {
-        map.data.remove(feature);
-    })
-
-    // ### Display decription box for a marker ###
-    //const markerDesc = new google.maps.InfoWindow();
 }
 
 async function animation() {
@@ -626,7 +217,7 @@ function registerLanguageSelect() {
 function selectJourney(journeyRow) {
     if (selectJourney.selectedJourney !== undefined) {
         selectJourney.selectedJourney.classList.remove('journey-selected');
-        selectJourney.selectedJourney.childNodes[1].classList.add('hidden');
+        selectJourney.selectedJourney.childNodes[1].classList.add('hidden'); // play button
         selectJourney.marker.setIcon('/s/img/pin.png');
     }
 
@@ -654,11 +245,22 @@ function registerJourneySelect() {
     }
 }
 
-window.onload = () => {
-    animation();
-    myMap();
+function closeJourney() {
+    if (isPanning) stopJourney = true;
+    if (panningMarker) panningMarker.setMap(null);
+    if (panningLine) panningLine.setMap(null);
     drawJourneyStarts();
-    updateMap();
+    document.getElementById('journey-display').classList.add('hidden');
+    document.getElementById('journey-list').classList.remove('hidden');
+}
+
+window.onload = async () => {
+    animation();
+    await myMap();
+    drawJourneyStarts();
+    //updateMap();
     registerLanguageSelect();
     registerJourneySelect();
+
+    document.getElementById('close-journey').addEventListener('click', closeJourney);
 };

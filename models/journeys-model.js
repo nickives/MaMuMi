@@ -63,10 +63,10 @@ class JourneyModel {
             await conn.beginTransaction();
 
             // insert journey
-            const sql = "INSERT INTO `tbl_journeys` (`forename`, `surname`,\
-                        `video_link`, `desc_en`, `desc_es`, `desc_el`,\
+            const sql = "INSERT INTO `tbl_journeys` (`name`, `subtitle`,\
+                        `audio_uri`, `desc_en`, `desc_es`, `desc_el`,\
                         `desc_it`, `desc_no`, `desc_bg`)\
-                        VALUES (:forename, :surname, :video_link,\
+                        VALUES (:name, :subtitle, :audio_uri,\
                         :d_en, :d_es,:d_el, :d_it, :d_no, :d_bg)";
             res = await conn.query(
                 {
@@ -74,9 +74,9 @@ class JourneyModel {
                     sql: sql
                 },
                 {
-                    forename: journey.forename,
-                    surname: journey.surname,
-                    video_link: journey.video_link,
+                    name: journey.name,
+                    subtitle: journey.subtitle,
+                    audio_uri: journey.audio_uri,
                     d_en: (journey.description.en ? journey.description.en : ""),
                     d_es: (journey.description.es ? journey.description.es : ""),
                     d_el: (journey.description.el ? journey.description.el : ""),
@@ -113,15 +113,15 @@ class JourneyModel {
 
         try {
             // get journey
-            let sql = "SELECT `forename`, `surname`, `video_link`, `desc_en`,\
+            let sql = "SELECT `name`, `subtitle`, `audio_uri`, `desc_en`,\
                         `desc_es`, `desc_bg`, `desc_el`, `desc_no`, `desc_it`\
                         FROM `tbl_journeys` WHERE `id_journeys` = ?";
             let res_j = await conn.query(sql, id);
             if (res_j.length === 0) return null; // not found
 
-            journey.forename = res_j[0].forename;
-            journey.surname = res_j[0].surname;
-            journey.video_link = res_j[0].video_link;
+            journey.name = res_j[0].name;
+            journey.subtitle = res_j[0].subtitle;
+            journey.audio_uri = res_j[0].audio_uri;
             journey.id = id;
 
             journey.addDescription({
@@ -183,8 +183,8 @@ class JourneyModel {
             await conn.beginTransaction();
 
             // update journey
-            let sql = "UPDATE `tbl_journeys` SET `forename` = :forename,\
-                        `surname` = :surname, `video_link` = :video_link,\
+            let sql = "UPDATE `tbl_journeys` SET `name` = :name,\
+                        `subtitle` = :subtitle, `audio_uri` = :audio_uri,\
                         `desc_en` = :d_en, `desc_es` = :d_es, `desc_el` = :d_el,\
                         `desc_it` = :d_it, `desc_no` = :d_no, `desc_bg` = :d_bg\
                         WHERE `id_journeys` = :id_journeys";
@@ -196,9 +196,9 @@ class JourneyModel {
                 },
                 {
                     id_journeys: id,
-                    forename: journey.forename,
-                    surname: journey.surname,
-                    video_link: journey.video_link,
+                    name: journey.name,
+                    subtitle: journey.subtitle,
+                    audio_uri: journey.audio_uri,
                     d_en: (journey.description.en ? journey.description.en : ""),
                     d_es: (journey.description.es ? journey.description.es : ""),
                     d_el: (journey.description.el ? journey.description.el : ""),
@@ -261,9 +261,9 @@ class JourneyModel {
         const conn = await this.pool.getConnection();
 
         try {
-            let sql = "SELECT `tbl_journeys`.`id_journeys`, `tbl_journeys`.`forename`,\
-                        `tbl_journeys`.`surname`, `tbl_points`.`point_num`,\
-                        `tbl_points`.`loc`, `tbl_journeys`.`video_link`,\
+            let sql = "SELECT `tbl_journeys`.`id_journeys`, `tbl_journeys`.`name`,\
+                        `tbl_journeys`.`subtitle`, `tbl_points`.`point_num`,\
+                        `tbl_points`.`loc`, `tbl_journeys`.`audio_uri`,\
                         `tbl_journeys`.`desc_en`, `tbl_journeys`.`desc_es`,\
                         `tbl_journeys`.`desc_el`, `tbl_journeys`.`desc_it`,\
                         `tbl_journeys`.`desc_no`, `tbl_journeys`.`desc_bg`\
@@ -279,7 +279,7 @@ class JourneyModel {
 
         let journeysReturn = [];
         res.forEach( (j) => {
-            const journey = new Journey(j.forename, j.surname, j.video_link, j.id_journeys);
+            const journey = new Journey(j.name, j.subtitle, j.audio_uri, j.id_journeys);
 
             journey.addDescription({
                 en: j.desc_en,

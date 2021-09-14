@@ -11,6 +11,9 @@
 // -Sam
 
 const Journey = require('../lib/journey');
+const formidable = require('formidable');
+const fs = require('fs').promises;
+const path = require('path');
 
 class JourneyController {
 
@@ -22,15 +25,15 @@ class JourneyController {
   /**
    * A private function used to clone the journey data
    * that was received from outside of this class. This
-   * is to serialize the data before it is entered into
+   * is to santise the object before it is entered into
    * the database.
    *
    * @param {Journey} journey - The journey object to be cloned
    *
    * @returns The cloned journey object
    */
-  async cloneJourney(journey) {
-    let newJourney = new Journey(journey.forename, journey.surname, journey.video_link);
+  cloneJourney(journey) {
+    let newJourney = new Journey(journey.forename, journey.surname, journey.audio_uri);
 
     // TODO: We're not reconstructing the points here. Maybe we should be?
     if (journey.points !== undefined) {
@@ -48,25 +51,78 @@ class JourneyController {
    * Creates a new journey in the data base by passing Journey object
    * to the model
    *
-   * @param {Journey} journey - The journey object
+   * @param {Journey} req - The request object
    * 
    * @returns The database connection status
    */
-  async create(journey) {
-    // Clone the journey to serialize
-    let newJourney = await this.cloneJourney(journey);
-    let res;
+  async create(req) {
 
+    const form = formidable({ 
+      keepExtensions: true,
+      multiples: true,
+      uploadDir: `${__dirname}/../uploads`
+    });
 
-    // Send journey to the model to create it
+    form.parse(req, async (err, fields, file) => {
+      if (err) {
+        next(err);
+        return;
+      }
+
+      // move file from /uploads to /static/audio
+      const originalPath = file['audio_file'].path;
+      const filename = path.parse(file['audio_file'].path).base;
+      const newPath = `${__dirname}/../static/audio/${filename}`;
+      await fs.rename(originalPath, newPath);
+      const audio_uri = `${this.view.locals.hostname}/s/audio/${filename}`;
+
+      const inputJourney = JSON.parse(fields.journey);
+
+      const newJourney = new Journey(inputJourney.name, inputJourney.subtitle, audio_uri);
+
+      if (inputJourney.points !== undefined) {
+        for (let i = 0; i < inputJourney.points.length; i++) {
+          newJourney.addPoint(inputJourney.points[i]);
+        }
+      }
+  
+      newJourney.addDescription(inputJourney.description);
+
+      let res;
+      try {
+        res = await this.model.create(newJourney);
+        this.view.send("OK");
+
+      } catch (err) {
+        fs.stat(newPath)
+        .then(() => fs.unlink(newPath))
+        .catch();
+
+        fs.stat(originalPath)
+        .then(() => fs.unlink(originalPath))
+        .catch();
+
+        this.view.status(422).send({message : err.message});
+      }
+    });
+
+    /*
     try {
+      // Save the audio file
+
+
+      // Clone the journey to serialize
+      let newJourney = this.cloneJourney(journey);
+      let res;
+
+      // Send journey to the model to create it
       res = await this.model.create(newJourney);
     } catch (err) {
       this.view.status(422).send({message : err.message});
     }
+    */
 
     // Return the database response
-    this.view.send("OK");
   }
 
   /**
@@ -93,7 +149,7 @@ class JourneyController {
       this.view.sendStatus(404);
     }
 
-    this.view.send(res);
+    //this.view.send(res);
   }
 
   /**
@@ -127,7 +183,7 @@ class JourneyController {
    */
   async update(id, journey) {
     // Clone the journey to serialize
-    let newJourney = await this.cloneJourney(journey);
+    let newJourney = this.cloneJourney(journey);
     let res;
 
     // Send the id and journey to the model to update

@@ -1,3 +1,4 @@
+//- This page is kind of a nightmare. It actually supports add and update because of all the ternaries (so many ternaries). Really we should have just made separate pages.
 extends admin 
 block main
     script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgQsUmoRWeiRlclZbkSmn3vIFEmJZaBN4")
@@ -13,14 +14,14 @@ block main
                     small= __('admin.create-journey.required')
                 .form-group-container
                     .form-group.row.m-0
-                        label(for='forename').col-md-3.col-form-label-sm= __('admin.dashboard.forename')
-                        input(type='text' name='forename', required, value=(journey && journey.forename) ? journey.forename : "").col-md-9.form-control.form-control-sm#forename
+                        label(for='name').col-md-3.col-form-label-sm= __('admin.dashboard.name')
+                        input(type='text' name='name', required, value=(journey && journey.name) ? journey.name : "").col-md-9.form-control.form-control-sm#name
                     .form-group.row.m-0
-                        label(for='surname').col-md-3.col-form-label-sm= __('admin.dashboard.surname')
-                        input(type='text' name='surname', required, value=(journey && journey.surname) ? journey.surname : "").col-md-9.form-control.form-control-sm#surname
+                        label(for='subtitle').col-md-3.col-form-label-sm= __('admin.dashboard.subtitle')
+                        input(type='text' name='subtitle', required, value=(journey && journey.subtitle) ? journey.subtitle : "").col-md-9.form-control.form-control-sm#subtitle
                     .form-group.row.m-0
-                        label(for='video_link').col-md-3.col-form-label-sm= __('admin.dashboard.video_link')
-                        input(type='url' name='video_link', required, value=(journey && journey.video_link) ? journey.video_link : "").col-md-9.form-control.form-control-sm#video_link
+                        label(for='audio_file').col-md-3.col-form-label-sm= __('admin.dashboard.audio-file')
+                        input(type="file", name="audio_file", required=((journey == undefined) || (journey.audio_uri == undefined)))#audio_file
                     .form-group.row.m-0
                         label(for='desc_en').col-md-3.col-form-label-sm= __('admin.create-journey.english')
                         input(type='textarea' name='desc_en', value=(journey && journey.desc_en) ? journey.desc_en : "").col-md-9.form-control.form-control-sm#desc_en

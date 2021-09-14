@@ -1,5 +1,5 @@
-const Point = require('../static/js/lib/point');
-const Journey = require('../static/js/lib/journey');
+const Point = require('../lib/point');
+const Journey = require('../lib/journey');
 const assert = require('assert');
 const pool = require('./pool-test');
 const JourneyModel = require("../models/journeys-model");
@@ -45,9 +45,9 @@ describe('Journeys-model.js DB Tests', function () {
             de: "De description",
             fr: "Fr description"
         };
-        video_link = "http://youtu.be";
+        audio_uri = "http://youtu.be";
 
-        journey = new Journey("Bob", "FromTesco", video_link);
+        journey = new Journey("Bob", "FromTesco", audio_uri);
         journey.addDescription(desc);
         journey.addPoint(point1);
         journey.addPoint(point2);
@@ -79,8 +79,8 @@ describe('Journeys-model.js DB Tests', function () {
         let output = await model.read(res.insertId);
 
         // Read OK
-        assert.ok(output.forename, journey.forename);
-        assert.ok(output.surname, journey.surname);
+        assert.ok(output.name, journey.name);
+        assert.ok(output.description, journey.description);
 
         // Make sure points are attached
         let point1Found, point2Found;
@@ -103,7 +103,7 @@ describe('Journeys-model.js DB Tests', function () {
         let res_create = await model.create(journey);
         
         // lets change some stuff
-        journey.forename = "Freddy";
+        journey.name = "Freddy";
         let point3 = new Point(null, 3, {lat: 52, lng: -2}, "point2");
         journey.addPoint(point3);
         await model.update(res_create.insertId, journey);
@@ -123,7 +123,7 @@ describe('Journeys-model.js DB Tests', function () {
             }
         })
 
-        assert.ok(output.forename === "Freddy");
+        assert.ok(output.name === "Freddy");
         assert.ok(point1Found);
         assert.ok(point2Found);
         assert.ok(point3Found);
@@ -143,7 +143,7 @@ describe('Journeys-model.js DB Tests', function () {
         let resJourney = await model.create(journey);
 
         // We should have two types of journey for good measure
-        let journeyWithNoPoint = new Journey('Fred', 'isBest', video_link);
+        let journeyWithNoPoint = new Journey('Fred', 'isBest', audio_uri);
         let resNoPoint = await model.create(journeyWithNoPoint);
 
         let resAll = await model.readAll();
@@ -152,12 +152,12 @@ describe('Journeys-model.js DB Tests', function () {
         let journeyNoPointFound = false;
         resAll.forEach( (j) => {
             if (j.id != null) { // make sure there's an id attached
-                if (j.forename == journey.forename) {
-                    if (j.points[0].video_link == journey.points[0].video_link) {
+                if (j.name == journey.name) {
+                    if (j.points[0].video_link == journey.points[0].audio_uri) {
                         journeyFound = true;
                     }
                     
-                } else if (j.forename == journeyWithNoPoint.forename) {
+                } else if (j.name == journeyWithNoPoint.name) {
                     journeyNoPointFound = true;
                 }
             }

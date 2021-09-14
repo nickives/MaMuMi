@@ -4,15 +4,15 @@ export class Journey {
      * A Journey has a name for the person undertaking it, and comprises an
      * array of points they visited.
      * 
-     * @param {String} forename - First name of migrant
-     * @param {String} surname - Surname of migrant 
+     * @param {String} name - Name of journey
+     * @param {String} subtitle - Journey subtitle
      * @param {Number} id - Primary key of journey, positive integer
-     * @param {String} video_link - link to media
+     * @param {String} audio_uri - link to media
      */
-    constructor(forename, surname, video_link, id) {
-        this.forename = forename;
-        this.surname = surname;
-        this.video_link = video_link;
+     constructor(name, subtitle, audio_uri, id) {
+        this.name = name;
+        this.subtitle = subtitle;
+        this.audio_uri = audio_uri;
         this.points = [];
         this.id = id;
         this.description = {};       

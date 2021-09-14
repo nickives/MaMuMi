@@ -1,7 +1,7 @@
 {
-	"admin.dashboard.forename": "Forename",
-	"admin.dashboard.surname": "Surname",
-	"admin.dashboard.video_link": "Video URL",
+	"admin.dashboard.name": "Name",
+	"admin.dashboard.subtitle": "Subtitle",
+	"admin.dashboard.audio-file": "Audio File",
 	"admin.create-journey.journey-details": "Journey Details",
 	"admin.create-journey.required": "Required",
 	"admin.create-journey.english": "English Description",
@@ -12,14 +12,11 @@
 	"admin.create-journey.italian": "Italian Description",
 	"admin.create-journey.journey_pins": "Journey Pins",
 	"admin.create-journey.number": "Number",
-    
 	"index.journey.select": "Select a journey",
-
 	"Submit": "Submit",
 	"Edit": "Edit",
 	"Delete": "Delete",
 	"Update": "Update",
-
 	"lang.current.name": "English",
 	"lang.current.code": "en",
 	"lang.1.name": "Български",
@@ -32,4 +29,5 @@
 	"lang.4.code": "no",
 	"lang.5.name": "Español",
 	"lang.5.code": "es"
+
 }

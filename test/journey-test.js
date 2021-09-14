@@ -1,22 +1,22 @@
-const Point = require('../static/js/lib/point');
-const Journey = require('../static/js/lib/journey');
+const Point = require('../lib/point');
+const Journey = require('../lib/journey');
 const assert = require('assert');
 
 describe('Journey Construction Test', function () {
 
-    const forename = "John";
-    const surname = "Smith";
-    const video_link = "http://youtu.be";
+    const name = "John";
+    const subtitle = "Smith";
+    const audio_uri = "http://youtu.be";
     var journey;
 
     beforeEach( () => {
-        journey = new Journey(forename, surname, video_link);
+        journey = new Journey(name, subtitle, audio_uri);
     });
 
     it('Should construct OK', () => {
-        assert.strictEqual(journey.forename, forename);
-        assert.strictEqual(journey.surname, surname);
-        assert.strictEqual(journey.video_link, video_link);
+        assert.strictEqual(journey.name, name);
+        assert.strictEqual(journey.subtitle, subtitle);
+        assert.strictEqual(journey.audio_uri, audio_uri);
     });
 
     it('Should add Descriptions OK', () => {

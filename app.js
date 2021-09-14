@@ -34,7 +34,7 @@ app.use(i18n.init);
 
 // app locals - all templates can see these
 app.use((req, res, next) => {
-  res.locals.hostname = "http://" + req.hostname;
+  res.locals.hostname = `${req.protocol}://${req.get('host')}`;
   res.locals.port = app.get('port');
   next();
 });
