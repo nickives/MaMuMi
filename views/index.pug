@@ -47,7 +47,9 @@ block content
                 a(href="#", data-lang=`"${__('lang.5.code')}"`).nav-link-lang= __('lang.5.name')
 
       .container-fluid: .row
+        //- Journey Select / Journey View column
         .col-lg-4.order-lg-1.order-xl-1.order-xxl-1.order-2.order-sm-2.order-md-2
+          //- Journey List
           .container#journey-list
             h1= __('index.journey.select')
             .journey-scroll
@@ -58,13 +60,14 @@ block content
                     .journey-short-desc= j.subtitle
                   .col.play-col.hidden
                     img(src="/s/img/play.png", alt="", srcset="").play-img
-
+          //- Journey Display
           .container.hidden#journey-display
             .row: h1#journey-name Name 
             .row: h1#journey-subtitle Subtitle 
             .row.player-row: audio(src="", controls, preload=auto)#journey-audio-player
             .row.fade-out: p#journey-description Desc
             .row: a(href="#")#close-journey Close Journey
+        //- Map Column
         .col-lg-8.map.order-lg-2.order-xl-2.order-xxl-2.order-1.order-sm-1.order-md-1
 
 
