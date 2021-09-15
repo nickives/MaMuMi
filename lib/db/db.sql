@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Jul 22, 2021 at 02:49 PM
+-- Generation Time: Sep 15, 2021 at 12:27 PM
 -- Server version: 5.5.64-MariaDB-1~trusty
--- PHP Version: 7.4.15
+-- PHP Version: 7.4.21
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `mamumi`
 --
-CREATE DATABASE IF NOT EXISTS `mamumi` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `mamumi`;
 
 -- --------------------------------------------------------
 
@@ -33,9 +31,9 @@ USE `mamumi`;
 DROP TABLE IF EXISTS `tbl_journeys`;
 CREATE TABLE `tbl_journeys` (
   `id_journeys` int(11) NOT NULL,
-  `forename` varchar(65) NOT NULL,
-  `surname` varchar(65) NOT NULL,
-  `video_link` varchar(2048) NOT NULL,
+  `name` varchar(65) NOT NULL,
+  `subtitle` varchar(65) NOT NULL,
+  `audio_uri` varchar(2048) NOT NULL,
   `desc_en` varchar(1800) NOT NULL,
   `desc_es` varchar(1800) NOT NULL,
   `desc_bg` varchar(1800) NOT NULL,
