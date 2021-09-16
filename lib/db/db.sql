@@ -3,11 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Sep 15, 2021 at 12:27 PM
+-- Generation Time: Sep 16, 2021 at 03:22 PM
 -- Server version: 5.5.64-MariaDB-1~trusty
 -- PHP Version: 7.4.21
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -33,13 +32,13 @@ CREATE TABLE `tbl_journeys` (
   `id_journeys` int(11) NOT NULL,
   `name` varchar(65) NOT NULL,
   `subtitle` varchar(65) NOT NULL,
-  `audio_uri` varchar(2048) NOT NULL,
-  `desc_en` varchar(1800) NOT NULL,
-  `desc_es` varchar(1800) NOT NULL,
-  `desc_bg` varchar(1800) NOT NULL,
-  `desc_el` varchar(1800) NOT NULL,
-  `desc_no` varchar(1800) NOT NULL,
-  `desc_it` varchar(1800) NOT NULL
+  `audio_uri` varchar(256) NOT NULL,
+  `desc_en` text NOT NULL,
+  `desc_es` text NOT NULL,
+  `desc_bg` text NOT NULL,
+  `desc_el` text NOT NULL,
+  `desc_no` text NOT NULL,
+  `desc_it` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -99,7 +98,6 @@ ALTER TABLE `tbl_points`
 --
 ALTER TABLE `tbl_points`
   ADD CONSTRAINT `fk_id_journeys` FOREIGN KEY (`id_journeys`) REFERENCES `tbl_journeys` (`id_journeys`) ON DELETE CASCADE ON UPDATE CASCADE;
-SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
