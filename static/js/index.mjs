@@ -140,7 +140,7 @@ class MyMap {
         const path = poly.getPath();
 
         this.isPanning = true;
-        for (let x = 0; x <= destinations.length; ++x) {
+        for (let x = 0; x < destinations.length; ++x) {
             const d = destinations[x];
             for (let i = 0; i <= d.loc.steps; ++i) {
                 if (this.isStopping) {
@@ -322,7 +322,7 @@ class IndexPage {
             icon: '/s/img/pin_selected.png'
         });
     
-        await this.myMap.animateMap(marker, journey.points, 30);
+        await this.myMap.animateMap(marker, journey.points, 5);
     }
 
     closeJourney = () => {
