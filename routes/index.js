@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const JourneyModel = require('../models/journeys-model');
-const pool = require("../lib/db/pool-secret");
+const pool = require("../lib/db/pool");
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {

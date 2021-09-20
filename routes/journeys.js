@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Require Model and controller
-const pool = require("../lib/db/pool-secret");
+const pool = require("../lib/db/pool");
 const JourneyModel = require("../models/journeys-model");
 const JourneyController = require("../controllers/journey-controller");
 const Journey = require('../lib/journey');

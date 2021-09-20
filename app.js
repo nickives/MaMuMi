@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
+require('dotenv').config();
 
 // routes
 const indexRouter = require('./routes/index');
@@ -29,7 +30,7 @@ const i18n = new I18n({
   defaultLocale: 'en',
   cookie: 'lang',
   directory: path.join(__dirname, 'locales')
-})
+});
 app.use(i18n.init);
 
 // app locals - all templates can see these

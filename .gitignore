@@ -1,6 +1,5 @@
 node_modules
 .vscode
-lib/db/pool-secret.js
 .DS_Store
 uploads
 static/audio

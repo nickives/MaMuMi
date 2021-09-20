@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const JourneyModel = require('../models/journeys-model');
-const pool = require("../lib/db/pool-secret");
+const SessionModel = require('../models/session-model');
+const pool = require("../lib/db/pool");
+const formidable = require('formidable');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -10,6 +12,19 @@ router.get('/', function (req, res, next) {
 
 router.get('/login', function (req, res, next) {
     res.render('login');
+});
+
+router.post('/login', function (req, res, next) {
+    const form = formidable();
+
+    form.parse(req, async function (err, fields, file, next) {
+        if (err) {
+            next(err);
+            return;
+        }
+
+
+    });
 });
 
 router.get('/dashboard', async function (req, res) {
