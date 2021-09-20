@@ -105,24 +105,6 @@ class JourneyController {
         this.view.status(422).send({message : err.message});
       }
     });
-
-    /*
-    try {
-      // Save the audio file
-
-
-      // Clone the journey to serialize
-      let newJourney = this.cloneJourney(journey);
-      let res;
-
-      // Send journey to the model to create it
-      res = await this.model.create(newJourney);
-    } catch (err) {
-      this.view.status(422).send({message : err.message});
-    }
-    */
-
-    // Return the database response
   }
 
   /**
