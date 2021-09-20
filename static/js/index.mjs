@@ -73,6 +73,8 @@ class MyMap {
      * @param {Marker} marker           Google Map Marker at the start position
      * @param {[LatLng]} destinations   Array of Google Maps LatLng or LatLng literals
      * @param {Number} time             Time in seconds for the pan to take.
+     * 
+     * @return {Marker, Poly} Object containing the drawn marker and polylines
      */
     async animateMap(marker, destinations, time) {
         if (this.isPanning) return; // don't attempt to pan twice
@@ -140,6 +142,7 @@ class MyMap {
         const path = poly.getPath();
 
         this.isPanning = true;
+        this.isStopping = false;
         for (let x = 0; x < destinations.length; ++x) {
             const d = destinations[x];
             for (let i = 0; i <= d.loc.steps; ++i) {
@@ -174,6 +177,11 @@ class MyMap {
         );
         this.isPanning = false;
         this.isStopping = false;
+
+        return {
+            marker: marker,
+            poly: poly
+        }
     }
 
     /**
@@ -210,7 +218,7 @@ class MyMap {
      * Stop panning. Completely stops panning and removes marker / line.
      */
     stopPan() {
-        if (this.isPanning) this.isStopping = true;
+        this.isStopping = true;
     }
 
     getMapMarkers() {
@@ -231,6 +239,8 @@ class IndexPage {
         this.myMap = myMap;
         this.selectedJourneyRow = undefined;
         this.marker = undefined;
+        this.audioPlayer = undefined;
+        this.selectedJourney = undefined;
         this.registerJourneySelect();
         IndexPage.registerLanguageSelect();
         this.drawJourneyStarts();
@@ -256,10 +266,10 @@ class IndexPage {
                     const journeyRow = document.getElementById(`journey-row-${marker.journey.id}`);
                     const playButton = journeyRow.childNodes[1];
                     playButton.addEventListener('click', async () => {
-                        await this.drawJourney(marker.journey.id);
+                        await this.displayJourney(marker.journey.id);
                     });
     
-                    marker.addListener('click', function () {
+                    marker.addListener('click', () => {
                         this.selectJourney(journeyRow);
                     });
     
@@ -293,14 +303,13 @@ class IndexPage {
         this.myMap.getMap().panTo(marker.getPosition());
     }
 
-    async drawJourney(id) {
+    async displayJourney(id) {
         const res = await fetch('/journeys/' + id);
         const journey = await res.json();
+        this.selectedJourney = journey;
         document.getElementById('journey-list').classList.add('hidden');
         document.getElementById('journey-display').classList.remove('hidden');
         this.myMap.clearMap();
-    
-        const point = journey.points[0]; // first Point
     
         document.getElementById('journey-name').innerText = journey.name;
     
@@ -316,18 +325,61 @@ class IndexPage {
             default: description.innerHTML = journey.description.en;
         }
     
+        const audioElement = document.getElementById('journey-audio-player');
+        this.audioPlayer = new AudioPlayer(audioElement, journey.audio_uri);
+        this.audioPlayer.registerPlayCallback(this.playCallback);
+        this.audioPlayer.registerPauseCallback(this.pauseCallback);
+        this.audioPlayer.registerPlayingCallback(this.playingCallback);
+        this.audioPlayer.registerStopCallback(this.stopCallback);
+    }
+
+    /**
+     * Play callback.
+     * 
+     * This should be called when the HTMLAudioElement has commenced playing.
+     * 
+     * @param {HTMLAudioElement} player HTMLAudioElement that is playing
+     */
+    playCallback = (player) => {
+        const journey = this.selectedJourney;
+        const point = journey.points[0]; // first Point
         const marker = new google.maps.Marker({
             position: point.loc,
             map: this.myMap.getMap(),
             icon: '/s/img/pin_selected.png'
         });
-    
-        await this.myMap.animateMap(marker, journey.points, 5);
+        this.selectedJourney.marker = marker;
+        this.myMap.animateMap(journey.marker, journey.points, player.duration);
+    }
+
+    /**
+     * Pause callback.
+     * 
+     * This should be called when the player has paused for any reason.
+     */
+    pauseCallback = () => {
+        this.myMap.pausePan();
+    }
+
+    /**
+     * Playing callback.
+     * 
+     * This should be called when the player has resumed playing after a pause.
+     */
+    playingCallback = () => {
+        this.myMap.resumePan();
+    }
+
+    stopCallback = () => {
+        this.myMap.stopPan();
+        this.selectedJourney.marker = null;
     }
 
     closeJourney = () => {
         this.myMap.stopPan();
         this.drawJourneyStarts();
+        if (this.audioPlayer) this.audioPlayer.destroy();
+        this.audioPlayer = undefined;
         document.getElementById('journey-display').classList.add('hidden');
         document.getElementById('journey-list').classList.remove('hidden');
     }
@@ -357,7 +409,198 @@ class IndexPage {
 }
 
 class AudioPlayer {
+    constructor(audioPlayerElement, audioResource) {
+        this.audioPlayer = new Audio(audioResource);
+        this.playButton = audioPlayerElement.children['play-button'];
+        this.pauseButton = audioPlayerElement.children['pause-button'];
+        this.stopButton = audioPlayerElement.children['stop-button'];
+        this.currentTime = audioPlayerElement.children['current-time'];
+        this.positionSlider = audioPlayerElement.children['seek-slider'];
+        this.duration = audioPlayerElement.children['duration'];
 
+        // Registered using register{Stop,Pause}Callback
+        this.stopCallback = null;
+        this.pauseCallback = null;
+        this.playCallback = null
+        this.playingCallback = null
+
+        // register event callbacks
+        this.playButton.addEventListener('click', this.play);
+        this.pauseButton.addEventListener('click', this.pause);
+        this.stopButton.addEventListener('click', this.stop);
+        this.audioPlayer.addEventListener('timeupdate', this.timeUpdate);
+        this.audioPlayer.addEventListener('stalled', this.stalledWaitingEventHandler);
+        this.audioPlayer.addEventListener('waiting', this.stalledWaitingEventHandler);
+        this.audioPlayer.addEventListener('play', this.playEventHandler);
+        this.audioPlayer.addEventListener('playing', this.playingEventHandler);
+        this.audioPlayer.addEventListener('loadedmetadata', this.loadedMetaData);
+
+    }
+
+    /**
+     * Destroy the AudioPlayer.
+     * 
+     * This will stop playback, set the source to null and remove all event
+     * listeners. The browser should then garbage collect the player.
+     */
+    destroy() {
+        this.pause();
+        this.playButton.removeEventListener('click', this.play);
+        this.pauseButton.removeEventListener('click', this.pause);
+        this.stopButton.removeEventListener('click', this.stop);
+        this.audioPlayer.removeEventListener('timeupdate', this.timeUpdate);
+        this.audioPlayer.removeEventListener('stalled', this.stalledWaitingEventHandler);
+        this.audioPlayer.removeEventListener('waiting', this.stalledWaitingEventHandler);
+        this.audioPlayer.removeEventListener('play', this.playEventHandler);
+        this.audioPlayer.removeEventListener('playing', this.playingEventHandler);
+        this.audioPlayer.removeEventListener('loadedmetadata', this.loadedMetaData);
+        this.audioPlayer.src = null;
+        this.audioPlayer = null;
+        this.stopCallback = null;
+        this.pauseCallback = null;
+        this.playingCallback = null;
+        this.playCallback = null;
+    }
+
+    /**
+     * Convert seconds to a string representing duration in minutes and seconds
+     * 
+     * @param {Number} duration Duration in seconds
+     * @return {String} Duration in MM:SS
+     */
+    static convertSecondsToMinutesAndSecondsString(duration) {
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        const returnedSeconds = seconds < 10 ? "0" + seconds : seconds;
+        return `${minutes}:${returnedSeconds}`;
+    }
+
+    // EVENT HANDLERS
+
+    /**
+     * Play audio. This is also registered as a play button click event handler.
+     */
+     play = () => {
+         if (this.audioPlayer.currentTime === 0) {
+             this.audioPlayer.play();
+             if (this.playCallback) this.playCallback(this.audioPlayer);
+         } else {
+            this.audioPlayer.play();
+            if (this.playingCallback) this.playingCallback(this.audioPlayer);
+         }
+    }
+
+    /**
+     * Pause audio. This is also registered as a pause button click event handler. 
+     */
+    pause = () => {
+        this.audioPlayer.pause();
+        if (this.pauseCallback) this.pauseCallback();
+    }
+
+    /**
+     * Stop audio. This is also registered as a stop button click event handler.
+     */
+    stop = () => {
+        this.audioPlayer.pause();
+        this.audioPlayer.currentTime = 0;
+        if (this.stopCallback) this.stopCallback();
+    }
+
+    /**
+     * Time update event handler.
+     */
+     timeUpdate = () => {
+        this.currentTime.innerText = AudioPlayer.convertSecondsToMinutesAndSecondsString(this.audioPlayer.currentTime);
+        this.positionSlider.value = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100;
+    }
+
+    /**
+     * Stalled / Waiting event handler.
+     * 
+     * Just calls the pause callback if registered.
+     */
+    stalledWaitingEventHandler = () => {
+        if (this.pauseCallback) this.pauseCallback();
+    }
+
+    /**
+     * Play event handler.
+     * 
+     * Fired when play happens.
+     */ 
+    playEventHandler = () => {
+        
+    }
+
+    /**
+     * Playing event handler.
+     * 
+     * Fired when playback is ready to start after having been paused or delayed 
+     * due to lack of data. Calls the playing callback if registered;
+     */ 
+    playingEventHandler = () => {
+        if (this.playingCallback) this.playingCallback();
+    }
+
+    loadedMetaData = () => {
+        this.duration.innerText = AudioPlayer.convertSecondsToMinutesAndSecondsString(this.audioPlayer.duration);
+    }
+
+    /**
+     * Register a callback for when the player commences playing.
+     * 
+     * @param {Function} callback Function to register
+     */
+     registerPlayCallback(callback) {
+        if (typeof callback === 'function') {
+            this.playCallback = callback;
+        } else {
+            throw new Error('Function expected')
+        }
+    }    
+
+    /**
+     * Register a callback for when the player stops.
+     * 
+     * @param {Function} callback Function to register
+     */
+    registerStopCallback(callback) {
+        if (typeof callback === 'function') {
+            this.stopCallback = callback;
+        } else {
+            throw new Error('Function expected')
+        }
+    }
+
+    /**
+     * Register a callback for when the player pauses for any reason.
+     * 
+     * @param {Function} callback Function to register
+     */
+    registerPauseCallback(callback) {
+        if (typeof callback === 'function') {
+            this.pauseCallback = callback;
+        } else {
+            throw new Error('Function expected')
+        }
+    }
+
+    /**
+     * Register a callback for when the player resumes playing after a pause.
+     * 
+     * This could be called resume instead of playing, but we're matching the
+     * name of the HTMLMediaElement event.
+     * 
+     * @param {Function} callback Function to register
+     */
+    registerPlayingCallback(callback) {
+        if (typeof callback === 'function') {
+            this.playingCallback = callback;
+        } else {
+            throw new Error('Function expected')
+        }
+    }
 }
 
 function hypotenuseDistance(side1, side2) {

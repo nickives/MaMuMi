@@ -64,7 +64,13 @@ block content
           .container.hidden#journey-display
             .row: h1#journey-name Name 
             .row: h1#journey-subtitle Subtitle 
-            .row.player-row: audio(src="", controls, preload=auto)#journey-audio-player
+            .row.player-row: #journey-audio-player
+              button#play-button play
+              button#pause-button pause
+              button#stop-button stop
+              span#current-time 0:00
+              input#seek-slider(type="range", name="", min="0", max="100", value="0", disabled)
+              span#duration 0:00
             .row.fade-out: p#journey-description Desc
             .row: a(href="#")#close-journey Close Journey
         //- Map Column
