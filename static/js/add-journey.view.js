@@ -206,24 +206,6 @@ function _createJourney() {
     }
 }
 
-function _sendJourney(journey) {
-    console.log(JSON.stringify(journey));
-    fetch("/journeys", {
-        method: "POST",
-        mode: "same-origin",
-        headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(journey),
-    }).then((res) => {
-        alert("Journey has been created");
-    }).catch((error) => {
-        alert(error.message);
-    });
-}
-
-
 // ### Form layout and response code ###
 
 window.onload = async () => {
