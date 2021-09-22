@@ -58,10 +58,6 @@ describe('Journeys-model.js DB Tests', function () {
         if (conn) conn.end();
     });
 
-    after(async function () {
-        await pool.end();
-    });
-
     it('Should Create() OK', async () => {
 
         // Valid insert succeeds
