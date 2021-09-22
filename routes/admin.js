@@ -6,25 +6,53 @@ const pool = require("../lib/db/pool");
 const formidable = require('formidable');
 const CryptoJS = require('crypto-js');
 
-/* GET home page. */
-router.get('/', async function (req, res, next) {
+
+/**
+ * Authentication middleware
+ */
+router.use(async (req, res, next) => {
     let isLoggedIn = false;
     if (req.cookies && req.cookies.sessionKey) {
         const sessionKey = req.cookies.sessionKey;
         const model = new SessionModel(pool);
-        isLoggedIn = await model.isSessionIdValid(sessionKey);
+        const result = await model.read(sessionKey);
+        // if we get a matching session key
+        if (result[0]) {
+            const timeLimit = 1200000 // 20 minutes;
+            const timeThreshold = Date.now().valueOf() - timeLimit;
+            const lastAccessTime = result[0].last_access.valueOf();
+            isLoggedIn = lastAccessTime > timeThreshold;
+        }
     }
 
     if (isLoggedIn) {
-        res.redirect('/admin/dashboard');
+        req.isLoggedIn = true;
+        next();
+    } else if (req.path === '/login') {
+        // if they were trying to login anyway
+        next();
     } else {
         res.redirect('/admin/login');
     }
-    
+})
+
+/* GET home page. */
+router.get('/', async function (req, res, next) {
+    res.redirect('/admin/dashboard');
 });
 
+router.get('/logout', function (req, res, next) {
+    res.clearCookie('sessionKey');
+    res.redirect('/admin/login');
+})
+
 router.get('/login', function (req, res, next) {
-    res.render('login');
+    if (req.isLoggedIn) {
+        // set in authentication middleware. Stops user logging in twice.
+        res.redirect('/admin/dashboard');
+    } else {
+        res.render('login');
+    }
 });
 
 router.post('/login', async function (req, res, next) {
