@@ -65,7 +65,7 @@ class JourneyController {
 
     form.parse(req, async (err, fields, file) => {
       if (err) {
-        next(err);
+        //next(err);
         return;
       }
 
