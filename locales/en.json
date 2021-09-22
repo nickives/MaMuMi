@@ -13,6 +13,8 @@
 	"admin.create-journey.journey_pins": "Journey Pins",
 	"admin.create-journey.number": "Number",
 	"index.journey.select": "Select a journey",
+	"login.bad.password": "Incorrect Password",
+	"Password": "Password",
 	"Submit": "Submit",
 	"Edit": "Edit",
 	"Delete": "Delete",

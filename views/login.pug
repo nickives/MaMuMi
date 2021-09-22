@@ -6,22 +6,13 @@ block content
             .col-md-4.shadow-lg.mt-5#login-form
                 #form-inner.p-4
                     img(src='/a/login/logo.png')
-                    form
+                    form(action="/admin/login", method="post")#login-form
                         //- Labels not shown but included for accessibility - do not remove
                         .form-group
-                            //- Email
-                            label(for='email-input') Email
-                            input(type='email' placeholder='Enter email address' required='').form-control.mb-3#email-input
-
                             //- Password
-                            label(for='password-input') Password
-                            input(type='password' placeholder='Enter password' required='').form-control#email-input
-                        
-                        .form-check 
-                            input(type='checkbox').form-check-input#remember-me
-                            label(for='remember-me').form-check-label Remember me
+                            label(for='password-input')= __('Password')
+                            input(type='password' placeholder='Enter password' required=true, name='password').form-control#password-input
+                            .error= (badPassword) ? __('login.bad.password') : ""
 
                         //- Submit
-                        button(type='submit').btn.btn-primary.mt-4.w-100 Submit
-
-    script(src='/s/js/login.js')
+                        button(type='submit').btn.btn-primary.mt-4.w-100= __('Submit')
