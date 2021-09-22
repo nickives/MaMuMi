@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "mocha",
-    "test-debug": "mocha --inspect-brk",
+    "test-debug": "mocha --inspect-brk=0.0.0.0:9230",
     "start": "node ./bin/www",
     "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L --inspect=0.0.0.0:9229 ./bin/www",
     "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
@@ -30,6 +30,7 @@
   "dependencies": {
     "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
+    "crypto-js": "^4.1.1",
     "debug": "^2.6.9",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
