@@ -34,6 +34,8 @@ div.animation video {
 
 div.map {
   height: auto;
+  padding-left: 0%;
+  padding-right: 0%;
 }
 
 /* ===== Login ===== */
@@ -189,6 +191,29 @@ table .form-title h3 {
 #main-header {
   width: 100%;
 }
+
+#language-button{
+  padding-right: 0px;
+}
+
+#journey-window {
+  height: calc(100vh - 66.75px);
+  padding-right: 0%;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+#journey-display {
+  height: calc(100vh - 66.75px);
+  overflow-y: visible;
+  padding: 24px;
+}
+
+#journey-description {
+  height: calc(75vh - 66.75px);
+  overflow-y: auto;
+}
+
 /* Phone Screen */
 @media (max-width: 992px) {
   .fade-out {
@@ -199,6 +224,22 @@ table .form-title h3 {
   div.map {
     height: 600px;
 
+  }
+
+  #journey-window {
+    height: calc(100vh - 666.75px);
+    overflow-y: auto;
+  }
+
+  #journey-display {
+    height: auto;
+    overflow-y: visible;
+    padding: 24px;
+  }
+
+  #journey-description {
+    height: auto;
+    overflow-y: visible;
   }
 }
 /* End Phone Screen */
@@ -231,14 +272,31 @@ body {
   color: #333333;
 }
 
+#content-window {
+  height: 92vh;
+  overflow-y: visible;
+}
+
+#journey-audio-player {
+  padding: 12px;
+}
+
 #journey-list {
-  max-height: calc(100vh - 66.75px);
-  min-height: 600px;
+  margin-right: 0em;
+  padding-right: 0%;
+  overflow-y: visible;
+  
+}
+
+#journey-footer {
+  height: 66.75px;
 }
 
 .journey-scroll {
-  max-height: 86vh;
-  overflow:scroll;
+  height: auto;
+  margin-right: 0em;
+  overflow-y: visible;
+  overflow-x: clip;
 }
 
 .journey-item {
@@ -290,7 +348,7 @@ body {
 }
 
 .play-img {
-  max-width: 2.5em;
+  max-width: 2em;
 }
 
 /* Just for 'beta' text next to logo. Will be removed in prod */
