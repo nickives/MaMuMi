@@ -192,7 +192,7 @@ function _createJourney() {
         formData.append('journey', JSON.stringify(journey));
         formData.append('audio_file', audioFile);
 
-        fetch("/journeys", {
+        fetch("/admin/journey/create", {
             method: "POST",
             mode: "same-origin",
             body: formData

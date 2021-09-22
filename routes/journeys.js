@@ -12,18 +12,6 @@ const Point = require('../lib/point');
 
 router.use(express.json());
 
-// Create 
-router.post('/', function(req, res, next) {
- 
-  // Create model object
-  let model = new JourneyModel(pool);
-
-  // Create controller object
-  let controller = new JourneyController(model, res);
-
-  controller.create(req);
-});
-
 // Read single journey
 router.get('/:id', function(req, res) {
 
@@ -48,43 +36,6 @@ router.get('/', function(req, res) {
 
   controller.readAll();
 });
-
-// Update a journey by and id
-router.post('/:id/update', function(req, res) {
-
-  // Create model object
-  let model = new JourneyModel(pool);
-
-  // Create controller object
-  let controller = new JourneyController(model, res);
-
-  let id = parseInt(req.params['id']);
-  let journey = req.body;
-
-  controller.update(id, journey);
-});
-
-// Delete an id by an id
-router.get('/:id/delete', function(req, res) {
-  
-  // Create model object
-  let model = new JourneyModel(pool);
-
-  // Create controller object
-  let controller = new JourneyController(model, res);
-
-  let id = parseInt(req.params['id']);
-
-  controller.delete(id);
-});
-
-
-router.get('/:id/geojson', function(req, res) {
-  let model = new JourneyModel(pool);
-  let controller = new JourneyController(model, res);
-  let id = parseInt(req.params['id']);
-  controller.geoJSON(id);
-})
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);

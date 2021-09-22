@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const JourneyModel = require('../models/journeys-model');
+const JourneyController = require("../controllers/journey-controller");
 const SessionModel = require('../models/session-model');
 const pool = require("../lib/db/pool");
-const formidable = require('formidable');
 const CryptoJS = require('crypto-js');
 
+router.use(express.json());
 
 /**
  * Authentication middleware
@@ -95,6 +96,47 @@ router.get('/edit-journey/:id', async function (req, res) {
     }
 
     res.render('add-journey', { journey: journey });
-})
+});
+
+// Create 
+router.post('/journey/create', function(req, res, next) {
+ 
+    // Create model object
+    let model = new JourneyModel(pool);
+  
+    // Create controller object
+    let controller = new JourneyController(model, res);
+  
+    controller.create(req);
+});
+
+// Update a journey by and id
+router.post('/journey/:id/update', function(req, res) {
+
+    // Create model object
+    let model = new JourneyModel(pool);
+  
+    // Create controller object
+    let controller = new JourneyController(model, res);
+  
+    let id = parseInt(req.params['id']);
+    let journey = req.body;
+  
+    controller.update(id, journey);
+});
+
+// Delete an id by an id
+router.get('/journey/:id/delete', function(req, res) {
+  
+    // Create model object
+    let model = new JourneyModel(pool);
+  
+    // Create controller object
+    let controller = new JourneyController(model, res);
+  
+    let id = parseInt(req.params['id']);
+  
+    controller.delete(id);
+});
 
 module.exports = router;

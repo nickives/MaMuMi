@@ -12,4 +12,4 @@ block main
                     td= j.name
                     td= j.subtitle
                     td: a(href='/admin/edit-journey/' + j.id)= __('Edit')
-                    td: a(href=`/journeys/${j.id}/delete`)= __('Delete')
+                    td: a(href=`/admin/journey/${j.id}/delete`)= __('Delete')

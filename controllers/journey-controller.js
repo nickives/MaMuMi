@@ -182,7 +182,7 @@ class JourneyController {
   }
 
   /**
-   * Delete a given journey from a given id_points
+   * Delete a journey by id
    *
    * @param {Number} id - The id of the journey to delete
    *
@@ -193,58 +193,22 @@ class JourneyController {
     if (isNaN(id)) {
       res.status(404).send("Not Found");
     }
-    let res;
     try {
-      let res = this.model.delete(id);
-      if (res === null) {
+      let result = await this.model.read(id);
+
+      //let result = 
+      if (result !== null) {
+        await this.model.delete(id);
+        const uriParts = result.audio_uri.split('/');
+        const fileName = uriParts[uriParts.length - 1]; // last element
+        const filePath = `${__dirname}/../static/audio/${fileName}`;
+        await fs.unlink(filePath);
+        this.view.redirect('/admin/dashboard');
+      } else {
         res.status(404).send("Not Found");
       }
     } catch (err) {
-      res = JSON.stringify(err);
       this.view.sendStatus(500); // This should never error
-    }
-    // Return the model response
-    this.view.redirect('/admin/dashboard');
-  }
-
-  /**
-   * Get the GeoJSON line for a given journey
-   * 
-   * @param {Number} id 
-   */
-  async geoJSON(id) {
-    let res;
-    try {
-      res = await this.model.read(id);
-
-      if (res == null) {
-        this.view.sendStatus(404);
-      }
-
-      let geoJson = {
-        type: "FeatureCollection",
-        features: [{
-          type: "Feature",
-          geometry: {
-            type: "LineString",
-            coordinates: [] // [LNG, LAT]
-          },
-          properties: {
-            journey: res
-          }
-        }]
-      }
-      res.points.map(x => {
-        let num = x.point_num;
-        geoJson.features[0].geometry.coordinates[num-1] = [x.loc.lng, x.loc.lat]
-      });
-
-      let json = JSON.stringify(geoJson);
-
-      this.view.send(json);
-
-    } catch (err) {
-      this.view.sendStatus(500);
     }
   }
 }
