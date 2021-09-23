@@ -128,7 +128,7 @@ class JourneyController {
         const newJourney = this.cloneJourney(inputJourney);
         newJourney.audio_uri = audio_uri;
         res = await this.model.create(newJourney);
-        this.view.send("OK");
+        this.view.redirect("/admin/dashboard");
 
       } catch (err) {
         console.log(err);
@@ -176,14 +176,11 @@ class JourneyController {
       res = JSON.stringify(err);
       this.view.sendStatus(404);
     }
-
-    //this.view.send(res);
   }
 
   /**
    * Fetch the first point from every journey
    *
-   * @returns array of journeys or data base response
    */
   async readAll() {
     let res;
@@ -191,7 +188,6 @@ class JourneyController {
     try {
       res = await this.model.readAll();
       res = JSON.stringify(res);
-
 
       // Return the database response to the view
       this.view.send(res);
@@ -204,27 +200,84 @@ class JourneyController {
   /**
    * Update a given journey
    *
-   * @param {Number} id - The journey id to update
-   * @param {Journey} journey - The data to update the journey
-   *
-   * @returns The database response
+   * @param {Request} req - The request object
    */
-  async update(id, journey) {
-    // Clone the journey to serialize
-    let newJourney = this.cloneJourney(journey);
-    let res;
+  async update(req) {
 
-    // Send the id and journey to the model to update
-    try {
-      res = await this.model.update(id, newJourney);
-      res = JSON.stringify(res);
-    } catch (err) {
-      res = JSON.stringify(err);
-      this.view.sendStatus(422);
-    }
+    const form = formidable({ 
+      keepExtensions: true,
+      multiples: true,
+      uploadDir: `${__dirname}/../uploads`
+    });
 
-    // Return the model response
-    this.view.send("OK");
+    form.parse(req, async (err, fields, file) => {
+      if (err) {
+        //next(err);
+        return;
+      }
+      const inputJourney = JSON.parse(fields.journey);
+
+      let res;
+      let newPath = '';
+      let originalPath = '';
+      try {
+        const id = parseInt(req.params['id']);
+        const newJourney = this.cloneJourney(inputJourney);
+
+        // if we got a new file, attach new uri here
+        let filename;
+        if (file['audio_file']) {
+          // move file from /uploads to /static/audio
+          originalPath = file['audio_file'].path;
+          filename = path.parse(file['audio_file'].path).base;
+          newPath = `${__dirname}/../static/audio/${filename}`;
+          await fs.rename(originalPath, newPath);
+          const audio_uri = `${this.view.locals.hostname}/s/audio/${filename}`;
+          newJourney.audio_uri = audio_uri;
+        }
+        
+        // if a new file was uploaded, get path of old file and delete.
+        let oldJourney;
+        if (file['audio_file']) {
+          oldJourney = await this.model.read(id);
+        }
+
+        // make sure we can create OK
+        res = await this.model.update(id, newJourney);
+        this.view.send("OK");
+
+        // now delete old file
+        if (oldJourney) {
+          const pathArray = oldJourney.audio_uri.split('/');
+          const fileName = pathArray[pathArray.length - 1];
+          fs.unlink(`${__dirname}/../static/audio/${filename}`);
+        }
+      } catch (err) {
+        console.log(err);
+
+        // delete from /static/audio
+        if (newPath !== '') {
+          fs.stat(newPath)
+          .then(() => fs.unlink(newPath))
+          .catch((err) => console.log(err));
+        }
+        
+
+        // delete from /uploads
+        if (originalPath !== '') {
+          fs.stat(originalPath)
+          .then(() => fs.unlink(originalPath))
+          .catch((err) => console.log(err));
+        }        
+
+        // cloneJourney throws TypeError
+        if (err.name === 'TypeError') {
+          this.view.sendStatus(400);
+        } else {
+          this.view.sendStatus(500);
+        }
+      }
+    });
   }
 
   /**

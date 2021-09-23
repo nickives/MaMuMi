@@ -118,11 +118,7 @@ router.post('/journey/:id/update', function(req, res) {
   
     // Create controller object
     let controller = new JourneyController(model, res);
-  
-    let id = parseInt(req.params['id']);
-    let journey = req.body;
-  
-    controller.update(id, journey);
+    controller.update(req);
 });
 
 // Delete an id by an id

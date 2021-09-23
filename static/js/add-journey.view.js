@@ -201,8 +201,8 @@ function _createJourney(isUpdate) {
 
         formData.append('journey', JSON.stringify(journey));
         
-
-        const fetchUrl = isUpdate ? `/admin/journey/update` : "/admin/journey/create";
+        const id = document.getElementById('journey-id').value;
+        const fetchUrl = isUpdate ? `/admin/journey/${id}/update` : "/admin/journey/create";
         fetch(fetchUrl, {
             method: "POST",
             mode: "same-origin",
@@ -212,6 +212,7 @@ function _createJourney(isUpdate) {
                 alert("Server Error");
             } else if (isUpdate) {
                 alert("Journey has been updated");
+                location.reload();
             } else {
                 alert("Journey has been created");
             }
@@ -233,7 +234,7 @@ window.onload = async () => {
     const _submitJourneyBtn = document.getElementById("journey-submit");
     _submitJourneyBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        const isUpdate = _submitJourneyBtn.dataset.update;
+        const isUpdate = _submitJourneyBtn.dataset.update !== undefined;
         _createJourney(isUpdate);
     });
 
