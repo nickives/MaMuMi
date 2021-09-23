@@ -154,7 +154,7 @@ function _deletePoint(pointNumber) {
 
 // ### Submit journey to the db ###
 
-function _createJourney() {
+function _createJourney(isUpdate) {
     const journeyForm = document.getElementById('journey-form');
     if (markerArray.length < 2) {
         alert('Journey requires start and finish!');
@@ -186,18 +186,35 @@ function _createJourney() {
         });
 
         const audioFile = document.getElementById('audio_file').files[0];
-
+        const oldAudioUri = document.getElementById('old-audio-uri');
         const formData = new FormData();
 
-        formData.append('journey', JSON.stringify(journey));
-        formData.append('audio_file', audioFile);
+        if (isUpdate) {
+            if (audioFile) {
+                formData.append('audio_file', audioFile);
+            } else {
+                journey.audio_uri = oldAudioUri.value;
+            }
+        } else {
+            formData.append('audio_file', audioFile);
+        }
 
-        fetch("/admin/journey/create", {
+        formData.append('journey', JSON.stringify(journey));
+        
+
+        const fetchUrl = isUpdate ? `/admin/journey/update` : "/admin/journey/create";
+        fetch(fetchUrl, {
             method: "POST",
             mode: "same-origin",
             body: formData
         }).then((res) => {
-            alert("Journey has been created");
+            if (res.status !== 200) {
+                alert("Server Error");
+            } else if (isUpdate) {
+                alert("Journey has been updated");
+            } else {
+                alert("Journey has been created");
+            }
         }).catch((error) => {
             alert(error.message);
         });
@@ -216,7 +233,8 @@ window.onload = async () => {
     const _submitJourneyBtn = document.getElementById("journey-submit");
     _submitJourneyBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        _createJourney();
+        const isUpdate = _submitJourneyBtn.dataset.update;
+        _createJourney(isUpdate);
     });
 
     const oldPoints = document.getElementById('old-points');

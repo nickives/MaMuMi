@@ -14,6 +14,7 @@ const Journey = require('../lib/journey');
 const formidable = require('formidable');
 const fs = require('fs').promises;
 const path = require('path');
+const Point = require('../lib/point');
 
 class JourneyController {
 
@@ -31,18 +32,62 @@ class JourneyController {
    * @param {Journey} journey - The journey object to be cloned
    *
    * @returns The cloned journey object
+   * @throws Error if journey does not meet expectations. This includes missing
+   * fields, ID's that aren't numbers and a journey without points.
    */
   cloneJourney(journey) {
-    let newJourney = new Journey(journey.forename, journey.surname, journey.audio_uri);
+    // validate strings
+    if ((typeof journey.name != 'string') || (typeof journey.subtitle != 'string')) {
+          throw new TypeError('Invalid Name / Subtitle')
+    }
 
-    // TODO: We're not reconstructing the points here. Maybe we should be?
-    if (journey.points !== undefined) {
-      for (let i = 0; i < journey.points.length; i++) {
-        newJourney.addPoint(journey.points[i]);
+    if (journey.audio_uri) {
+      if (typeof journey.audio_uri != 'string') {
+        throw new TypeError('Invalid audio URI');
       }
     }
 
-    newJourney.addDescription(journey.description);
+    let newJourney = new Journey(journey.name, journey.subtitle, journey.audio_uri);
+
+    // validate id - will happen in case of update
+    if (journey.id) {
+      if (typeof journey.id != 'number') {
+        throw new TypeError('Invalid Journey ID');
+      }
+      newJourney.id = journey.id;
+    }
+
+    // A journey will always have points, so don't bother to check if they exist
+    for (let i = 0; i < journey.points.length; i++) {
+      const point_num = journey.points[i].point_num;
+      const lat = journey.points[i].loc.lat;
+      const lng = journey.points[i].loc.lng;
+
+      if ((typeof point_num != 'number') || (typeof lat != 'number') 
+          || (typeof lng != 'number')) {
+            throw new TypeError('Invalid Point');
+      }
+      const loc = { lat: lat, lng: lng };
+      const point = new Point(null, point_num, loc);
+      newJourney.addPoint(point);
+    }
+
+    if (journey.description) {
+      for (const [key, value] of Object.entries(journey.description)) {
+        switch (key) {
+          case 'bg':
+          case 'el':
+          case 'en':
+          case 'es':
+          case 'it':
+          case 'no':
+            newJourney.addDescription( { [key]: value } );
+            break;
+          default:
+            throw new TypeError('Unexpected Language Key');
+        }
+      }
+    }
 
     return newJourney;
   }
@@ -78,31 +123,32 @@ class JourneyController {
 
       const inputJourney = JSON.parse(fields.journey);
 
-      const newJourney = new Journey(inputJourney.name, inputJourney.subtitle, audio_uri);
-
-      if (inputJourney.points !== undefined) {
-        for (let i = 0; i < inputJourney.points.length; i++) {
-          newJourney.addPoint(inputJourney.points[i]);
-        }
-      }
-  
-      newJourney.addDescription(inputJourney.description);
-
       let res;
       try {
+        const newJourney = this.cloneJourney(inputJourney);
+        newJourney.audio_uri = audio_uri;
         res = await this.model.create(newJourney);
         this.view.send("OK");
 
       } catch (err) {
+        console.log(err);
+
+        // delete from /static/audio
         fs.stat(newPath)
         .then(() => fs.unlink(newPath))
-        .catch();
+        .catch((err) => console.log(err));
 
+        // delete from /uploads
         fs.stat(originalPath)
         .then(() => fs.unlink(originalPath))
-        .catch();
+        .catch((err) => console.log(err));
 
-        this.view.status(422).send({message : err.message});
+        // cloneJourney throws TypeError
+        if (err.name === 'TypeError') {
+          this.view.sendStatus(400);
+        } else {
+          this.view.sendStatus(500);
+        }
       }
     });
   }
