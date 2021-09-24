@@ -86,6 +86,10 @@ div.login-wrapper .form-check-label {
 }
 
 /* ===== Admin Dashboard ===== */
+#logout-icon {
+  padding-left: 15px;
+}
+
 .main-content {
   margin-left: 5rem;
 }
