@@ -218,36 +218,6 @@ table .form-title h3 {
   overflow-y: auto;
 }
 
-/* Phone Screen */
-@media (max-width: 992px) {
-  .fade-out {
-    max-height: 150px;
-    text-overflow: ellipsis;
-  }
-
-  div.map {
-    height: 600px;
-
-  }
-
-  #journey-window {
-    height: calc(100vh - 666.75px);
-    overflow-y: auto;
-  }
-
-  #journey-display {
-    height: auto;
-    overflow-y: visible;
-    padding: 24px;
-  }
-
-  #journey-description {
-    height: auto;
-    overflow-y: visible;
-  }
-}
-/* End Phone Screen */
-
 /* Navbar */
 .nav-link-lang {
   color: #a9a9a9;
@@ -281,10 +251,6 @@ body {
   overflow-y: visible;
 }
 
-#journey-audio-player {
-  padding: 12px;
-}
-
 #journey-list {
   margin-right: 0em;
   padding-right: 0%;
@@ -309,6 +275,32 @@ body {
   cursor: pointer;
 }
 
+#close-cross {
+  display: none;
+}
+
+#close-journey {
+  background-color: #04adbf;
+  display: block;
+  width: 10rem;
+  background: #4E9CAF;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  line-height: 25px;
+  text-decoration: none;
+  box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.5);
+  font-family: 'Poppins', sans-serif;
+  font-size: 1em;
+}
+
+.close-journey-row {
+  padding-left: 60%;
+  
+}
+
 .journey-selected {
   margin-left: 1.5em;
   padding-left: 0.5em;
@@ -321,7 +313,7 @@ body {
 }
 
 /* journey select title */
-.journey-item > * > h1, #journey-display > * > h1 {
+.journey-item > * > h1, #journey-display * > h1 {
   font-family: 'Poppins', sans-serif;
   font-size: 1.25em;
   color: #333333;
@@ -355,9 +347,95 @@ body {
   max-width: 2em;
 }
 
+/* AUDIO PLAYER */
+#journey-audio-player {
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.player-button {
+  outline: none;
+  border:none;
+}
+
+.play-pause-icon {
+  width: 22px;
+  height: 22px;
+}
+
+#seek-slider {
+  background-color: #cfcfcf;
+}
+
+#seek-slider {
+  height: 15px;
+  min-width:40%;
+  max-width: 90%;
+}
+progress[value]::-webkit-progress-bar {
+  background-color: #cfcfcf;
+}
+
+progress[value]::-webkit-progress-value {
+  background-color:#04adbf;
+}
+
+#close-cross-col {
+  display: none;
+}
+
 /* Just for 'beta' text next to logo. Will be removed in prod */
 #beta {
   font-family: 'Poppins', sans-serif;
   font-size: 1.25em;
   color: #b2b2b2;
 }
+
+/* Phone Screen */
+@media (max-width: 992px) {
+  .fade-out {
+    max-height: 150px;
+    text-overflow: ellipsis;
+  }
+
+  div.map {
+    height: 600px;
+
+  }
+
+  #journey-window {
+    height: calc(100vh - 666.75px);
+    overflow-y: auto;
+  }
+
+  #journey-display {
+    height: auto;
+    overflow-y: visible;
+    padding: 24px;
+  }
+
+  #journey-description {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .close-journey-row, .close-journey-row  * {
+    display: none;
+  }
+
+  #close-cross {
+    display: inline-block;
+    max-width: 2.5rem;
+  }
+
+  #journey-name {
+    display: inline;
+  }
+
+  #close-cross-col {
+    display: inline;
+    text-align: right;
+  }
+}
+/* End Phone Screen */

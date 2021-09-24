@@ -63,17 +63,20 @@ block content
               .col-lg-12#journey-footer
           //- Journey Display
           .container.hidden#journey-display
-            .row: h1#journey-name Name 
+            .row
+              .col
+                h1#journey-name Name
+              .col#close-cross-col
+                a(href="#").close-journey-btn: img(src="/s/icons/close.png", alt="", srcset="")#close-cross
             .row: h1#journey-subtitle Subtitle 
             .row.player-row: #journey-audio-player
-              button#play-button play
-              button#pause-button pause
-              button#stop-button stop
+              button.player-button#play-button: img(src="/s/icons/play.png", alt="", srcset="").play-pause-icon
+              button.player-button#pause-button: img(src="/s/icons/pause.png", alt="", srcset="").play-pause-icon
               span#current-time 0:00
-              input#seek-slider(type="range", name="", min="0", max="100", value="0", disabled)
+              progress#seek-slider(name="", max="100", value="0")
               span#duration 0:00
             .row: p#journey-description Desc
-            .row: a(href="#")#close-journey Close Journey
+            .row.close-journey-row: a(href="#").close-journey-btn#close-journey= __('index.journey.close')
         //- Map Column
         .col-lg-8.map.order-lg-2.order-xl-2.order-xxl-2.order-1.order-sm-1.order-md-1
 

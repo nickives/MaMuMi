@@ -244,7 +244,12 @@ class IndexPage {
         this.registerJourneySelect();
         IndexPage.registerLanguageSelect();
         this.drawJourneyStarts();
-        document.getElementById('close-journey').addEventListener('click', this.closeJourney);
+
+        // we have two close journey buttons, one for desktop other for mobile
+        const closeJourneyButtons = document.getElementsByClassName('close-journey-btn');
+        for (let i = 0; i < closeJourneyButtons.length; ++i) {
+            closeJourneyButtons.item(i).addEventListener('click', this.closeJourney);
+        }
     }
 
     async drawJourneyStarts() {
@@ -312,6 +317,7 @@ class IndexPage {
         this.myMap.clearMap();
     
         document.getElementById('journey-name').innerText = journey.name;
+        document.getElementById('journey-subtitle').innerText = journey.subtitle
     
         document.getElementById('journey-audio-player').src = journey.audio_uri;
         const description = document.getElementById('journey-description');
@@ -415,7 +421,7 @@ class AudioPlayer {
         this.pauseButton = audioPlayerElement.children['pause-button'];
         this.stopButton = audioPlayerElement.children['stop-button'];
         this.currentTime = audioPlayerElement.children['current-time'];
-        this.positionSlider = audioPlayerElement.children['seek-slider'];
+        this.positionSlider = document.getElementById('seek-slider');
         this.duration = audioPlayerElement.children['duration'];
 
         // Registered using register{Stop,Pause}Callback
@@ -427,7 +433,7 @@ class AudioPlayer {
         // register event callbacks
         this.playButton.addEventListener('click', this.play);
         this.pauseButton.addEventListener('click', this.pause);
-        this.stopButton.addEventListener('click', this.stop);
+        //this.stopButton.addEventListener('click', this.stop);
         this.audioPlayer.addEventListener('timeupdate', this.timeUpdate);
         this.audioPlayer.addEventListener('stalled', this.stalledWaitingEventHandler);
         this.audioPlayer.addEventListener('waiting', this.stalledWaitingEventHandler);
@@ -447,7 +453,7 @@ class AudioPlayer {
         this.pause();
         this.playButton.removeEventListener('click', this.play);
         this.pauseButton.removeEventListener('click', this.pause);
-        this.stopButton.removeEventListener('click', this.stop);
+        //this.stopButton.removeEventListener('click', this.stop);
         this.audioPlayer.removeEventListener('timeupdate', this.timeUpdate);
         this.audioPlayer.removeEventListener('stalled', this.stalledWaitingEventHandler);
         this.audioPlayer.removeEventListener('waiting', this.stalledWaitingEventHandler);
