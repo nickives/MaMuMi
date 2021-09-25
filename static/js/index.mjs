@@ -148,8 +148,9 @@ class MyMap {
             for (let i = 0; i <= d.loc.steps; ++i) {
                 if (this.isStopping) {
                     // If we have to stop
-                    marker.setMap(null);
+                    //marker.setMap(null);
                     poly.setMap(null);
+                    marker.setPosition(start);
                     break;
                 } else if (this.isPanning) {
                     pos.lat += d.loc.latStep;
@@ -243,7 +244,7 @@ class IndexPage {
         this.selectedJourney = undefined;
         this.registerJourneySelect();
         IndexPage.registerLanguageSelect();
-        this.drawJourneyStarts();
+        this.drawMapMarkers();
 
         // we have two close journey buttons, one for desktop other for mobile
         const closeJourneyButtons = document.getElementsByClassName('close-journey-btn');
@@ -252,9 +253,32 @@ class IndexPage {
         }
     }
 
-    async drawJourneyStarts() {
-        this.myMap.clearMap();
-    
+    /**
+     * IndexPage static factory method.
+     * 
+     * This is required because the process of fetching the map markers is
+     * async. The fetch should happen once because we need to attach event
+     * listeners to them, so rather than deal with setting / clearing event
+     * listeners we fetch once and then show / hide as required.
+     * 
+     * @param {MyMap} myMap MyMap object
+     * @returns {IndexPage} Constructed IndexPage
+     */
+    static async build(myMap) {
+        const indexPage = new IndexPage(myMap);
+        await indexPage._getMapMarkers();
+        return indexPage;
+    }
+
+    /**
+     * Private: Get map makers from server.
+     * 
+     * Here we get the markers and attach all required event listeners. Calling
+     * this multiple times will result in redundent event listeners being
+     * attached to page elements and subsequent strange behaviour. It should
+     * only be called once during page construction.
+     */
+    async _getMapMarkers() {
         try {
             let res = await fetch('/journeys')
             let journeys = await res.json();
@@ -269,11 +293,11 @@ class IndexPage {
                     })
     
                     const journeyRow = document.getElementById(`journey-row-${marker.journey.id}`);
-                    const playButton = journeyRow.childNodes[1];
+                    const playButton = journeyRow.childNodes[2].childNodes[0];
                     playButton.addEventListener('click', async () => {
                         await this.displayJourney(marker.journey.id);
                     });
-    
+
                     marker.addListener('click', () => {
                         this.selectJourney(journeyRow);
                     });
@@ -286,18 +310,25 @@ class IndexPage {
         }
     }
 
+    drawMapMarkers() {
+        this.myMap.clearMap();
+        this.myMap.getMapMarkers().forEach( (m) => {
+            m.setMap(this.myMap.getMap());
+        });
+    }
+
     selectJourney(journeyRow) {
         // if a journey is already selected
         if (this.selectedJourneyRow !== undefined) {
             this.selectedJourneyRow.classList.remove('journey-selected'); // remove prior selection
-            this.selectedJourneyRow.childNodes[1].classList.add('hidden'); // play button
+            this.selectedJourneyRow.childNodes[2].classList.add('hidden'); // play button
             this.marker.setIcon('/s/img/pin.png');
         }
     
         this.selectedJourneyRow = journeyRow;
         this.selectedJourneyRow.classList.add('journey-selected');
     
-        this.selectedJourneyRow.childNodes[1].classList.remove('hidden');
+        this.selectedJourneyRow.childNodes[2].classList.remove('hidden'); // play button
     
         const id = this.selectedJourneyRow.attributes['data-id'].value;
     
@@ -314,7 +345,9 @@ class IndexPage {
         this.selectedJourney = journey;
         document.getElementById('journey-list').classList.add('hidden');
         document.getElementById('journey-display').classList.remove('hidden');
-        this.myMap.clearMap();
+        const safeMarker = this.myMap.getMapMarkers().find( e => e.journey.id === id);
+        this.myMap.clearMap(safeMarker);
+        this.selectedJourney.marker = safeMarker;
     
         document.getElementById('journey-name').innerText = journey.name;
         document.getElementById('journey-subtitle').innerText = journey.subtitle
@@ -348,13 +381,6 @@ class IndexPage {
      */
     playCallback = (player) => {
         const journey = this.selectedJourney;
-        const point = journey.points[0]; // first Point
-        const marker = new google.maps.Marker({
-            position: point.loc,
-            map: this.myMap.getMap(),
-            icon: '/s/img/pin_selected.png'
-        });
-        this.selectedJourney.marker = marker;
         this.myMap.animateMap(journey.marker, journey.points, player.duration);
     }
 
@@ -382,9 +408,9 @@ class IndexPage {
     }
 
     closeJourney = () => {
-        this.myMap.stopPan();
-        this.drawJourneyStarts();
         if (this.audioPlayer) this.audioPlayer.destroy();
+        this.myMap.stopPan();
+        this.drawMapMarkers();
         this.audioPlayer = undefined;
         document.getElementById('journey-display').classList.add('hidden');
         document.getElementById('journey-list').classList.remove('hidden');
@@ -418,11 +444,11 @@ class AudioPlayer {
     constructor(audioPlayerElement, audioResource) {
         this.audioPlayer = new Audio(audioResource);
         this.playButton = audioPlayerElement.children['play-button'];
-        this.pauseButton = audioPlayerElement.children['pause-button'];
-        this.stopButton = audioPlayerElement.children['stop-button'];
-        this.currentTime = audioPlayerElement.children['current-time'];
+        //this.pauseButton = audioPlayerElement.children['pause-button'];
+        //this.stopButton = audioPlayerElement.children['stop-button'];
+        //this.currentTime = audioPlayerElement.children['current-time'];
         this.positionSlider = document.getElementById('seek-slider');
-        this.duration = audioPlayerElement.children['duration'];
+        //this.duration = audioPlayerElement.children['duration'];
 
         // Registered using register{Stop,Pause}Callback
         this.stopCallback = null;
@@ -432,14 +458,14 @@ class AudioPlayer {
 
         // register event callbacks
         this.playButton.addEventListener('click', this.play);
-        this.pauseButton.addEventListener('click', this.pause);
+        //this.pauseButton.addEventListener('click', this.pause);
         //this.stopButton.addEventListener('click', this.stop);
         this.audioPlayer.addEventListener('timeupdate', this.timeUpdate);
         this.audioPlayer.addEventListener('stalled', this.stalledWaitingEventHandler);
         this.audioPlayer.addEventListener('waiting', this.stalledWaitingEventHandler);
-        this.audioPlayer.addEventListener('play', this.playEventHandler);
+        //this.audioPlayer.addEventListener('play', this.playEventHandler);
         this.audioPlayer.addEventListener('playing', this.playingEventHandler);
-        this.audioPlayer.addEventListener('loadedmetadata', this.loadedMetaData);
+        //this.audioPlayer.addEventListener('loadedmetadata', this.loadedMetaData);
 
     }
 
@@ -451,15 +477,17 @@ class AudioPlayer {
      */
     destroy() {
         this.pause();
+        //this.currentTime.innerText = "00:00";
+        this.positionSlider.value = 0;
         this.playButton.removeEventListener('click', this.play);
-        this.pauseButton.removeEventListener('click', this.pause);
+        //this.pauseButton.removeEventListener('click', this.pause);
         //this.stopButton.removeEventListener('click', this.stop);
         this.audioPlayer.removeEventListener('timeupdate', this.timeUpdate);
         this.audioPlayer.removeEventListener('stalled', this.stalledWaitingEventHandler);
         this.audioPlayer.removeEventListener('waiting', this.stalledWaitingEventHandler);
-        this.audioPlayer.removeEventListener('play', this.playEventHandler);
+        //this.audioPlayer.removeEventListener('play', this.playEventHandler);
         this.audioPlayer.removeEventListener('playing', this.playingEventHandler);
-        this.audioPlayer.removeEventListener('loadedmetadata', this.loadedMetaData);
+        //this.audioPlayer.removeEventListener('loadedmetadata', this.loadedMetaData);
         this.audioPlayer.src = null;
         this.audioPlayer = null;
         this.stopCallback = null;
@@ -487,10 +515,16 @@ class AudioPlayer {
      * Play audio. This is also registered as a play button click event handler.
      */
      play = () => {
-         if (this.audioPlayer.currentTime === 0) {
+         const icon = document.getElementById('play-button').children[0];
+         if (!this.audioPlayer.paused) {
+             icon.src = '/s/icons/play.png';
+             this.pause();
+         } else if (this.audioPlayer.currentTime === 0) {
+            icon.src = '/s/icons/pause.png';
              this.audioPlayer.play();
              if (this.playCallback) this.playCallback(this.audioPlayer);
          } else {
+            icon.src = '/s/icons/pause.png';
             this.audioPlayer.play();
             if (this.playingCallback) this.playingCallback(this.audioPlayer);
          }
@@ -517,7 +551,7 @@ class AudioPlayer {
      * Time update event handler.
      */
      timeUpdate = () => {
-        this.currentTime.innerText = AudioPlayer.convertSecondsToMinutesAndSecondsString(this.audioPlayer.currentTime);
+        //this.currentTime.innerText = AudioPlayer.convertSecondsToMinutesAndSecondsString(this.audioPlayer.currentTime);
         this.positionSlider.value = (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100;
     }
 
@@ -618,5 +652,5 @@ window.onload = async () => {
     //await myMap();
     const mapElement = document.getElementById('gMap');
     const map = await MyMap.build(mapElement);
-    const indexPage = new IndexPage(map);
+    const indexPage = await IndexPage.build(map);
 };

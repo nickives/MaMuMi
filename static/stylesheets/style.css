@@ -388,8 +388,13 @@ body {
   height: 22px;
 }
 
-#seek-slider {
+#play-button {
+  padding-right: 1rem;
+}
+
+progress#seek-slider {
   background-color: #cfcfcf;
+  width: 80%;
 }
 
 #seek-slider {
@@ -414,6 +419,13 @@ progress[value]::-webkit-progress-value {
   font-family: 'Poppins', sans-serif;
   font-size: 1.25em;
   color: #b2b2b2;
+}
+
+.journey-header {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: space-between;
 }
 
 /* Phone Screen */
@@ -449,7 +461,7 @@ progress[value]::-webkit-progress-value {
     font-size: 3rem;
   }
 
-  .journey-short-desc {
+  .journey-short-desc, h2#journey-subtitle {
     font-size: 2.5rem;
   }
 
@@ -463,6 +475,9 @@ progress[value]::-webkit-progress-value {
     height: auto;
     overflow-y: visible;
     padding: 24px;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    max-width: 90vw;
   }
 
   #journey-description {
@@ -475,8 +490,8 @@ progress[value]::-webkit-progress-value {
   }
 
   #close-cross {
-    display: inline-block;
-    max-width: 2.5rem;
+    display: block;
+    max-width: 5rem;
   }
 
   #journey-name {
@@ -485,15 +500,41 @@ progress[value]::-webkit-progress-value {
 
   #close-cross-col {
     display: inline;
-    text-align: right;
+    text-align: center;
+    padding-right: 4rem;
   }
 
-  .player-button {
-    width: 15px;
-    height: 15px;
-    background-image: url('/s/icons/play.png');
-    
+  .play-pause-icon {
+    width: 4rem;
+    height: 4rem;
+  }
 
+  h1#journey-name {
+    font-size: 4.5rem;
+  }
+
+  h1#journey-subtitle {
+    font-size: 3.5rem;
+  }
+
+  #journey-description {
+    font-size: 2.5rem;
+    padding-top: 1rem;
+  }
+
+  #journey-audio-player {
+    /* height: 2rem; */
+    padding: 1rem;
+  }
+
+  .journey-header-left {
+    flex-grow: 4;
+    max-width: fit-content;
+  }
+
+  .journey-header-right {
+    flex-grow: 1;
+    max-width: 1rem;
   }
 }
 /* End Phone Screen */

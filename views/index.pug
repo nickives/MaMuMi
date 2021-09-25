@@ -65,12 +65,12 @@ block content
               .col-lg-12#journey-footer
           //- Journey Display
           .container.hidden#journey-display
-            .row
-              .col
+            .row.journey-header
+              .journey-header-left
                 h1#journey-name Name
-              .col#close-cross-col
+                h2#journey-subtitle Subtitle 
+              .journey-header-right#close-cross-col
                 a(href="#").close-journey-btn: img(src="/s/icons/close.png", alt="", srcset="")#close-cross
-            .row: h1#journey-subtitle Subtitle 
             .row.player-row: #journey-audio-player
               button.player-button#play-button: img(src="/s/icons/play.png", alt="", srcset="").play-pause-icon
               //- button.player-button#pause-button: img(src="/s/icons/pause.png", alt="", srcset="").play-pause-icon
