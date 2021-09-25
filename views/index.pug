@@ -55,11 +55,13 @@ block content
             .journey-scroll
               each j in journeys
                 .row.journey-item(data-id=`${j.id}`, id=`journey-row-${j.id}`)
-                  .col-sm-9
+                  .journey-item-left
                     h1.journey-name= j.name
                     .journey-short-desc= j.subtitle
-                  .col.play-col.hidden.col-sm-3
+                  span.journey-item-middle
+                  .hidden.journey-item-right
                     img(src="/s/img/play.png", alt="", srcset="").play-img
+                  span.journey-item-right-right
               .col-lg-12#journey-footer
           //- Journey Display
           .container.hidden#journey-display
@@ -71,10 +73,8 @@ block content
             .row: h1#journey-subtitle Subtitle 
             .row.player-row: #journey-audio-player
               button.player-button#play-button: img(src="/s/icons/play.png", alt="", srcset="").play-pause-icon
-              button.player-button#pause-button: img(src="/s/icons/pause.png", alt="", srcset="").play-pause-icon
-              span#current-time 0:00
+              //- button.player-button#pause-button: img(src="/s/icons/pause.png", alt="", srcset="").play-pause-icon
               progress#seek-slider(name="", max="100", value="0")
-              span#duration 0:00
             .row: p#journey-description Desc
             .row.close-journey-row: a(href="#").close-journey-btn#close-journey= __('index.journey.close')
         //- Map Column

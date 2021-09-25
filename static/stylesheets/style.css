@@ -269,11 +269,43 @@ body {
   overflow-x: clip;
 }
 
+/* JOURNEY ITEM FLEX BOX*/
 .journey-item {
   padding-top: 0.33em;
   padding-bottom: 0.33em;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: space-around;
+  margin-right: 0px;
 }
+
+
+.journey-item-left, .journey-item-right {
+  width: auto;
+}
+
+.journey-item-middle {
+  width: 1px;
+  flex-grow: 1;
+}
+
+.journey-item-right {
+  align-self: center;
+  padding-right: 2rem;
+}
+
+.journey-item-right-right {
+  width: 1px;
+  flex-grow: 1;
+}
+
+.play-img {
+  max-width: 2rem;
+}
+
+/* END JOURNEY ITEM FLEX BOX*/
 
 #close-cross {
   display: none;
@@ -339,14 +371,6 @@ body {
   background: #555;
 }
 
-.play-col {
-  align-self: center;
-}
-
-.play-img {
-  max-width: 2em;
-}
-
 /* AUDIO PLAYER */
 #journey-audio-player {
   background-color: #f2f2f2;
@@ -400,13 +424,39 @@ progress[value]::-webkit-progress-value {
   }
 
   div.map {
-    height: 600px;
+    height: 52vh;
+  }
 
+  .journey-scroll {
+    width: 100vw;
+  }
+
+  #journey-list {
+    margin-right: 0%;
+    margin-left: 0%;
+  }
+
+  .play-img {
+    max-width: fit-content;
+  }
+
+  #journey-list > h1 {
+    padding-top: 1rem;
+    font-size: 4rem;
+  }
+
+  h1.journey-name {
+    font-size: 3rem;
+  }
+
+  .journey-short-desc {
+    font-size: 2.5rem;
   }
 
   #journey-window {
-    height: calc(100vh - 666.75px);
+    height: calc(100vh - 52vh - 67px);
     overflow-y: auto;
+    padding-left: 0%;
   }
 
   #journey-display {
@@ -436,6 +486,14 @@ progress[value]::-webkit-progress-value {
   #close-cross-col {
     display: inline;
     text-align: right;
+  }
+
+  .player-button {
+    width: 15px;
+    height: 15px;
+    background-image: url('/s/icons/play.png');
+    
+
   }
 }
 /* End Phone Screen */
