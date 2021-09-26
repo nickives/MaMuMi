@@ -208,14 +208,18 @@ table .form-title h3 {
 }
 
 #journey-display {
-  height: calc(100vh - 66.75px);
+  max-height: calc(100vh - 66.75px);
   overflow-y: visible;
   padding: 24px;
 }
 
-#journey-description {
-  height: calc(75vh - 66.75px);
-  overflow-y: auto;
+.journey-desc-row {
+  max-height: calc(70vh - 45px);
+  overflow-y: scroll;
+}
+
+p#journey-description {
+
 }
 
 /* Navbar */
