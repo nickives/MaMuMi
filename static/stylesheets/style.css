@@ -263,10 +263,10 @@ body {
 }
 
 .journey-scroll {
-  height: auto;
+  height: 76vh;
   margin-right: 0em;
-  overflow-y: visible;
-  overflow-x: clip;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 /* JOURNEY ITEM FLEX BOX*/
