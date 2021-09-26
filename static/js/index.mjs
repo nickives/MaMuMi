@@ -73,10 +73,11 @@ class MyMap {
      * @param {Marker} marker           Google Map Marker at the start position
      * @param {[LatLng]} destinations   Array of Google Maps LatLng or LatLng literals
      * @param {Number} time             Time in seconds for the pan to take.
+     * @param {String} lineColor        Hex string representation of desired color
      * 
      * @return {Marker, Poly} Object containing the drawn marker and polylines
      */
-    async animateMap(marker, destinations, time) {
+    async animateMap(marker, destinations, time, lineColor) {
         if (this.isPanning) return; // don't attempt to pan twice
         // take away user control
         this.map.setOptions(
@@ -133,7 +134,7 @@ class MyMap {
         }
 
         const poly = new google.maps.Polyline({
-            strokeColor: "#000000",
+            strokeColor: lineColor,
             strokeOpacity: 1.0,
             strokeWeight: 3,
         });
@@ -251,6 +252,13 @@ class IndexPage {
         for (let i = 0; i < closeJourneyButtons.length; ++i) {
             closeJourneyButtons.item(i).addEventListener('click', this.closeJourney);
         }
+
+        // Colors for the journey lines
+        this.journeyColors = [
+            "#fff275","#fbc2b5","#9c569c","#ff0000","#d95c9c",
+            "#e3b505","#594a26","#89fc00","#333333","#e8ddb5"
+        ];
+        this.currentJourneyColor = 0;
     }
 
     /**
@@ -381,7 +389,15 @@ class IndexPage {
      */
     playCallback = (player) => {
         const journey = this.selectedJourney;
-        this.myMap.animateMap(journey.marker, journey.points, player.duration);
+        const journeyColor = this.journeyColors[this.currentJourneyColor];
+        this.myMap.animateMap(journey.marker, journey.points, player.duration, journeyColor);
+
+        // Loop through all the colours 
+        if (this.currentJourneyColor === this.journeyColors.length - 1) {
+            this.currentJourneyColor = 0;
+        } else {
+            ++this.currentJourneyColor;
+        }
     }
 
     /**
