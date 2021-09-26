@@ -382,6 +382,7 @@ body {
 .player-button {
   outline: none;
   border:none;
+  background-color: #f2f2f2;
 }
 
 .play-pause-icon {
@@ -447,7 +448,6 @@ progress[value]::-webkit-progress-value {
   #journey-list {
     margin-right: 0%;
     margin-left: 0%;
-    overflow-x: hidden;
   }
 
   .play-img {
@@ -468,7 +468,7 @@ progress[value]::-webkit-progress-value {
   }
 
   #journey-window {
-    height: calc(100vh - 52vh - 67px);
+    height: calc(100vh - 45vh - 67px);
     overflow-y: auto;
     padding-left: 0%;
   }
