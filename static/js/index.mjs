@@ -477,6 +477,9 @@ class AudioPlayer {
      */
     destroy() {
         this.pause();
+        // reset the play / pause icon
+        const icon = document.getElementById('play-button').children[0];
+        icon.src = '/s/icons/play.png';
         //this.currentTime.innerText = "00:00";
         this.positionSlider.value = 0;
         this.playButton.removeEventListener('click', this.play);
