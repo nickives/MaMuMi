@@ -542,5 +542,9 @@ progress[value]::-webkit-progress-value {
     flex-grow: 1;
     max-width: 1rem;
   }
+
+  .journey-desc-row {
+    overflow-y: clip;
+  }
 }
 /* End Phone Screen */
