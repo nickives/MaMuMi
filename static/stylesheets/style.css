@@ -449,20 +449,20 @@ progress[value]::-webkit-progress-value {
   }
 
   .play-img {
-    max-width: fit-content;
+    max-width: 4rem;
   }
 
   #journey-list > h1 {
     padding-top: 1rem;
-    font-size: 4rem;
+    font-size: 2.5rem;
   }
 
   h1.journey-name {
-    font-size: 3rem;
+    font-size: 2rem;
   }
 
   .journey-short-desc, h2#journey-subtitle {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
   }
 
   #journey-window {
@@ -491,7 +491,7 @@ progress[value]::-webkit-progress-value {
 
   #close-cross {
     display: block;
-    max-width: 5rem;
+    max-width: 2.5rem;
   }
 
   #journey-name {
@@ -501,16 +501,16 @@ progress[value]::-webkit-progress-value {
   #close-cross-col {
     display: inline;
     text-align: center;
-    padding-right: 4rem;
+    padding-right: 2.5rem;
   }
 
   .play-pause-icon {
-    width: 4rem;
-    height: 4rem;
+    width: 2rem;
+    height: 2rem;
   }
 
   h1#journey-name {
-    font-size: 4.5rem;
+    font-size: 2.5rem;
   }
 
   h1#journey-subtitle {
@@ -518,7 +518,7 @@ progress[value]::-webkit-progress-value {
   }
 
   #journey-description {
-    font-size: 2.5rem;
+    font-size: 1.25rem;
     padding-top: 1rem;
   }
 
