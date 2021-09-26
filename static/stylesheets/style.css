@@ -504,6 +504,7 @@ progress[value]::-webkit-progress-value {
     display: inline;
     text-align: center;
     padding-right: 2.5rem;
+    padding-top: 0.25rem;
   }
 
   .play-pause-icon {
