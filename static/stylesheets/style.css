@@ -299,6 +299,7 @@ body {
 .journey-item-right-right {
   width: 1px;
   flex-grow: 1;
+  max-width: 1px;
 }
 
 .play-img {
@@ -436,7 +437,7 @@ progress[value]::-webkit-progress-value {
   }
 
   div.map {
-    height: 52vh;
+    height: 45vh;
   }
 
   .journey-scroll {
@@ -446,6 +447,7 @@ progress[value]::-webkit-progress-value {
   #journey-list {
     margin-right: 0%;
     margin-left: 0%;
+    overflow-x: hidden;
   }
 
   .play-img {
@@ -523,7 +525,6 @@ progress[value]::-webkit-progress-value {
   }
 
   #journey-audio-player {
-    /* height: 2rem; */
     padding: 1rem;
   }
 
