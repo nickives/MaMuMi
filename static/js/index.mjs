@@ -91,6 +91,7 @@ class MyMap {
 
         const start = marker.getPosition();
         this.map.setCenter(start);
+        this.map.setZoom(9);
 
         const framerate = 30;
         const steps = time * framerate;
