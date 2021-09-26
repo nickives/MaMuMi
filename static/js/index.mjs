@@ -36,6 +36,7 @@ class MyMap {
         this.mapMarkers = [];       // All map markers
         this.isPanning = false;     // Panning flag - used to pause / resume
         this.isStopping = false;    // Stopping flag - used to stop panning
+        this.framerate = 60;
     }
 
     static async build(mapElement) {
@@ -78,6 +79,10 @@ class MyMap {
      * @return {Marker, Poly} Object containing the drawn marker and polylines
      */
     async animateMap(marker, destinations, time, lineColor) {
+
+        // BIG BRAIN REFACTOR REALISATION
+        // This should all be scrapped and instead we should just update the map based on the
+        // timeupdate event from the HTMLMediaElement.
         if (this.isPanning) return; // don't attempt to pan twice
         // take away user control
         this.map.setOptions(
@@ -90,11 +95,12 @@ class MyMap {
         );
 
         const start = marker.getPosition();
-        this.map.setCenter(start);
-        this.map.setZoom(9);
+        this.map.panTo(start);
+        this.map.setZoom(7);
 
-        const framerate = 30;
-        const steps = time * framerate;
+        const sillyCorrection = Math.floor(time * .95); // take 
+        const framerate = this.framerate;
+        const steps = sillyCorrection * framerate;
 
         // calculate total distance and length of each leg
         let totalDistance = 0;
@@ -137,7 +143,7 @@ class MyMap {
         const poly = new google.maps.Polyline({
             strokeColor: lineColor,
             strokeOpacity: 1.0,
-            strokeWeight: 3,
+            strokeWeight: 8,
         });
         poly.setMap(this.map);
 
@@ -147,7 +153,7 @@ class MyMap {
         this.isStopping = false;
         for (let x = 0; x < destinations.length; ++x) {
             const d = destinations[x];
-            for (let i = 0; i <= d.loc.steps; ++i) {
+            for (let i = 0; i < d.loc.steps; ++i) {
                 if (this.isStopping) {
                     // If we have to stop
                     //marker.setMap(null);
@@ -184,6 +190,38 @@ class MyMap {
         return {
             marker: marker,
             poly: poly
+        }
+    }
+
+    doMapAnimation = async (currentTime) => {
+        const destinations = this.animationState.destinations;
+        const marker = this.animationState.marker;
+        const poly = this.animationState.poly;
+        const path = poly.getPath();
+        const framerate = this.framerate;
+
+        for (let x = 0; x < destinations.length; ++x) {
+            const d = destinations[x];
+            for (let i = 0; i <= d.loc.steps; ++i) {
+                if (this.isStopping) {
+                    // If we have to stop
+                    //marker.setMap(null);
+                    poly.setMap(null);
+                    marker.setPosition(start);
+                    break;
+                } else if (this.isPanning) {
+                    pos.lat += d.loc.latStep;
+                    pos.lng += d.loc.lngStep;
+                    this.map.setCenter(pos);
+                    marker.setPosition(pos);
+                    path.push(new google.maps.LatLng(pos));
+                    await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
+                } else {
+                    // Not panning, not stopping, so paused
+                    --i;
+                    await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
+                }     
+            }
         }
     }
 
@@ -260,6 +298,7 @@ class IndexPage {
             "#e3b505","#594a26","#89fc00","#333333","#e8ddb5"
         ];
         this.currentJourneyColor = 0;
+        this.displayedJourneys = []; // we store {Map, Poly} objects here when finished animating the map
     }
 
     /**
@@ -388,11 +427,28 @@ class IndexPage {
      * 
      * @param {HTMLAudioElement} player HTMLAudioElement that is playing
      */
-    playCallback = (player) => {
+    playCallback = async (player) => {
         const journey = this.selectedJourney;
         const journeyColor = this.journeyColors[this.currentJourneyColor];
-        this.myMap.animateMap(journey.marker, journey.points, player.duration, journeyColor);
 
+        // If this journey was already played, clear it before playing again
+        this.displayedJourneys.filter( (e) => {
+            if (e.marker.journey.id === journey.id) {
+                e.poly.setMap(null);
+                const start = e.marker.journey.points[0].loc;
+                e.marker.setPosition(start);
+                return false;
+            } else {
+                return true;
+            }
+        });
+        const completedJourney = await this.myMap.animateMap(journey.marker, journey.points, player.duration, journeyColor);
+
+        // if it didn't get stopped
+        if (completedJourney) {
+            this.displayedJourneys.push(completedJourney);
+        }
+        
         // Loop through all the colours 
         if (this.currentJourneyColor === this.journeyColors.length - 1) {
             this.currentJourneyColor = 0;
