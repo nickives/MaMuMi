@@ -3,12 +3,12 @@ import Cookies from '/s/js/js.cookie.min.mjs'
 function animation() {
     const video = document.getElementById('loading-animation');
 
-    video.classList.add('hidden'); // remove this to re-enable animation!
-    document.querySelector('#hidden-page').classList.remove('hidden');
+    //video.classList.add('hidden'); // remove this to re-enable animation!
+    //document.querySelector('#hidden-page').classList.remove('hidden');
 
     video.onended = function() {
         video.classList.add('hidden');
-        document.querySelector('div.map').classList.remove('hidden');
+        document.querySelector('#hidden-page').classList.remove('hidden');
     }
 }
 
@@ -402,13 +402,23 @@ class IndexPage {
     
         document.getElementById('journey-audio-player').src = journey.audio_uri;
         const description = document.getElementById('journey-description');
-        const language = Cookies.get({ name: 'lang' });
+        const language = Cookies.get('lang');
         switch (language) {
-            case 'es': description.innerHTML = journey.description.es;
-            case 'el': description.innerHTML = journey.description.el;
-            case 'bg': description.innerHTML = journey.description.bg;
-            case 'no': description.innerHTML = journey.description.no;
-            case 'it': description.innerHTML = journey.description.it;
+            case 'es':
+                description.innerHTML = journey.description.es;
+                break;
+            case 'el':
+                description.innerHTML = journey.description.el;
+                break;
+            case 'bg':
+                description.innerHTML = journey.description.bg;
+                break;
+            case 'no':
+                description.innerHTML = journey.description.no;
+                break;
+            case 'it':
+                description.innerHTML = journey.description.it;
+                break;
             default: description.innerHTML = journey.description.en;
         }
     

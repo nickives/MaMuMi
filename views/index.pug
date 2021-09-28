@@ -6,7 +6,7 @@ block content
     link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap")
     link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap")
     #animation
-      video(autoplay muted id='loading-animation') 
+      video(autoplay muted id='loading-animation').intro-animation
         source(src='/s/anim/splash.mp4' type='video/mp4')
         
     div.hidden#hidden-page
@@ -32,19 +32,19 @@ block content
               li.dropdown-item
                 img(src=`/s/img/${__('lang.2.code')}.png`, alt="", srcset="")
                 |&nbsp;
-                a(href="#", data-lang=`"${__('lang.2.code')}"`).nav-link-lang= __('lang.2.name')
+                a(href="#", data-lang=`${__('lang.2.code')}`).nav-link-lang= __('lang.2.name')
               li.dropdown-item
                 img(src=`/s/img/${__('lang.3.code')}.png`, alt="", srcset="")
                 |&nbsp;
-                a(href="#", data-lang=`"${__('lang.3.code')}"`).nav-link-lang= __('lang.3.name')
+                a(href="#", data-lang=`${__('lang.3.code')}`).nav-link-lang= __('lang.3.name')
               li.dropdown-item
                 img(src=`/s/img/${__('lang.4.code')}.png`, alt="", srcset="")
                 |&nbsp;
-                a(href="#", data-lang=`"${__('lang.4.code')}"`).nav-link-lang= __('lang.4.name')
+                a(href="#", data-lang=`${__('lang.4.code')}`).nav-link-lang= __('lang.4.name')
               li.dropdown-item
                 img(src=`/s/img/${__('lang.5.code')}.png`, alt="", srcset="")
                 |&nbsp;
-                a(href="#", data-lang=`"${__('lang.5.code')}"`).nav-link-lang= __('lang.5.name')
+                a(href="#", data-lang=`${__('lang.5.code')}`).nav-link-lang= __('lang.5.name')
 
       .container-fluid#content-window: .row
         //- Journey Select / Journey View column
