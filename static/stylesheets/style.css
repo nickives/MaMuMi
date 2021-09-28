@@ -444,6 +444,14 @@ progress[value]::-webkit-progress-value {
     object-fit: cover;
 }
 
+h1#journey-name {
+  font-size: 2.25rem;
+}
+
+h2#journey-subtitle {
+  font-size: 1.5rem;
+}
+
 /* Phone Screen */
 @media (max-width: 992px) {
   .fade-out {
