@@ -85,4 +85,4 @@ block content
           #testOut
 
       script(type="module", src="/s/js/index.mjs")
-    script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgQsUmoRWeiRlclZbkSmn3vIFEmJZaBN4")
+    script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.APP_MAPS_API_KEY}`)
