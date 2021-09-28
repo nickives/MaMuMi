@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Sep 16, 2021 at 03:22 PM
+-- Generation Time: Sep 28, 2021 at 12:06 PM
 -- Server version: 5.5.64-MariaDB-1~trusty
 -- PHP Version: 7.4.21
 
@@ -55,6 +55,18 @@ CREATE TABLE `tbl_points` (
   `loc` point NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_sessions`
+--
+
+DROP TABLE IF EXISTS `tbl_sessions`;
+CREATE TABLE `tbl_sessions` (
+  `session_key` bigint(32) NOT NULL,
+  `last_access` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -72,6 +84,12 @@ ALTER TABLE `tbl_points`
   ADD PRIMARY KEY (`id_points`),
   ADD UNIQUE KEY `points_point_num` (`point_num`,`id_journeys`),
   ADD KEY `fk_id_journeys_idx` (`id_journeys`);
+
+--
+-- Indexes for table `tbl_sessions`
+--
+ALTER TABLE `tbl_sessions`
+  ADD PRIMARY KEY (`session_key`);
 
 --
 -- AUTO_INCREMENT for dumped tables
