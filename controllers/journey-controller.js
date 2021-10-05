@@ -118,7 +118,8 @@ class JourneyController {
       const originalPath = file['audio_file'].path;
       const filename = path.parse(file['audio_file'].path).base;
       const newPath = `${__dirname}/../static/audio/${filename}`;
-      await fs.rename(originalPath, newPath);
+      await fs.copyFile(originalPath, newPath);
+      await fs.unlink(originalPath);
       // Just store the file path, not the full URI. It means everything won't 
       // break if the hostname changes (this was a real problem).
       const audio_uri = '/s/audio/' + filename;
@@ -236,7 +237,8 @@ class JourneyController {
           originalPath = file['audio_file'].path;
           filename = path.parse(file['audio_file'].path).base;
           newPath = `${__dirname}/../static/audio/${filename}`;
-          await fs.rename(originalPath, newPath);
+          await fs.copyFile(originalPath, newPath);
+          await fs.unlink(originalPath);
           // Just store the file path, not the full URI. It means everything won't 
           // break if the hostname changes (this was a real problem).
           const audio_uri = '/s/audio/' + filename;
