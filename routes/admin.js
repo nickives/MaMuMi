@@ -23,6 +23,7 @@ router.use(async (req, res, next) => {
             const timeThreshold = Date.now().valueOf() - timeLimit;
             const lastAccessTime = result[0].last_access.valueOf();
             isLoggedIn = lastAccessTime > timeThreshold;
+            if (isLoggedIn) model.update(sessionKey);
         }
     }
 
