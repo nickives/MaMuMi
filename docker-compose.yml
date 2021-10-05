@@ -12,3 +12,6 @@ services:
       - mamumi-audio:/mamumi/static/audio
     ports:
       - 3000:3000
+
+volumes:
+  mamumi-audio:
