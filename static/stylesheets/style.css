@@ -452,6 +452,28 @@ h2#journey-subtitle {
   font-size: 1.5rem;
 }
 
+.error-container {
+  background: linear-gradient(
+    342deg,
+    rgba(4, 138, 191, 1) 22%,
+    rgba(217, 91, 173, 1) 56%,
+    rgba(77, 60, 134, 1) 76%
+  )
+  fixed;
+  width: 100%;
+  height: 100%;
+}
+
+img#error-logo {
+  width: 100%;
+}
+
+h1#error-code {
+  color: #fff;
+  text-align: center;
+  font-size: 8rem;
+}
+
 /* Phone Screen */
 @media (max-width: 992px) {
   .fade-out {
