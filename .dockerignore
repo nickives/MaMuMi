@@ -1,6 +1,7 @@
 **/.classpath
+**/.DS_Store
 **/.dockerignore
-**/.env
+**/.env.example
 **/.git
 **/.gitignore
 **/.project
