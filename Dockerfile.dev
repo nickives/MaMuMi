@@ -1,8 +1,11 @@
-FROM node:12.18-alpine
+FROM node:12.22.6-alpine
 ENV NODE_ENV=development
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --development --silent 
+WORKDIR /mamumi
 COPY . .
+RUN npm install --development --silent 
+RUN chmod 777 ./uploads
+RUN chmod 777 ./static/audio
+RUN adduser -D -H mamumi
 EXPOSE 3000
+USER mamumi
 CMD ["npm", "run", "start.dev"]

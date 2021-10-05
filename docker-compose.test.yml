@@ -2,21 +2,18 @@ version: '3.4'
 
 services:
   mamumi:
-    container_name: mamumi
-    image: mamumi-dev
+    image: mamumi
     build:
       context: .
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./Dockerfile
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
+      - mamumi-audio:/mamumi/static/audio
     ports:
       - 3000:3000
     networks:
       - mamumi
-    command: ["npm", "run", "start.dev"]
 
   mariadb:
     container_name: mamumi_mariadb
@@ -45,6 +42,7 @@ services:
 volumes:
   mariadb-volume:
   mariadb-logs-volume:
+  mamumi-audio:
 
 networks:
   mamumi:
