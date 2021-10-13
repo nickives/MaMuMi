@@ -570,7 +570,7 @@ h1#error-code {
   }
 
   #journey-audio-player {
-    padding: 1rem;
+    padding-top: 1rem;
   }
 
   .journey-header-left {
@@ -585,6 +585,10 @@ h1#error-code {
 
   .journey-desc-row {
     overflow-y: clip;
+  }
+
+  progress#seek-slider {
+    max-width: 60vw;
   }
 }
 /* End Phone Screen */
