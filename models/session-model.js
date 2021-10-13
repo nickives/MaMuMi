@@ -59,12 +59,11 @@ class SessionModel {
     }
 
     async update(sessionKey) {
-        const sql = "UPDATE `tbl_sessions` SET `last_access` = ? WHERE `session_key` = ?";
-        const accessTime = Date.now();
+        const sql = "UPDATE `tbl_sessions` SET `last_access` = NOW() WHERE `session_key` = ?";
         let res, conn;
         try {
             conn = await this._pool.getConnection();
-            res = await conn.query(sql, accessTime, sessionKey);
+            res = await conn.query(sql, sessionKey);
         } finally {
             if (conn) conn.end();
         }
