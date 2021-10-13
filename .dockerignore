@@ -2,6 +2,7 @@
 **/.DS_Store
 **/.dockerignore
 **/.env.example
+**/.env
 **/.git
 **/.gitignore
 **/.project
