@@ -320,12 +320,12 @@ class IndexPage {
     
                     const journeyRow = document.getElementById(`journey-row-${marker.journey.id}`);
                     const playButton = journeyRow.childNodes[2].childNodes[0];
-                    playButton.addEventListener('click', async () => {
-                        await this.displayJourney(marker.journey.id);
+                    playButton.addEventListener('click', () => {
+                        this.displayJourney(marker.journey.id);
                     });
 
                     marker.addListener('click', () => {
-                        this.selectJourney(journeyRow);
+                        this.displayJourney(marker.journey.id);
                     });
     
                     this.myMap.getMapMarkers().push(marker);
@@ -343,7 +343,7 @@ class IndexPage {
         });
     }
 
-    selectJourney(journeyRow) {
+    async selectJourney(journeyRow) {
         // if a journey is already selected
         if (this.selectedJourneyRow !== undefined) {
             this.selectedJourneyRow.classList.remove('journey-selected'); // remove prior selection
@@ -362,10 +362,11 @@ class IndexPage {
         marker.setIcon('/s/img/pin_selected.png');
         this.marker = marker;
     
-        this.myMap.getMap().panTo(marker.getPosition());
+        this.myMap.getMap().setCenter(marker.getPosition());
     }
 
     async displayJourney(id) {
+        if (typeof id === 'string') id = parseInt(id);
         const res = await fetch('/journeys/' + id);
         const journey = await res.json();
         this.selectedJourney = journey;
@@ -374,6 +375,7 @@ class IndexPage {
         const safeMarker = this.myMap.getMapMarkers().find( e => e.journey.id === id);
         this.myMap.clearMap(safeMarker);
         this.selectedJourney.marker = safeMarker;
+        this.myMap.getMap().setCenter(safeMarker.getPosition());
     
         document.getElementById('journey-name').innerText = journey.name;
         document.getElementById('journey-subtitle').innerText = journey.subtitle
@@ -406,6 +408,9 @@ class IndexPage {
         this.audioPlayer.registerPauseCallback(this.pauseCallback);
         this.audioPlayer.registerPlayingCallback(this.playingCallback);
         this.audioPlayer.registerStopCallback(this.stopCallback);
+
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.audioPlayer.play();
     }
 
     /**
@@ -481,7 +486,8 @@ class IndexPage {
         const journeys = document.querySelectorAll('.journey-item');
         for (const j of journeys) {
             j.addEventListener('click', (e) => {
-                this.selectJourney(e.currentTarget);
+                const id = e.currentTarget.attributes['data-id'].value;
+                this.displayJourney(id); // we now display journey. Selection is gone
             });
         }
     }
