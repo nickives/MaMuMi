@@ -169,9 +169,6 @@ class JourneyController {
     // Read the journey from the model
     try {
       res = await this.model.read(id);
-
-      // remember to add the hostname back here!
-      res.audio_uri = this.view.locals.hostname + res.audio_uri;
       res = JSON.stringify(res);
 
 
@@ -237,7 +234,7 @@ class JourneyController {
           originalPath = file['audio_file'].path;
           filename = path.parse(file['audio_file'].path).base;
           newPath = `${__dirname}/../static/audio/${filename}`;
-          await fs.copyFile(originalPath, newPath);
+            await fs.copyFile(originalPath, newPath);
           await fs.unlink(originalPath);
           // Just store the file path, not the full URI. It means everything won't 
           // break if the hostname changes (this was a real problem).
