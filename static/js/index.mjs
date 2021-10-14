@@ -343,28 +343,6 @@ class IndexPage {
         });
     }
 
-    async selectJourney(journeyRow) {
-        // if a journey is already selected
-        if (this.selectedJourneyRow !== undefined) {
-            this.selectedJourneyRow.classList.remove('journey-selected'); // remove prior selection
-            this.selectedJourneyRow.childNodes[2].classList.add('hidden'); // play button
-            this.marker.setIcon('/s/img/pin.png');
-        }
-    
-        this.selectedJourneyRow = journeyRow;
-        this.selectedJourneyRow.classList.add('journey-selected');
-    
-        this.selectedJourneyRow.childNodes[2].classList.remove('hidden'); // play button
-    
-        const id = this.selectedJourneyRow.attributes['data-id'].value;
-    
-        const marker = this.myMap.getMapMarkers().find(marker => marker.journey.id == id);
-        marker.setIcon('/s/img/pin_selected.png');
-        this.marker = marker;
-    
-        this.myMap.getMap().setCenter(marker.getPosition());
-    }
-
     async displayJourney(id) {
         if (typeof id === 'string') id = parseInt(id);
         const res = await fetch('/journeys/' + id);
