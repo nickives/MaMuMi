@@ -2,6 +2,13 @@ import Cookies from '/s/js/js.cookie.min.mjs'
 
 function animation() {
     const video = document.getElementById('loading-animation');
+    const hideVideo = () => {
+        video.classList.add('hidden');
+        document.body.removeEventListener('dblclick', hideVideo);
+        document.querySelector('#hidden-page').classList.remove('hidden');
+    }
+
+    document.body.addEventListener('dblclick', hideVideo);
 
     //video.classList.add('hidden'); // remove this to re-enable animation!
     //document.querySelector('#hidden-page').classList.remove('hidden');
@@ -9,6 +16,7 @@ function animation() {
     video.onended = function() {
         video.classList.add('hidden');
         document.querySelector('#hidden-page').classList.remove('hidden');
+        document.body.removeEventListener('dblclick', hideVideo);
     }
 }
 
