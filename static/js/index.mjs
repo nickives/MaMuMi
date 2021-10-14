@@ -97,6 +97,7 @@ class MyMap {
         const start = marker.getPosition();
         this.map.panTo(start);
         this.map.setZoom(7);
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         const sillyCorrection = Math.floor(time * .95); // take 
         const framerate = this.framerate;
@@ -193,37 +194,6 @@ class MyMap {
         }
     }
 
-    doMapAnimation = async (currentTime) => {
-        const destinations = this.animationState.destinations;
-        const marker = this.animationState.marker;
-        const poly = this.animationState.poly;
-        const path = poly.getPath();
-        const framerate = this.framerate;
-
-        for (let x = 0; x < destinations.length; ++x) {
-            const d = destinations[x];
-            for (let i = 0; i <= d.loc.steps; ++i) {
-                if (this.isStopping) {
-                    // If we have to stop
-                    //marker.setMap(null);
-                    poly.setMap(null);
-                    marker.setPosition(start);
-                    break;
-                } else if (this.isPanning) {
-                    pos.lat += d.loc.latStep;
-                    pos.lng += d.loc.lngStep;
-                    this.map.setCenter(pos);
-                    marker.setPosition(pos);
-                    path.push(new google.maps.LatLng(pos));
-                    await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
-                } else {
-                    // Not panning, not stopping, so paused
-                    --i;
-                    await new Promise(resolve => setTimeout(resolve, 1000 / framerate));
-                }     
-            }
-        }
-    }
 
     /**
      * Clear map of all markers. Stops panning if in progress. Optionally
