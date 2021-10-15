@@ -172,11 +172,17 @@ class JourneyController {
     // Read the journey from the model
     try {
       res = await this.model.read(id);
-      res = JSON.stringify(res);
+      
 
 
       // Return response
-      this.view.send(res);
+      if (res == null) {
+        createError(404);
+      } else {
+        res = JSON.stringify(res);
+        this.view.send(res);
+      }
+      
     } catch (err) {
       // Catch error and set status to 404
       res = JSON.stringify(err);
