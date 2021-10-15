@@ -26,22 +26,22 @@ block main
                         input(type="hidden", name="old-audio-uri", value=(journey && journey.audio_uri) ? journey.audio_uri : "")#old-audio-uri
                     .form-group.row.m-0
                         label(for='desc_en').col-md-3.col-form-label-sm= __('admin.create-journey.english')
-                        input(type='textarea' name='desc_en', value=(journey && journey.description.en) ? journey.description.en : "").col-md-9.form-control.form-control-sm#desc_en
+                        textarea(cols="30", rows="10", type='textarea' name='desc_en').col-md-9.form-control.form-control-sm#desc_en= (journey && journey.description.en) ? journey.description.en : ""
                     .form-group.row.m-0
                         label(for='desc_es').col-md-3.col-form-label-sm= __('admin.create-journey.spanish')
-                        input(type='textarea' name='desc_es', value=(journey && journey.description.es) ? journey.description.es : "").col-md-9.form-control.form-control-sm#desc_es
+                        textarea(cols="30", rows="10", name='desc_es').col-md-9.form-control.form-control-sm#desc_es= (journey && journey.description.es) ? journey.description.es : ""
                     .form-group.row.m-0
                         label(for='desc_bg').col-md-3.col-form-label-sm= __('admin.create-journey.bulgarian')
-                        input(type='textarea' name='desc_bg', value=(journey && journey.description.bg) ? journey.description.bg : "").col-md-9.form-control.form-control-sm#desc_bg
+                        textarea(cols="30", rows="10", name='desc_bg').col-md-9.form-control.form-control-sm#desc_bg= (journey && journey.description.bg) ? journey.description.bg : ""
                     .form-group.row.m-0
                         label(for='desc_el').col-md-3.col-form-label-sm= __('admin.create-journey.greek')
-                        input(type='textarea' name='desc_el', value=(journey && journey.description.el) ? journey.description.el : "").col-md-9.form-control.form-control-sm#desc_el
+                        textarea(cols="30", rows="10", name='desc_el').col-md-9.form-control.form-control-sm#desc_el= (journey && journey.description.el) ? journey.description.el : ""
                     .form-group.row.m-0
                         label(for='desc_no').col-md-3.col-form-label-sm= __('admin.create-journey.norwegian')
-                        input(type='textarea' name='desc_no', value=(journey && journey.description.no) ? journey.description.no : "").col-md-9.form-control.form-control-sm#desc_no
+                        textarea(cols="30", rows="10", name='desc_no').col-md-9.form-control.form-control-sm#desc_no= (journey && journey.description.no) ? journey.description.no : ""
                     .form-group.row.m-0
                         label(for='desc_it').col-md-3.col-form-label-sm= __('admin.create-journey.italian')
-                        input(type='textarea' name='desc_it', value=(journey && journey.description.it) ? journey.description.it : "").col-md-9.form-control.form-control-sm#desc_it
+                        textarea(cols="30", rows="10", name='desc_it').col-md-9.form-control.form-control-sm#desc_it= (journey && journey.description.it) ? journey.description.it : ""
 
                         
             .form-container
@@ -65,7 +65,7 @@ block main
                 button(type='submit', data-update=(journey ? true : false)).btn.btn-block#journey-submit= journey ? __('Update') : __('Submit')
     .col-md-6.col-lg-8.container-fluid.m-0#gmap-container
         .row.h-100 
-            .col-12#gmap
+            .col-12#gmap(style="width:100%;height:90vh;")
 
   
 
