@@ -22,5 +22,7 @@
 **/npm-debug.log
 **/obj
 **/secrets.dev.yaml
+**/static/audio/*.mp3
+**/uploads/*.mp3
 **/values.dev.yaml
 README.md
