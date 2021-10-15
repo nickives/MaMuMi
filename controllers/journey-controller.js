@@ -81,7 +81,10 @@ class JourneyController {
           case 'es':
           case 'it':
           case 'no':
-            newJourney.addDescription( { [key]: value } );
+            if (typeof value === 'string') {
+              const cleanedValue = value.replace(/\n/g, '<BR>');
+              newJourney.addDescription( { [key]: cleanedValue } );
+            }
             break;
           default:
             throw new TypeError('Unexpected Language Key');
