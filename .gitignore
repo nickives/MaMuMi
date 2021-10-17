@@ -4,3 +4,4 @@ node_modules
 uploads
 static/audio
 .env
+db*.json
