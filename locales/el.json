@@ -1,14 +1,16 @@
 {
-    "lang.current.name": "Ελληνικά",
-    "lang.current.code": "el",
-    "lang.1.name": "Български",
-    "lang.1.code": "bg",
-    "lang.2.name": "English",
-    "lang.2.code": "en",
-    "lang.3.name": "Italiano",
-    "lang.3.code": "it",
-    "lang.4.name": "Norsk",
-    "lang.4.code": "no",
-    "lang.5.name": "Español",
-    "lang.5.code": "es"
+	"lang.current.name": "Ελληνικά",
+	"lang.current.code": "el",
+	"lang.1.name": "Български",
+	"lang.1.code": "bg",
+	"lang.2.name": "English",
+	"lang.2.code": "en",
+	"lang.3.name": "Italiano",
+	"lang.3.code": "it",
+	"lang.4.name": "Norsk",
+	"lang.4.code": "no",
+	"lang.5.name": "Español",
+	"lang.5.code": "es",
+	"index.journey.select": "Επιλέξτε Ένα Ταξίδι",
+	"index.journey.close": "Κλείσιμο Ταξίδι"
 }

@@ -1,14 +1,16 @@
 {
-    "lang.current.name": "Español",
-    "lang.current.code": "es",
-    "lang.1.name": "Български",
-    "lang.1.code": "bg",
-    "lang.2.name": "Ελληνικά",
-    "lang.2.code": "el",
-    "lang.3.name": "Italiano",
-    "lang.3.code": "it",
-    "lang.4.name": "Norsk",
-    "lang.4.code": "no",
-    "lang.5.name": "English",
-    "lang.5.code": "en"
+	"lang.current.name": "Español",
+	"lang.current.code": "es",
+	"lang.1.name": "Български",
+	"lang.1.code": "bg",
+	"lang.2.name": "Ελληνικά",
+	"lang.2.code": "el",
+	"lang.3.name": "Italiano",
+	"lang.3.code": "it",
+	"lang.4.name": "Norsk",
+	"lang.4.code": "no",
+	"lang.5.name": "English",
+	"lang.5.code": "en",
+	"index.journey.select": "Seleccione Un Viaje",
+	"index.journey.close": "Cerrar Viaje"
 }
