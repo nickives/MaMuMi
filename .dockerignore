@@ -16,6 +16,7 @@
 **/azds.yaml
 **/charts
 **/docker-compose*
+**/db/*.json
 **/compose*
 **/Dockerfile*
 **/node_modules
