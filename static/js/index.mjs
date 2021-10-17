@@ -354,7 +354,8 @@ class IndexPage {
         this.myMap.clearMap(safeMarker);
         this.selectedJourney.marker = safeMarker;
         this.myMap.getMap().setCenter(safeMarker.getPosition());
-        const lang = Cookies.get('lang');
+        const cookieLang = Cookies.get('lang');
+        const lang = (cookieLang) ? cookieLang : 'en';
     
         document.getElementById('journey-name').innerText = journey.name[lang];
         document.getElementById('journey-subtitle').innerText = journey.subtitle[lang];
