@@ -303,20 +303,28 @@ class JourneyController {
         }
         
         // if a new file was uploaded, get path of old file and delete.
-        let oldJourney;
-        if (file['audio_file']) {
-          oldJourney = await this.model.read(id);
-        }
+        const oldAudioUri = await ( async () => {
+          if (file['audio_file']) {
+            const oldJourney = await this.model.read(id);
+            return oldJourney.audio_uri;
+          }
+        })();
+
 
         // make sure we can create OK
         res = await this.model.update(id, newJourney);
         this.view.send("OK");
 
         // now delete old file
-        if (oldJourney) {
-          const pathArray = oldJourney.audio_uri.split('/');
+        if (oldAudioUri) {
+          const pathArray = oldAudioUri.split('/');
           const fileName = pathArray[pathArray.length - 1];
-          fs.unlink(`${__dirname}/../static/audio/${filename}`);
+          try {
+            fs.unlink(`${__dirname}/../static/audio/${fileName}`);
+          } catch {
+            // Don't crash if file doesn't exist, throw otherwise
+            if (err.errno !== -2) throw new Error('Error deleting file');
+          }
         }
       } catch (err) {
         console.log(err);
@@ -359,15 +367,18 @@ class JourneyController {
       res.status(404).send("Not Found");
     }
     try {
-      let result = await this.model.read(id);
+      let result = await this.model.delete(id);
 
-      //let result = 
-      if (result !== null) {
-        await this.model.delete(id);
+      if (result) {
         const uriParts = result.audio_uri.split('/');
         const fileName = uriParts[uriParts.length - 1]; // last element
         const filePath = `${__dirname}/../static/audio/${fileName}`;
-        await fs.unlink(filePath);
+        try {
+          await fs.unlink(filePath);
+        } catch (err) {
+          // Don't crash if file doesn't exist, throw otherwise
+          if (err.errno !== -2) throw new Error('Error deleting file');
+        }
         this.view.redirect('/admin/dashboard');
       } else {
         res.status(404).send("Not Found");
