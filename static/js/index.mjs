@@ -354,9 +354,10 @@ class IndexPage {
         this.myMap.clearMap(safeMarker);
         this.selectedJourney.marker = safeMarker;
         this.myMap.getMap().setCenter(safeMarker.getPosition());
+        const lang = Cookies.get('lang');
     
-        document.getElementById('journey-name').innerText = journey.name;
-        document.getElementById('journey-subtitle').innerText = journey.subtitle
+        document.getElementById('journey-name').innerText = journey.name[lang];
+        document.getElementById('journey-subtitle').innerText = journey.subtitle[lang];
     
         document.getElementById('journey-audio-player').src = journey.audio_uri;
         const description = document.getElementById('journey-description');

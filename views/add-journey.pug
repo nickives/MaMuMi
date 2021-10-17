@@ -6,20 +6,53 @@ block main
     if (journey && journey.points)
         input#old-points(type='hidden', value=journey.points)
     script(src='/s/js/add-journey.view.js', type='module')
-    .col-md-5.col-lg-3.pt-1.ml-2
-        form#journey-form
+    .col-md-5.col-lg-3.pt-1.ml-2.journey-form-col
+        form#journey-form   
             .form-container.mb-3
                 .form-title.d-flex.flex-row.justify-content-between.p-2.mb-2
                     h2.h6.m-0= __('admin.create-journey.journey-details')
                     small= __('admin.create-journey.required')
                 .form-group-container
                     input(type="hidden", name="id", value=(journey && journey.id) ? journey.id : "")#journey-id
+                    .form-group.row.m-0 
+                        label(for='order').col-md-3.col-form-label-sm Journey Number
+                        input(type="number", name="order", required, min="1", value=(journey && journey.order) ? journey.order : "1")#order
                     .form-group.row.m-0
-                        label(for='name').col-md-3.col-form-label-sm= __('admin.dashboard.name')
-                        input(type='text' name='name', required, value=(journey && journey.name) ? journey.name : "").col-md-9.form-control.form-control-sm#name
+                        label(for='name_en').col-md-3.col-form-label-sm Name English
+                        input(type='text' name='name_en', required, value=(journey && journey.name.en) ? journey.name.en : "").col-md-9.form-control.form-control-sm#name_en
                     .form-group.row.m-0
-                        label(for='subtitle').col-md-3.col-form-label-sm= __('admin.dashboard.subtitle')
-                        input(type='text' name='subtitle', required, value=(journey && journey.subtitle) ? journey.subtitle : "").col-md-9.form-control.form-control-sm#subtitle
+                        label(for='name_el').col-md-3.col-form-label-sm Name Greek
+                        input(type='text' name='name_el', required, value=(journey && journey.name.el) ? journey.name.el : "").col-md-9.form-control.form-control-sm#name_el
+                    .form-group.row.m-0
+                        label(for='name_es').col-md-3.col-form-label-sm Name Spanish
+                        input(type='text' name='name_es', required, value=(journey && journey.name.es) ? journey.name.es : "").col-md-9.form-control.form-control-sm#name_es
+                    .form-group.row.m-0
+                        label(for='name_bg').col-md-3.col-form-label-sm Name Bulgarian
+                        input(type='text' name='name_bg', required, value=(journey && journey.name.bg) ? journey.name.bg : "").col-md-9.form-control.form-control-sm#name_bg
+                    .form-group.row.m-0
+                        label(for='name_no').col-md-3.col-form-label-sm Name Norwegian
+                        input(type='text' name='name_no', required, value=(journey && journey.name.no) ? journey.name.no : "").col-md-9.form-control.form-control-sm#name_no
+                    .form-group.row.m-0
+                        label(for='name_it').col-md-3.col-form-label-sm Name Italian
+                        input(type='text' name='name_it', required, value=(journey && journey.name.it) ? journey.name.it : "").col-md-9.form-control.form-control-sm#name_it
+                    .form-group.row.m-0
+                        label(for='subtitle_en').col-md-3.col-form-label-sm English Subtitle
+                        input(type='text' name='subtitle_en', required, value=(journey && journey.subtitle.en) ? journey.subtitle.en : "").col-md-9.form-control.form-control-sm#subtitle_en
+                    .form-group.row.m-0
+                        label(for='subtitle_el').col-md-3.col-form-label-sm Greek Subtitle
+                        input(type='text' name='subtitle_el', required, value=(journey && journey.subtitle.el) ? journey.subtitle.el : "").col-md-9.form-control.form-control-sm#subtitle_el
+                    .form-group.row.m-0
+                        label(for='subtitle_es').col-md-3.col-form-label-sm Spanish Subtitle
+                        input(type='text' name='subtitle_es', required, value=(journey && journey.subtitle.es) ? journey.subtitle.es : "").col-md-9.form-control.form-control-sm#subtitle_es
+                    .form-group.row.m-0
+                        label(for='subtitle_bg').col-md-3.col-form-label-sm Bulgarian Subtitle
+                        input(type='text' name='subtitle_bg', required, value=(journey && journey.subtitle.bg) ? journey.subtitle.bg : "").col-md-9.form-control.form-control-sm#subtitle_bg
+                    .form-group.row.m-0
+                        label(for='subtitle_no').col-md-3.col-form-label-sm Norwegian Subtitle
+                        input(type='text' name='subtitle_no', required, value=(journey && journey.subtitle.no) ? journey.subtitle.no : "").col-md-9.form-control.form-control-sm#subtitle_no
+                    .form-group.row.m-0
+                        label(for='subtitle_it').col-md-3.col-form-label-sm Italian Subtitle
+                        input(type='text' name='subtitle_it', required, value=(journey && journey.subtitle.it) ? journey.subtitle.it : "").col-md-9.form-control.form-control-sm#subtitle_it
                     .form-group.row.m-0
                         label(for='audio_file').col-md-3.col-form-label-sm= __('admin.dashboard.audio-file')
                         input(type="file", name="audio_file", required=((journey == undefined) || (journey.audio_uri == undefined)))#audio_file

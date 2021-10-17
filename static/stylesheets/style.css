@@ -32,6 +32,12 @@ div.animation video {
   display: none;
 }
 
+.journey-form-col {
+  max-height: 99vh;
+  overflow-y: scroll;
+}
+
+
 div.map {
   height: auto;
   padding-left: 0%;
@@ -258,8 +264,7 @@ body {
 #journey-list {
   margin-right: 0em;
   padding-right: 0%;
-  overflow-y: visible;
-  
+  overflow-y: hidden;
 }
 
 #journey-footer {
@@ -486,12 +491,16 @@ h1#error-code {
   }
 
   .journey-scroll {
-    width: 100vw;
+    width: inherit;
+    overflow-y: scroll;
+    height: 45vh;
   }
 
   #journey-list {
+    min-width: 100vw;
     margin-right: 0%;
     margin-left: 0%;
+    max-height: 100%;
   }
 
   .play-img {
@@ -513,7 +522,7 @@ h1#error-code {
 
   #journey-window {
     height: calc(100vh - 45vh - 67px);
-    overflow-y: auto;
+    overflow: hidden;
     padding-left: 0%;
   }
 

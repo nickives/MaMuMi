@@ -3,9 +3,9 @@ ENV NODE_ENV=development
 WORKDIR /mamumi
 COPY . .
 RUN npm install --development --silent 
-RUN chmod 777 ./uploads
-RUN chmod 777 ./static/audio
 RUN adduser -D -H mamumi
+RUN chmod 755 ./uploads ./static/audio ./db
+RUN chown mamumi:mamumi ./uploads ./static/audio ./db
 EXPOSE 3000
 USER mamumi
 CMD ["npm", "run", "start.dev"]

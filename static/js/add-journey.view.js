@@ -159,26 +159,39 @@ function _createJourney(isUpdate) {
     if (markerArray.length < 2) {
         alert('Journey requires start and finish!');
     } else if (journeyForm.checkValidity()) {
-        // construct journey
-        const forename = document.getElementById('name').value;
-        const surname = document.getElementById('subtitle').value;
-        const journey = new Journey(forename, surname, null);
-
+        
+        // construct names
+        const names = {
+            en: document.getElementById('name_en').value,
+            es: document.getElementById('name_es').value,
+            el: document.getElementById('name_el').value,
+            bg: document.getElementById('name_bg').value,
+            no: document.getElementById('name_no').value,
+            it: document.getElementById('name_it').value,
+        }
+        
+        // construct subtitles
+        const subtitles = {
+            en: document.getElementById('subtitle_en').value,
+            es: document.getElementById('subtitle_es').value,
+            el: document.getElementById('subtitle_el').value,
+            bg: document.getElementById('subtitle_bg').value,
+            no: document.getElementById('subtitle_no').value,
+            it: document.getElementById('subtitle_it').value,            
+        }
+        
         // construct descriptions
-        const desc_en = document.getElementById('desc_en').value;
-        const desc_es = document.getElementById('desc_es').value;
-        const desc_bg = document.getElementById('desc_bg').value;
-        const desc_el = document.getElementById('desc_el').value;
-        const desc_no = document.getElementById('desc_no').value;
-        const desc_it = document.getElementById('desc_it').value;
         const descriptions = {
-            en: desc_en,
-            es: desc_es,
-            bg: desc_bg,
-            el: desc_el,
-            no: desc_no,
-            it: desc_it
+            en: document.getElementById('desc_en').value,
+            es: document.getElementById('desc_es').value,
+            el: document.getElementById('desc_el').value,
+            bg: document.getElementById('desc_bg').value,
+            no: document.getElementById('desc_no').value,
+            it: document.getElementById('desc_it').value
         };
+        // construct journey
+        const journey = new Journey(names, subtitles, null);
+        journey.order = document.getElementById('order').value;
         journey.addDescription(descriptions);
 
         getPoints().forEach(e => {

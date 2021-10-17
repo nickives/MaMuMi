@@ -7,7 +7,7 @@
     "test": "mocha",
     "test-debug": "mocha --inspect-brk=0.0.0.0:9230",
     "start": "node ./bin/www",
-    "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L --inspect=0.0.0.0:9229 ./bin/www",
+    "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug --ignore 'db/*.json' --ignore 'locales/*.json' -L --inspect=0.0.0.0:9229 ./bin/www",
     "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
   },
   "repository": {
@@ -28,7 +28,6 @@
     "sinon-express-mock": "^2.2.1"
   },
   "dependencies": {
-    "bootstrap": "^4.6.0",
     "cookie-parser": "^1.4.5",
     "crypto-js": "^4.1.1",
     "debug": "^2.6.9",
@@ -38,11 +37,9 @@
     "http-errors": "^1.7.2",
     "i18n": "^0.13.2",
     "jquery": "^3.5.1",
-    "mariadb": "^2.5.2",
+    "lowdb": "^1.0.0",
     "morgan": "^1.10.0",
     "popper.js": "^1.16.1",
-    "pug": "^3.0.2",
-    "webpack": "^5.23.0",
-    "webpack-cli": "^4.5.0"
+    "pug": "^3.0.2"
   }
 }

@@ -1,14 +1,16 @@
 {
-    "lang.current.name": "Norks",
-    "lang.current.code": "no",
-    "lang.1.name": "Български",
-    "lang.1.code": "bg",
-    "lang.2.name": "Ελληνικά",
-    "lang.2.code": "el",
-    "lang.3.name": "Italiano",
-    "lang.3.code": "it",
-    "lang.4.name": "English",
-    "lang.4.code": "en",
-    "lang.5.name": "Español",
-    "lang.5.code": "es"
+	"lang.current.name": "Norks",
+	"lang.current.code": "no",
+	"lang.1.name": "Български",
+	"lang.1.code": "bg",
+	"lang.2.name": "Ελληνικά",
+	"lang.2.code": "el",
+	"lang.3.name": "Italiano",
+	"lang.3.code": "it",
+	"lang.4.name": "English",
+	"lang.4.code": "en",
+	"lang.5.name": "Español",
+	"lang.5.code": "es",
+	"index.journey.select": "Velg En Reise",
+	"index.journey.close": "Lukk Reise"
 }

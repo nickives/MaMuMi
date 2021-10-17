@@ -10,5 +10,7 @@
     "lang.4.name": "Norsk",
     "lang.4.code": "no",
     "lang.5.name": "Español",
-    "lang.5.code": "es"
+    "lang.5.code": "es",
+	"index.journey.select": "Seleziona Un Viaggio",
+	"index.journey.close": "Chiudi Viaggio"
 }
