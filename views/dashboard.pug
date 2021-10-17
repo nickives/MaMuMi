@@ -9,7 +9,7 @@ block main
                 th= __('Delete')
             each j in journeys
                 tr
-                    td= j.name
-                    td= j.subtitle
+                    td= j.name[lang]
+                    td= j.subtitle[lang]
                     td: a(href='/admin/edit-journey/' + j.id)= __('Edit')
                     td: a(href=`/admin/journey/${j.id}/delete`)= __('Delete')

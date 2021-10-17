@@ -1,88 +1,58 @@
 
 class SessionModel {
 
+
     /**
-     * Session Model. This is used to validate login 
+     * Session Model.
      * 
-     * @param {mariadb.Pool} pool database connection pool
+     * @param {lowdb} db Lowdb instance 
      */
-    constructor(pool) {
-        this._pool = pool;
+     constructor(db) {
+        db.defaults({ sessions: [] });
+        this.db = db;
     }
 
     /**
      * 
-     * @return {Number} Session key number
+     * @return {number} Session key number
      */
     async create() {
-        const conn = await this._pool.getConnection();
-        let res;
-
         const maxBigInt = 18446744073709551615; // 2^64
-        let sessionKey = Math.floor((Math.random() * maxBigInt));
-        try {
-            const sql = "INSERT INTO `tbl_sessions` (`session_key`) VALUES (?)";
-
-            await conn.query(
-                {
-                    sql: sql,
-                    supportBigInt: true
-                }, 
-                sessionKey
-                );
-
-        } catch (err) {
-            // Duplicate key - there's a 1/2^64 chance this can happen, so just try again.
-            if (err.errno === 1062) {
-                sessionKey = this.create();
-            } else {
-                throw err;
-            }
-        } finally {
-            if (conn) conn.end();
+        let isUnique = false;
+        let sessionKey;
+        while (!isUnique) {
+            sessionKey = Math.floor((Math.random() * maxBigInt));
+            const res = await this.db.get('sessions')
+                                    .find({ key: sessionKey })
+                                    .value();
+            if (res === undefined) isUnique = true;
         }
+        const session = {
+            key: sessionKey,
+            lastAccess: Date.now()
+        }
+        this.db.get('sessions').push(session).write();
         return sessionKey;
     }
 
     async read(sessionKey) {
-        const sql = "SELECT `last_access` FROM `tbl_sessions` WHERE `session_key` = ?";
-        let res, conn;
-        try {
-            conn = await this._pool.getConnection();
-            res = await conn.query(sql, sessionKey);
-        } catch (err) {
-            throw err;
-        } finally {
-            if (conn) conn.end();
-        }
-        return res;
+        return await this.db.get('sessions')
+                            .find({ key: sessionKey })
+                            .value();
     }
 
     async update(sessionKey) {
-        const sql = "UPDATE `tbl_sessions` SET `last_access` = NOW() WHERE `session_key` = ?";
-        let res, conn;
-        try {
-            conn = await this._pool.getConnection();
-            res = await conn.query(sql, sessionKey);
-        } finally {
-            if (conn) conn.end();
-        }
-        return res;
+        return await this.db.get('sessions')
+                            .find({ key: sessionKey })
+                            .assign({ key: sessionKey, lastAccess: Date.now() })
+                            .write();
     }
 
     async delete(sessionKey) {
-        const sql = "DELETE FROM `tbl_sessions` WHERE `session_key` = ?";
-        try {
-            conn = await this._pool.getConnection();
-            res = await conn.query(sql, accessTime, sessionKey);
-        } finally {
-            if (conn) conn.end();
-        }
-        return res;        
-    }
-
-    checkTimeLimit(lastAccess) {
-
+        return await this.db.get('sessions')
+                            .find({ key: sessionKey })
+                            .remove()
+                            .write();
     }
 }
 

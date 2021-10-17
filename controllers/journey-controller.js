@@ -36,9 +36,49 @@ class JourneyController {
    * fields, ID's that aren't numbers and a journey without points.
    */
   cloneJourney(journey) {
-    // validate strings
-    if ((typeof journey.name != 'string') || (typeof journey.subtitle != 'string')) {
-          throw new TypeError('Invalid Name / Subtitle')
+    const name = {};
+    const subtitle = {};
+
+    if (journey.name) {
+      for (const [key, value] of Object.entries(journey.name)) {
+        switch (key) {
+          case 'bg':
+          case 'el':
+          case 'en':
+          case 'es':
+          case 'it':
+          case 'no':
+            if (typeof value === 'string') {
+              name[key] = value;
+            } else {
+              throw new TypeError('Invalid Name');
+            }
+            break;
+          default:
+            throw new TypeError('Unexpected Language Key');
+        }
+      }
+    }
+
+    if (journey.subtitle) {
+      for (const [key, value] of Object.entries(journey.subtitle)) {
+        switch (key) {
+          case 'bg':
+          case 'el':
+          case 'en':
+          case 'es':
+          case 'it':
+          case 'no':
+            if (typeof value === 'string') {
+              subtitle[key] = value;
+            } else {
+              throw new TypeError('Invalid Subtitle');
+            }
+            break;
+          default:
+            throw new TypeError('Unexpected Language Key');
+        }
+      }
     }
 
     if (journey.audio_uri) {
@@ -47,7 +87,12 @@ class JourneyController {
       }
     }
 
-    let newJourney = new Journey(journey.name, journey.subtitle, journey.audio_uri);
+    let newJourney = new Journey(name, subtitle, journey.audio_uri);
+    const order = parseInt(journey.order);
+    if (typeof order != 'number' || isNaN(order)) {
+      throw new TypeError('Invalid Journey Order');
+    }
+    newJourney.order = parseInt(journey.order);
 
     // validate id - will happen in case of update
     if (journey.id) {
@@ -56,6 +101,7 @@ class JourneyController {
       }
       newJourney.id = journey.id;
     }
+
 
     // A journey will always have points, so don't bother to check if they exist
     for (let i = 0; i < journey.points.length; i++) {
@@ -68,7 +114,7 @@ class JourneyController {
             throw new TypeError('Invalid Point');
       }
       const loc = { lat: lat, lng: lng };
-      const point = new Point(null, point_num, loc);
+      const point = new Point(undefined, point_num, loc);
       newJourney.addPoint(point);
     }
 
@@ -103,7 +149,7 @@ class JourneyController {
    * 
    * @returns The database connection status
    */
-  async create(req) {
+  create(req) {
 
     const form = formidable({ 
       keepExtensions: true,
@@ -142,12 +188,16 @@ class JourneyController {
         // delete from /static/audio
         fs.stat(newPath)
         .then(() => fs.unlink(newPath))
-        .catch((err) => console.log(err));
-
+        .catch((err) => {
+          // we expect ENOENT - no such file
+          if (err.errno !== -2) console.log(err);
+        });
         // delete from /uploads
         fs.stat(originalPath)
         .then(() => fs.unlink(originalPath))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          if (err.errno !== -2) console.log(err);
+        });
 
         // cloneJourney throws TypeError
         if (err.name === 'TypeError') {
@@ -235,6 +285,7 @@ class JourneyController {
       try {
         const id = parseInt(req.params['id']);
         const newJourney = this.cloneJourney(inputJourney);
+        newJourney.id = id;
 
         // if we got a new file, attach new uri here
         let filename;

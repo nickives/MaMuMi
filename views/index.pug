@@ -55,8 +55,8 @@ block content
               each j in journeys
                 .row.journey-item(data-id=`${j.id}`, id=`journey-row-${j.id}`)
                   .journey-item-left
-                    h1.journey-name= j.name
-                    .journey-short-desc= j.subtitle
+                    h1.journey-name= j.name[lang]
+                    .journey-short-desc= j.subtitle[lang]
                   span.journey-item-middle
                   .hidden.journey-item-right
                     img(src="/s/img/play.png", alt="", srcset="").play-img
