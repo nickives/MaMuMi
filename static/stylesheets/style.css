@@ -532,12 +532,12 @@ h1#error-code {
     padding: 24px;
     margin-left: 0.25rem;
     margin-right: 0.25rem;
-    max-width: 90vw;
+    max-width: 95vw;
   }
 
   #journey-description {
     height: auto;
-    overflow-y: visible;
+    overflow-y: scroll;
   }
 
   .close-journey-row, .close-journey-row  * {
@@ -561,8 +561,8 @@ h1#error-code {
   }
 
   .play-pause-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   h1#journey-name {
@@ -580,6 +580,7 @@ h1#error-code {
 
   #journey-audio-player {
     padding-top: 1rem;
+    white-space: nowrap;
   }
 
   .journey-header-left {
@@ -593,7 +594,10 @@ h1#error-code {
   }
 
   .journey-desc-row {
-    overflow-y: clip;
+    overflow-y: scroll;
+    max-height: 35vh;
+    width: 95vw;
+    overflow-y: scroll;
   }
 
   progress#seek-slider {
