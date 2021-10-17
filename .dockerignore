@@ -24,6 +24,7 @@
 **/obj
 **/secrets.dev.yaml
 **/static/audio/*.mp3
+**/static/audio/*.m4a
 **/uploads/*.mp3
 **/values.dev.yaml
 README.md
