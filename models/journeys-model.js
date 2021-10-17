@@ -74,8 +74,7 @@ class JourneyModel {
     async delete(id) {
         const res = await this.db
             .get('journeys')
-            .find({ id: id })
-            .remove()
+            .remove({ id: id })
             .write();
 
         return res;
