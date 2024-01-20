@@ -3,8 +3,6 @@
 - [MaMuMi](#mamumi)
     - [Current Status](#current-status)
 - [Docker Configuration](#docker-configuration)
-- [MariaDB](#mariadb)
-    - [IMPORTANT SETUP CONFIGURATION](#important-setup-configuration)
 - [Journey Classes](#journey-classes)
 - [Populate Journeys](#populate-journeys)
 
@@ -23,12 +21,6 @@ To run the dev container:
 
 To run the unit tests on a running container:
 `docker exect -it mamumi npm test`
-
-# MariaDB
-The database schema is in lib/db/db.sql. This script should populate the database with required tables. The dev container has the database open on port 3306.
-
-## IMPORTANT SETUP CONFIGURATION
-Currently there exists a file lib/db/pool-secret-template.js. This file should be configured with the database connection details and copied to pool-secret.js. In future it would be better to just have pool.js for the DB connection pool and populate those values with environment variables, but this will do for now. The default values in the template will work fine for the default configuration of the dev container. Obviously this is not secure.
 
 # Journey Classes
 These can be found in static/js/lib. 
