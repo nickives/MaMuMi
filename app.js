@@ -4,7 +4,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
+const low = require('lowdb');
+const FileAsync = require('lowdb/adapters/FileAsync');
 require('dotenv').config();
+
 
 // routes
 const indexRouter = require('./routes/index');
@@ -21,6 +24,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Init DB
+(async function () {
+  const adapter = new FileAsync(__dirname + '/db/db.json');
+  const db = await low(adapter);
+  await db.defaults({ journeys: [], sessions: [], journeysIndex: 0 }).write();
+})();
 
 // I18n
 const { I18n } = require('i18n')
