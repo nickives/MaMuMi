@@ -8,7 +8,7 @@
     "test-debug": "mocha --inspect-brk=0.0.0.0:9230",
     "start": "node ./bin/www",
     "start-debug": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug --ignore 'db/*.json' --ignore 'locales/*.json' -L --inspect=0.0.0.0:9229 ./bin/www",
-    "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug -L ./bin/www"
+    "start.dev": "node ./node_modules/nodemon/bin/nodemon.js -e js,njs,json,pug --ignore 'db/*.json' -L ./bin/www"
   },
   "repository": {
     "type": "git",
